@@ -1,45 +1,104 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
- * @format
- */
-
-import { NewAppScreen } from '@react-native/new-app-screen';
-import { StatusBar, StyleSheet, useColorScheme, View } from 'react-native';
-import {
-  SafeAreaProvider,
-  useSafeAreaInsets,
-} from 'react-native-safe-area-context';
-
-function App() {
-  const isDarkMode = useColorScheme() === 'dark';
-
-  return (
-    <SafeAreaProvider>
-      <StatusBar barStyle={isDarkMode ? 'light-content' : 'dark-content'} />
-      <AppContent />
-    </SafeAreaProvider>
-  );
-}
-
-function AppContent() {
-  const safeAreaInsets = useSafeAreaInsets();
-
-  return (
-    <View style={styles.container}>
-      <NewAppScreen
-        templateFileName="App.tsx"
-        safeAreaInsets={safeAreaInsets}
-      />
-    </View>
-  );
-}
+import { GoogleSignin } from '@react-native-google-signin/google-signin';
+import { Button, View, Text} from 'react-native';
+import { StyleSheet } from 'react-native';
+import { GoogleAuthProvider, getAuth, signInWithCredential, signOut, onAuthStateChanged } from '@react-native-firebase/auth';
+import React from 'react';
+import { useState, useEffect } from 'react';
+import googleJSON from './android/app/google-services.json'
+GoogleSignin.configure({
+  //REMEMBER TO DOWNLOAD google-services.json and put it into the /andoird/app directory
+  webClientId: googleJSON.client[0].oauth_client[1].client_id,
+});
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
+  button: {
+    marginTop: '10%'
   },
+  text: {
+    backgroundColor: 'blue',
+    textDecorationColor: 'white'
+  }
 });
+
+
+
+const onGoogleButtonPress = async () => {
+  // Check if your device supports Google Play
+  await GoogleSignin.hasPlayServices({ showPlayServicesUpdateDialog: true });
+  // Get the users ID token
+  const signInResult = await GoogleSignin.signIn();
+
+  // Try the new style of google-sign in result, from v13+ of that module
+  let idToken = signInResult.data?.idToken;
+  if (!idToken) {
+    // if you are using older versions of google-signin, try old style result
+    idToken = signInResult.idToken;
+  }
+  if (!idToken) {
+    throw new Error('No ID token found');
+  }
+
+  // Create a Google credential with the token
+  const googleCredential = GoogleAuthProvider.credential(signInResult.data.idToken);
+
+  // Sign-in the user with the credential
+  const account = await signInWithCredential(getAuth(), googleCredential);
+
+  return account;
+};
+
+function App()
+{
+
+  const [initializing, setInitializing] = useState(true);
+  const [user, setUser] = useState();
+
+  function handleAuthStateChanged(user) {
+    setUser(user);
+    if (initializing) setInitializing(false);
+  }
+
+  useEffect(() => {
+    const subscriber = onAuthStateChanged(getAuth(), handleAuthStateChanged);
+    return subscriber; // unsubscribe on unmount
+  }, []);
+
+  if (initializing) return null;
+
+  if(user)
+  {
+    return (
+      <>
+    <View style={styles.button}>
+    <Button
+      title="Press here to see use data"
+      onPress={() => console.log(getAuth())}
+    />
+    </View>
+    <Text style={styles.text}>HELLO</Text>
+    <View>
+    <Button
+      title="Press here to sign out"
+      onPress={() => signOut(getAuth()).then(() => console.log('User signed out!'))}
+    />
+    </View>
+    </>
+  )
+  }
+  
+  return (
+  <View style={styles.button}>
+  <Button
+    title="Google Sign-In"
+    onPress={() => onGoogleButtonPress().then(() => console.log(getAuth))}
+  />
+  <Button
+      title="Press here to see use data"
+      onPress={() => console.log(getAuth())}
+    />
+  </View>
+  )
+  
+}
 
 export default App;
