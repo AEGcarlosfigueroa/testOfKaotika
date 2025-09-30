@@ -1,6 +1,7 @@
 import { GoogleSignin } from '@react-native-google-signin/google-signin';
-import { Button, View, Text} from 'react-native';
-import { StyleSheet } from 'react-native';
+import { Text, Image, View} from 'react-native';
+import { TouchableOpacity } from 'react-native';
+import { StyleSheet, ActivityIndicator } from 'react-native';
 import { GoogleAuthProvider, getAuth, signInWithCredential, signOut, onAuthStateChanged } from '@react-native-firebase/auth';
 import React from 'react';
 import { useState, useEffect } from 'react';
@@ -14,11 +15,37 @@ GoogleSignin.configure({
 
 const styles = StyleSheet.create({
   button: {
-    marginTop: '10%'
+    top: '45%',
+    left: '25%',
+    width: '50%',
+    height : '5%',
+    backgroundColor: 'rgba(0,0,0,0.5)',
+    position: 'absolute',
+    borderRadius: '25%',
+    borderWidth: 2,
+    borderColor: 'grey'
   },
   text: {
-    backgroundColor: 'blue',
-    textDecorationColor: 'white'
+    color: 'yellow',
+    alignSelf: 'center',
+    margin: '5%'
+  },
+  image: {
+    height: '100%',
+    position: 'absolute',
+    zIndex: -10,
+    marginTop: '10%',
+    width: '100%'
+  },
+  fullScreen: {
+    height: '100%',
+    position: 'absolute',
+    zIndex: 10,
+    width: '100%',
+    backgroundColor: 'rgba(0,0,0,0.5)'
+  }, 
+  spinner: {
+    marginTop: '99%'
   }
 });
 
@@ -57,11 +84,15 @@ function App()
   }, 1000)
 
   const [initializing, setInitializing] = useState(true);
+
   const [user, setUser] = useState();
+
+  const [loading, setLoading] = useState(false);
 
   function handleAuthStateChanged(user) {
     setUser(user);
     if (initializing) setInitializing(false);
+    setLoading(false);
   }
 
   useEffect(() => {
@@ -75,34 +106,43 @@ function App()
   {
     return (
       <>
-    <View style={styles.button}>
-    <Button
-      title="Press here to see use data"
-      onPress={() => console.log(getAuth())}
-    />
-    </View>
-    <Text style={styles.text}>HELLO</Text>
-    <View>
-    <Button
-      title="Press here to sign out"
+    <TouchableOpacity style={styles.button}
       onPress={() => signOut(getAuth()).then(() => console.log('User signed out!'))}
-    />
-    </View>
+    >
+      <Text style={styles.text}>SIGN OUT</Text>
+    </TouchableOpacity>
     </>
   )
   }
+
+  let component = <></>
+
+  if(loading)
+  {
+    component = <View style={styles.fullScreen}>
+       <ActivityIndicator size="large" style={styles.spinner}/>
+    </View>
+  }
   
   return (
-  <View style={styles.button}>
-  <Button
-    title="Google Sign-In"
+    <>
+
+    {component}
+    
+    <Image source={require("./assets/castleDoor.png")} style={styles.image}/>
+  <TouchableOpacity
+    style={styles.button}
     onPress={() => onGoogleButtonPress().then(() => console.log(getAuth))}
-  />
-  <Button
-      title="Press here to see use data"
+    onPressOut={() => setLoading(true)}
+  >
+    <Text style={styles.text}>GOOGLE SIGNIN</Text>
+  </TouchableOpacity>
+  <TouchableOpacity
       onPress={() => console.log(getAuth())}
-    />
-  </View>
+    >
+
+    </TouchableOpacity>
+  </>
   )
   
 }
