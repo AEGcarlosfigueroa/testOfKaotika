@@ -4,7 +4,9 @@ import { StyleSheet } from 'react-native';
 import { GoogleAuthProvider, getAuth, signInWithCredential, signOut, onAuthStateChanged } from '@react-native-firebase/auth';
 import React from 'react';
 import { useState, useEffect } from 'react';
-import googleJSON from './android/app/google-services.json'
+import googleJSON from './android/app/google-services.json';
+import BootSplash from "react-native-bootsplash";
+
 GoogleSignin.configure({
   //REMEMBER TO DOWNLOAD google-services.json and put it into the /andoird/app directory
   webClientId: googleJSON.client[0].oauth_client[1].client_id,
@@ -49,6 +51,10 @@ const onGoogleButtonPress = async () => {
 
 function App()
 {
+  setTimeout( async () => {
+    await BootSplash.hide({ fade: true });
+    console.log("BootSplash has been hidden successfully");
+  }, 1000)
 
   const [initializing, setInitializing] = useState(true);
   const [user, setUser] = useState();
