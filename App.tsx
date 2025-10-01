@@ -9,9 +9,12 @@ import googleJSON from './android/app/google-services.json';
 import BootSplash from "react-native-bootsplash";
 
 GoogleSignin.configure({
-  //REMEMBER TO DOWNLOAD google-services.json and put it into the /andoird/app directory
+  //REMEMBER TO DOWNLOAD google-services.json and put it into the /android/app directory
   webClientId: googleJSON.client[0].oauth_client[1].client_id,
 });
+
+const serverURL = "https://testofkaotika-server.onrender.com";
+// const serverURL = "http://localhost:3000";
 
 const styles = StyleSheet.create({
   button: {
@@ -29,6 +32,14 @@ const styles = StyleSheet.create({
     color: 'yellow',
     alignSelf: 'center',
     margin: '5%'
+  },
+  errorText: {
+    color: 'red',
+    alignSelf: 'center',
+    margin: '5%',
+    position: 'absolute',
+    top: '48%',
+    zIndex: 0
   },
   image: {
     height: '100%',
@@ -91,6 +102,8 @@ function App()
 
   const [loading, setLoading] = useState(false);
 
+  const [errorMessage, setErrorMessage] = useState(<></>);
+
   function handleAuthStateChanged(user) {
     setUser(user);
     if (initializing) setInitializing(false);
@@ -109,7 +122,7 @@ function App()
     return (
       <>
     <TouchableOpacity style={styles.button}
-      onPress={() => signOut(getAuth()).then(() => console.log('User signed out!'))}
+      onPress={() => signOut(getAuth()).then(() => GoogleSignin.revokeAccess())}
     >
       <Text style={styles.text}>SIGN OUT</Text>
     </TouchableOpacity>
@@ -127,11 +140,14 @@ function App()
   }
   
 return (
-  <View style={styles.button}>
-   <Button
-  title="Google Sign-In"
+  <>
+   {component}
+  <Image style={styles.image} source={require("./assets/castleDoor.png")}/>
+   <TouchableOpacity style={styles.button}
   onPress={async () => {
     try {
+      setErrorMessage(<></>);
+      setLoading(true);
       // Sign in the user and get the token
       const { account, firebaseIdToken } = await onGoogleButtonPress();
 
@@ -139,24 +155,45 @@ return (
       console.log("Token:", firebaseIdToken);
 
       // Send token to server
-      const response = await fetch("http://localhost:3000/api/players", {
-        method: "GET", // or POST if your route is POST
+      const response = await fetch( serverURL + "/api/players", 
+        {
+          method: "GET",
         headers: {
           "Authorization": `Bearer ${firebaseIdToken}`, // important!
           "Content-Type": "application/json"
         },
       });
 
+      console.log(response);
+
       const data = await response.json();
       console.log("Server response:", data);
 
-    } catch (err) {
-      console.error("Error signing in or calling server:", err);
+      if(!data.error && !(data.message))
+      {
+        setLoading(false);
+      }
+      else
+      {
+        setLoading(false);
+        signOut(getAuth());
+        setErrorMessage(<Text style={styles.errorText}>{data.message}</Text>);
+        GoogleSignin.revokeAccess();
+      }
+
+    } catch (error: any) {
+      console.log(error);
+      console.error("Error signing in or calling server: " +  error);
+      signOut(getAuth());
+      setLoading(false);
+      GoogleSignin.revokeAccess();
     }
   }}
-/>
-
-  </View>
+>
+  <Text style={styles.text}>GOOGLE SIGN-IN</Text>
+</TouchableOpacity>
+  {errorMessage}
+  </>
 )
 
   
