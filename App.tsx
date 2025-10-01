@@ -102,12 +102,13 @@ function App()
 
   const [loading, setLoading] = useState(false);
 
+  const [success, setSuccess] = useState(false);
+
   const [errorMessage, setErrorMessage] = useState(<></>);
 
   function handleAuthStateChanged(user) {
     setUser(user);
     if (initializing) setInitializing(false);
-    setLoading(false);
   }
 
   useEffect(() => {
@@ -117,12 +118,16 @@ function App()
 
   if (initializing) return null;
 
-  if(user)
+  if(user && success)
   {
     return (
       <>
     <TouchableOpacity style={styles.button}
-      onPress={() => signOut(getAuth()).then(() => GoogleSignin.revokeAccess())}
+      onPress={() => {
+        signOut(getAuth());
+        GoogleSignin.revokeAccess();
+        setSuccess(false);
+      }}
     >
       <Text style={styles.text}>SIGN OUT</Text>
     </TouchableOpacity>
@@ -155,7 +160,7 @@ return (
       console.log("Token:", firebaseIdToken);
 
       // Send token to server
-      const response = await fetch( serverURL + "/api/players", 
+      const response = await fetch( serverURL + "/api/players/email/" + account.user._user.email, 
         {
           method: "GET",
         headers: {
@@ -172,6 +177,7 @@ return (
       if(!data.error && !(data.message))
       {
         setLoading(false);
+        setSuccess(true);
       }
       else
       {
