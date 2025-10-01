@@ -73,7 +73,9 @@ const onGoogleButtonPress = async () => {
   // Sign-in the user with the credential
   const account = await signInWithCredential(getAuth(), googleCredential);
 
-  return account;
+  const firebaseIdToken = await account.user.getIdToken();
+
+  return { account, firebaseIdToken};
 };
 
 function App()
@@ -124,26 +126,39 @@ function App()
     </View>
   }
   
-  return (
-    <>
+return (
+  <View style={styles.button}>
+   <Button
+  title="Google Sign-In"
+  onPress={async () => {
+    try {
+      // Sign in the user and get the token
+      const { account, firebaseIdToken } = await onGoogleButtonPress();
 
-    {component}
-    
-    <Image source={require("./assets/castleDoor.png")} style={styles.image}/>
-  <TouchableOpacity
-    style={styles.button}
-    onPress={() => onGoogleButtonPress().then(() => console.log(getAuth))}
-    onPressOut={() => setLoading(true)}
-  >
-    <Text style={styles.text}>GOOGLE SIGNIN</Text>
-  </TouchableOpacity>
-  <TouchableOpacity
-      onPress={() => console.log(getAuth())}
-    >
+      console.log("User:", account.user);
+      console.log("Token:", firebaseIdToken);
 
-    </TouchableOpacity>
-  </>
-  )
+      // Send token to server
+      const response = await fetch("http://localhost:3000/api/players", {
+        method: "GET", // or POST if your route is POST
+        headers: {
+          "Authorization": `Bearer ${firebaseIdToken}`, // important!
+          "Content-Type": "application/json"
+        },
+      });
+
+      const data = await response.json();
+      console.log("Server response:", data);
+
+    } catch (err) {
+      console.error("Error signing in or calling server:", err);
+    }
+  }}
+/>
+
+  </View>
+)
+
   
 }
 
