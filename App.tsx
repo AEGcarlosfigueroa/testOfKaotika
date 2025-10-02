@@ -7,12 +7,14 @@ import React from 'react';
 import { useState, useEffect } from 'react';
 import googleJSON from './android/app/google-services.json';
 import BootSplash from "react-native-bootsplash";
+import Navigator from './conponents/navigator';
 
 GoogleSignin.configure({
   //REMEMBER TO DOWNLOAD google-services.json and put it into the /android/app directory
   webClientId: googleJSON.client[0].oauth_client[1].client_id,
 });
 
+// const serverURL = "http://10.50.0.50:6002";
 const serverURL = "https://testofkaotika-server.onrender.com";
 // const serverURL = "http://localhost:3000";
 
@@ -109,6 +111,10 @@ function App()
   function handleAuthStateChanged(user) {
     setUser(user);
     if (initializing) setInitializing(false);
+    if(!user)
+    {
+      setSuccess(false);
+    }
   }
 
   useEffect(() => {
@@ -120,19 +126,10 @@ function App()
 
   if(user && success)
   {
-    return (
-      <>
-    <TouchableOpacity style={styles.button}
-      onPress={() => {
-        signOut(getAuth());
-        GoogleSignin.revokeAccess();
-        setSuccess(false);
-      }}
-    >
-      <Text style={styles.text}>SIGN OUT</Text>
-    </TouchableOpacity>
-    </>
-  )
+    return(
+      <Navigator/>
+    )
+    
   }
 
   let component = <></>
