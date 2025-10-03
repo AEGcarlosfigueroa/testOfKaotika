@@ -1,4 +1,4 @@
-import { StyleSheet, TouchableOpacity, Text } from "react-native";
+import { StyleSheet, TouchableOpacity, Text, Image } from "react-native";
 import { getAuth, signOut } from "@react-native-firebase/auth";
 import { GoogleSignin } from "@react-native-google-signin/google-signin";
 import { View } from "react-native";
@@ -24,12 +24,19 @@ const styles = StyleSheet.create({
     backgroundColor: 'grey',
     height: '100%',
     width: '100%'
+  },
+  image: {
+    height: '100%',
+    position: 'absolute',
+    zIndex: -10,
+    width: '100%'
   }
 });
 
 function Settings() {
     return (
-          <View style={styles.view}>
+          <>
+            <Image source={require("./../assets/settings.png")} style={styles.image}/>
         <TouchableOpacity style={styles.button}
           onPress={() => {
             signOut(getAuth());
@@ -38,7 +45,7 @@ function Settings() {
         >
           <Text style={styles.text}>SIGN OUT</Text>
         </TouchableOpacity>
-        </View>
+        </>
     );
 }
 

@@ -20,6 +20,7 @@ function Navigator() {
                       else if(route.name === 'Tasks') iconName = 'map-sharp'
                       return <Ionicons name={iconName} size={26} color={color} />
                     },
+                    tabBarIndicatorStyle: {backgroundColor: 'yellow'},
                     tabBarActiveTintColor: 'yellow',
                     tabBarInactiveTintColor: '#9F9F9F',
                     tabBarShowIcon: true,
@@ -29,8 +30,8 @@ function Navigator() {
                     })}
             >
                 <Tab.Screen name='Home' component={Home}/>
-                <Tab.Screen name='Settings' component={Settings}/>
                 <Tab.Screen name='Tasks' component={Tasks}/>
+                <Tab.Screen name='Settings' component={Settings}/>
             </Tab.Navigator>
         </NavigationContainer>
     )

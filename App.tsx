@@ -14,8 +14,8 @@ GoogleSignin.configure({
   webClientId: googleJSON.client[0].oauth_client[1].client_id,
 });
 
-// const serverURL = "http://10.50.0.50:6002";
-const serverURL = "https://testofkaotika-server.onrender.com";
+const serverURL = "http://10.50.0.50:6002";
+// const serverURL = "https://testofkaotika-server.onrender.com";
 // const serverURL = "http://localhost:3000";
 
 const styles = StyleSheet.create({
@@ -71,7 +71,7 @@ const onGoogleButtonPress = async () => {
   const signInResult = await GoogleSignin.signIn();
 
   // Try the new style of google-sign in result, from v13+ of that module
-  let idToken = signInResult.data?.idToken;
+  let idToken = (await (GoogleSignin.getTokens())).idToken;
   if (!idToken) {
     // if you are using older versions of google-signin, try old style result
     idToken = signInResult.idToken;
@@ -81,7 +81,7 @@ const onGoogleButtonPress = async () => {
   }
 
   // Create a Google credential with the token
-  const googleCredential = GoogleAuthProvider.credential(signInResult.data.idToken);
+  const googleCredential = GoogleAuthProvider.credential(idToken);
 
   // Sign-in the user with the credential
   const account = await signInWithCredential(getAuth(), googleCredential);
