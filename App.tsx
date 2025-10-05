@@ -19,6 +19,7 @@ GoogleSignin.configure({
 // const serverURL = "http://localhost:3000";
 const serverURL = "http://10.0.2.2:3000"
 
+
 const styles = StyleSheet.create({
   button: {
     top: '45%',
@@ -109,6 +110,8 @@ function App()
 
   const [errorMessage, setErrorMessage] = useState(<></>);
 
+  const [player, setPlayer] = useState();
+
   function handleAuthStateChanged(user) {
     setUser(user);
     if (initializing) setInitializing(false);
@@ -128,7 +131,7 @@ function App()
   if(user && success)
   {
     return(
-      <Navigator/>
+      <Navigator player= {player}/>
     )
     
   }
@@ -174,6 +177,7 @@ return (
 
       if(!data.error && !(data.message))
       {
+        setPlayer(data.data) //save server player
         setLoading(false);
         setSuccess(true);
       }

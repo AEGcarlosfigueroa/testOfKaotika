@@ -8,7 +8,7 @@ import Tasks from '../screens/tasks';
 
 const Tab = createMaterialTopTabNavigator();
 
-function Navigator() {
+function Navigator({player}) {
     return (
         <NavigationContainer>
             <Tab.Navigator style={{marginTop: '10%'}}
@@ -29,7 +29,7 @@ function Navigator() {
                     tabBarIndicatorContainerStyle: {backgroundColor: 'black'}
                     })}
             >
-                <Tab.Screen name='Home' component={Home}/>
+                <Tab.Screen name='Home'>{() => <Home player={player} />}</Tab.Screen>
                 <Tab.Screen name='Tasks' component={Tasks}/>
                 <Tab.Screen name='Settings' component={Settings}/>
             </Tab.Navigator>
