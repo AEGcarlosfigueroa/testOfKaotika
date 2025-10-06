@@ -1,40 +1,71 @@
 import * as React from 'react';
-import Settings from '../screens/settings';
 import { NavigationContainer } from '@react-navigation/native';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
-import Ionicons from '@react-native-vector-icons/ionicons'
+import Ionicons from '@react-native-vector-icons/ionicons';
+
 import Home from '../screens/home';
 import Tasks from '../screens/tasks';
+import SpyCam from '../screens/SpyCam';
+import Entrance from '../screens/Entrance';
+import Settings from '../screens/settings';
 
 const Tab = createMaterialTopTabNavigator();
 
-function Navigator({player}) {
-    return (
-        <NavigationContainer>
-            <Tab.Navigator style={{marginTop: '10%'}}
-                screenOptions={({ route }) => ({
-                    tabBarIcon: ({ focused, color }) => {
-                      let iconName;
-                      if(route.name === "Home") iconName= 'home'
-                      else if(route.name === 'Settings') iconName = 'settings-sharp'
-                      else if(route.name === 'Tasks') iconName = 'map-sharp'
-                      return <Ionicons name={iconName} size={26} color={color} />
-                    },
-                    tabBarIndicatorStyle: {backgroundColor: 'yellow'},
-                    tabBarActiveTintColor: 'yellow',
-                    tabBarInactiveTintColor: '#9F9F9F',
-                    tabBarShowIcon: true,
-                    tabBarShowLabel: false,
-                    swipeEnabled: true,
-                    tabBarIndicatorContainerStyle: {backgroundColor: 'black'}
-                    })}
-            >
-                <Tab.Screen name='Home'>{() => <Home player={player} />}</Tab.Screen>
-                <Tab.Screen name='Tasks' component={Tasks}/>
-                <Tab.Screen name='Settings' component={Settings}/>
-            </Tab.Navigator>
-        </NavigationContainer>
-    )
+// Plain object mapping screen names to components
+const screenComponents = {
+  Home: Home,
+  Tasks: Tasks,
+  Entrance: Entrance,
+  SpyCam: SpyCam,
+  Settings: Settings,
+};
+
+// Plain object mapping roles to their screens
+const roleScreens = {
+  ISTVAN: ['Home', 'Entrance', 'Settings'],
+  VILLANO: ['Home', 'Settings'],
+  MORTIMER: ['Home', 'SpyCam', 'Settings'],
+  ACOLITO: ['Home', 'Tasks', 'Entrance', 'Settings'],
+};
+
+function Navigator({ player }) {
+  // Get the screens for this player's role
+  const screensToRender = roleScreens[player.profile.role] || ['Home', 'Tasks', 'Settings'];
+
+  return (
+    <NavigationContainer>
+      <Tab.Navigator
+        style={{ marginTop: '10%' }}
+        screenOptions={({ route }) => ({
+          tabBarIcon: ({ color }) => {
+            let iconName = 'help';
+            if (route.name === 'Home') iconName = 'home';
+            else if (route.name === 'Settings') iconName = 'settings-sharp';
+            else if (route.name === 'Tasks') iconName = 'map-sharp';
+            else if (route.name === 'Entrance') iconName = 'log-in';
+            else if (route.name === 'SpyCam') iconName = 'camera';
+            return <Ionicons name={iconName} size={26} color={color} />;
+          },
+          tabBarIndicatorStyle: { backgroundColor: 'yellow' },
+          tabBarActiveTintColor: 'yellow',
+          tabBarInactiveTintColor: '#9F9F9F',
+          tabBarShowIcon: true,
+          tabBarShowLabel: false,
+          swipeEnabled: true,
+          tabBarIndicatorContainerStyle: { backgroundColor: 'black' },
+        })}
+      >
+        {screensToRender.map((screenName) => {
+          const ScreenComponent = screenComponents[screenName];
+          return (
+            <Tab.Screen key={screenName} name={screenName}>
+              {() => <ScreenComponent player={player} />}
+            </Tab.Screen>
+          );
+        })}
+      </Tab.Navigator>
+    </NavigationContainer>
+  );
 }
 
-export default Navigator
+export default Navigator;
