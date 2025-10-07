@@ -8,6 +8,7 @@ import { useState, useEffect } from 'react';
 import googleJSON from './android/app/google-services.json';
 import BootSplash from "react-native-bootsplash";
 import Navigator from './conponents/navigator';
+import { io } from "socket.io-client";
 
 GoogleSignin.configure({
   //REMEMBER TO DOWNLOAD google-services.json and put it into the /android/app directory
@@ -64,6 +65,11 @@ const styles = StyleSheet.create({
   }
 });
 
+const socket = io(serverURL);
+
+socket.on("connect", () => {
+  console.log("✅ Connected to socket server:", socket.id);
+});
 
 
 const onGoogleButtonPress = async () => {
