@@ -8,7 +8,7 @@ import { useState, useEffect } from 'react';
 import googleJSON from './android/app/google-services.json';
 import BootSplash from "react-native-bootsplash";
 import Navigator from './conponents/navigator';
-import { io } from "socket.io-client";
+import connectSocket  from "./socket";
 
 GoogleSignin.configure({
   //REMEMBER TO DOWNLOAD google-services.json and put it into the /android/app directory
@@ -64,13 +64,6 @@ const styles = StyleSheet.create({
     marginTop: '99%'
   }
 });
-
-const socket = io(serverURL);
-
-socket.on("connect", () => {
-  console.log("✅ Connected to socket server:", socket.id);
-});
-
 
 const onGoogleButtonPress = async () => {
   // Check if your device supports Google Play
@@ -177,6 +170,8 @@ return (
       });
 
       console.log(response);
+
+      connectSocket(firebaseIdToken, serverURL);
 
       const data = await response.json();
       console.log("Server response:", data);
