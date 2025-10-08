@@ -20,5 +20,7 @@ const connectSocket = (firebaseIdToken: string, serverUrl:  string) => {
   });
   socket.emit("info", "carlos012100@gmail.com")
 };
-
-export default connectSocket;
+const getSocket= () => {
+  return socket
+}
+export default { getSocket, connectSocket};
