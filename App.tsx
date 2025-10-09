@@ -7,8 +7,9 @@ import React from 'react';
 import { useState, useEffect } from 'react';
 import googleJSON from './android/app/google-services.json';
 import BootSplash from "react-native-bootsplash";
-import Navigator from './conponents/navigator';
+import Navigator from './components/navigator';
 import socketIO  from "./socketIO";
+import { NavigationContainer } from '@react-navigation/native';
 
 GoogleSignin.configure({
   //REMEMBER TO DOWNLOAD google-services.json and put it into the /android/app directory
@@ -130,7 +131,11 @@ function App()
   if(user && success)
   {
     return(
-      <Navigator player= {player}/>
+      <NavigationContainer>
+              <Navigator player= {player}/>
+
+
+      </NavigationContainer>
     )
     
   }
