@@ -8,7 +8,7 @@ import { useState, useEffect } from 'react';
 import googleJSON from './android/app/google-services.json';
 import BootSplash from "react-native-bootsplash";
 import Navigator from './conponents/navigator';
-import connectSocket  from "./socket";
+import socketIO  from "./socketIO";
 
 GoogleSignin.configure({
   //REMEMBER TO DOWNLOAD google-services.json and put it into the /android/app directory
@@ -171,7 +171,7 @@ return (
 
       console.log(response);
 
-      connectSocket(firebaseIdToken, serverURL);
+      socketIO.connectSocket(firebaseIdToken, serverURL);
 
       const data = await response.json();
       console.log("Server response:", data);
