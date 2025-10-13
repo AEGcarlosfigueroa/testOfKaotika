@@ -2,7 +2,7 @@ import * as React from 'react';
 import IstvanNav from './istvanNav';
 // import villanoNav from './villanoNav';
 // import mortimerNav from './mortimerNav';
-// import acolitoNav from './acolitoNav';
+import AcolitoNav from './acolitoNav';
 
 function Navigator ({ player })
 {
@@ -10,6 +10,9 @@ function Navigator ({ player })
   {
     case 'ISTVAN':
       return <IstvanNav player={player} />
+
+    case 'ACOLITO':
+    return  <AcolitoNav player={player} />
 
     default:
       return null;

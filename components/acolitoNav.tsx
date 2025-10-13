@@ -1,16 +1,24 @@
 // acolitoNav.tsx
 import React from 'react';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
-import Ionicons from 'react-native-vector-icons/Ionicons';
+import Ionicons from '@react-native-vector-icons/ionicons';
 import Home from '../screens/home';
 import Entrance from '../screens/Entrance';
 import Settings from '../screens/settings';
+import { StyleSheet } from 'react-native';
+
+const styles = StyleSheet.create({
+  topOffset: {
+    marginTop: '10%'
+  }
+})
 
 const Tab = createMaterialTopTabNavigator();
 
-export function acolitoNav({ player }: { player: any }) {
+export function AcolitoNav({ player }: { player: any }) {
   return (
     <Tab.Navigator
+      style={styles.topOffset}
       screenOptions={({ route }) => ({
         tabBarIcon: ({ color }) => (
           <Ionicons
@@ -28,8 +36,8 @@ export function acolitoNav({ player }: { player: any }) {
         tabBarIndicatorStyle: { backgroundColor: 'black' },
         tabBarActiveTintColor: 'black',
         tabBarInactiveTintColor: '#000000ff',
-        tabBarShowIcon: false,
-        tabBarShowLabel: true,
+        tabBarShowIcon: true,
+        tabBarShowLabel: false,
       })}
     >
       <Tab.Screen name="Home">{() => <Home player={player} />}</Tab.Screen>
@@ -39,4 +47,4 @@ export function acolitoNav({ player }: { player: any }) {
   );
 }
 
-export default acolitoNav;
+export default AcolitoNav;
