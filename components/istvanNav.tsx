@@ -4,8 +4,8 @@ import { createMaterialTopTabNavigator } from '@react-navigation/material-top-ta
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
 import Home from '../screens/home';
-// import Entrance from '../screens/Entrance';
-// import Settings from '../screens/settings';
+import Settings from '../screens/settings';
+import Scanner from '../screens/scanner';
 
 const Tab = createMaterialTopTabNavigator();
 
@@ -26,16 +26,16 @@ export function IstvanNav({ player }: { player: any }) {
             color={color}
           />
         ),
-        tabBarIndicatorStyle: { backgroundColor: 'yellow' },
-        tabBarActiveTintColor: 'yellow',
-        tabBarInactiveTintColor: '#9F9F9F',
-        tabBarShowIcon: true,
-        tabBarShowLabel: false,
+        tabBarIndicatorStyle: { backgroundColor: 'black' },
+        tabBarActiveTintColor: 'black',
+        tabBarInactiveTintColor: '#000000ff',
+        tabBarShowIcon: false,
+        tabBarShowLabel: true,
       })}
     >
       <Tab.Screen name="Home">{() => <Home player={player} />}</Tab.Screen>
-      {/* <Tab.Screen name="Entrance">{() => <Entrance player={player} />}</Tab.Screen>
-      <Tab.Screen name="Settings">{() => <Settings player={player} />}</Tab.Screen> */}
+      <Tab.Screen name="Entrance">{() => <Scanner/>}</Tab.Screen>
+      <Tab.Screen name="Settings">{() => <Settings player={player} />}</Tab.Screen>
     </Tab.Navigator>
   );
 }

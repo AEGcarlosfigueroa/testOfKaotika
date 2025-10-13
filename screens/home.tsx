@@ -1,8 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Image, StyleSheet, Button } from 'react-native';
-import QRCode from 'react-native-qrcode-svg';
-import socketIO from '../socketIO';
-// import socket from '../socket';
+import { View, Image, StyleSheet, Text } from 'react-native';
 
 const styles = StyleSheet.create({
   image: {
@@ -10,7 +7,16 @@ const styles = StyleSheet.create({
     width: '100%',
     position: 'absolute',
     zIndex: -10,
-  }
+  },
+  title: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    marginBottom: 20,
+    color: '#fff',
+    textShadowColor: 'rgba(0, 0, 0, 0.7)',
+    textShadowOffset: { width: 2, height: 2 },
+    textShadowRadius: 4,
+  },
 });
 
 type Player = { profile: { role: "ACOLITO" | "ISTVAN" | "MORTIMER" | "VILLANO" } };
@@ -33,45 +39,10 @@ function Home({ player }: { player: Player }) {
       break;
   }
 
-  const [showQR, setShowQR] = useState(false);
-  const [socketId, setSocketId] = useState("null")
-
-  
-  
-  useEffect (() =>{
-    const socket = socketIO.getSocket();
-    if(!socket){
-      return;
-    }
-    const handlesConnect = () => {
-        setSocketId(socket.id || "");
-    }
-
-    if(socket.connected)
-    {
-      handlesConnect();
-    }
-    else {
-      socket.on("connect", handlesConnect);
-    }
-
-    // return () => {
-    // socket.off("connect", handlesConnect);
-    // };
-
-  },[]);
-
-  const revealQR = () => {
-    setShowQR(prev => !prev);
-  }
-
   return (
     <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+      <Text style={styles.title}>Welcome {player.profile.role}</Text>
       <Image source={imageSource} style={styles.image} />
-
-      <Button onPress={revealQR} title={showQR ? "Hide Esoteric Wisdom" : " Reveal Mystery SCroll"}/>
-
-      {showQR && <QRCode value={socketId} size={150} />}
     </View>
   );
 }
