@@ -6,47 +6,52 @@ import socketIO from '../socketIO';
 const styles = StyleSheet.create({
   image: {
     height: '100%',
+    width: '100%',
     position: 'absolute',
     zIndex: -10,
-    width: '100%'
-  }
+  },
+  qrContainer: {
+    marginTop: 20,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
 });
 
-function Entrance({player}) {
+function Entrance({ player }: { player: { email: string } }) {
   const [showQR, setShowQR] = useState(false);
-  const [socketId, setSocketId] = useState("");
+  const [socketId, setSocketId] = useState('');
 
   useEffect(() => {
     const socket = socketIO.getSocket();
     if (!socket) return;
 
-    const handleConnect = () => {
-      setSocketId(socket.id || "");
-    };
+    const handleConnect = () => setSocketId(socket.id || '');
 
     if (socket.connected) {
       handleConnect();
     } else {
-      socket.on("connect", handleConnect);
+      socket.on('connect', handleConnect);
     }
 
     return () => {
-      socket.off("connect", handleConnect);
+      socket.off('connect', handleConnect);
     };
   }, []);
 
-  const revealQR = () => {
-    setShowQR(prev => !prev);
-  };
+  const revealQR = () => setShowQR(prev => !prev);
 
   return (
     <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-      <Image source={require("./../assets/Entrance.webp")} style={styles.image} />
-      <Button 
-        onPress={revealQR} 
-        title={showQR ? "Hide Esoteric Wisdom" : "Reveal Mystery Scroll"} 
+      <Image source={require('./../assets/Entrance.webp')} style={styles.image} />
+      <Button
+        onPress={revealQR}
+        title={showQR ? 'Hide Esoteric Wisdom' : 'Reveal Mystery Scroll'}
       />
-      {showQR && <QRCode value={player.email} size={150} />}
+      {showQR && (
+        <View style={styles.qrContainer}>
+          <QRCode value={player?.email || 'no-email'} size={150} />
+        </View>
+      )}
     </View>
   );
 }
