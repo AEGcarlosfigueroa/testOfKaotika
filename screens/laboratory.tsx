@@ -1,5 +1,6 @@
 import React from 'react';
 import { Image, StyleSheet, View, Text } from 'react-native';
+import playerContext from '../context';
 
 const styles = StyleSheet.create({
   image: {
@@ -10,7 +11,10 @@ const styles = StyleSheet.create({
   },
 });
 
-function Laboratory({ player }: { player: any }) {
+function Laboratory() {
+
+  const context = React.useContext(playerContext);
+  const {player} = context;
   // Only verified players can see lab content
   if (!player?.isInside) {
     return (

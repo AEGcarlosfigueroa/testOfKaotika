@@ -1,5 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { View, Image, StyleSheet, Text } from 'react-native';
+import playerContext from '../context';
 
 const styles = StyleSheet.create({
   image: {
@@ -19,9 +20,12 @@ const styles = StyleSheet.create({
   },
 });
 
-type Player = { profile: { role: "ACOLITO" | "ISTVAN" | "MORTIMER" | "VILLANO" } };
 
-function Home({ player }: { player: Player }) {
+function Home() {
+
+  const context = useContext(playerContext)
+  const {player} = context;
+
   let imageSource;
 
   switch(player.profile.role) {

@@ -1,7 +1,9 @@
+import React from "react";
 import { StyleSheet, TouchableOpacity, Text, Image } from "react-native";
 import { getAuth, signOut } from "@react-native-firebase/auth";
 import { GoogleSignin } from "@react-native-google-signin/google-signin";
 import { View } from "react-native";
+import playerContext from "../context";
 
 const styles = StyleSheet.create({
     button: {
@@ -33,8 +35,11 @@ const styles = StyleSheet.create({
   }
 });
 
-function Settings({player}) {
+function Settings() {
 
+  const context = React.useContext(playerContext)
+  const {player} = context
+  
   let imageSource;
 
     switch(player.profile.role) {

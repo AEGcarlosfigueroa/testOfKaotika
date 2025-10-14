@@ -15,7 +15,7 @@ const styles = StyleSheet.create({
 
 const Tab = createMaterialTopTabNavigator();
 
-export function mortimerNav({ player }: { player: any }) {
+export function mortimerNav() {
   return (
     <Tab.Navigator
       style={styles.topOffset}
@@ -40,9 +40,9 @@ export function mortimerNav({ player }: { player: any }) {
         tabBarShowLabel: false,
       })}
     >
-      <Tab.Screen name="Home">{() => <Home player={player} />}</Tab.Screen>
-      <Tab.Screen name="Entrance">{() => <Entrance player={player} />}</Tab.Screen>
-      <Tab.Screen name="Settings">{() => <Settings player={player} />}</Tab.Screen>
+      <Tab.Screen name="Home">{() => <Home/>}</Tab.Screen>
+      <Tab.Screen name="Entrance">{() => <Entrance/>}</Tab.Screen>
+      <Tab.Screen name="Settings">{() => <Settings/>}</Tab.Screen>
     </Tab.Navigator>
   );
 }

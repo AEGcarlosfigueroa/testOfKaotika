@@ -9,7 +9,7 @@ import Scanner from '../screens/scanner';
 
 const Tab = createMaterialTopTabNavigator();
 
-export function IstvanNav({ player }: { player: any }) {
+export function IstvanNav() {
   return (
     <Tab.Navigator
       screenOptions={({ route }) => ({
@@ -33,9 +33,9 @@ export function IstvanNav({ player }: { player: any }) {
         tabBarShowLabel: true,
       })}
     >
-      <Tab.Screen name="Home">{() => <Home player={player} />}</Tab.Screen>
+      <Tab.Screen name="Home">{() => <Home/>}</Tab.Screen>
       <Tab.Screen name="Entrance">{() => <Scanner/>}</Tab.Screen>
-      <Tab.Screen name="Settings">{() => <Settings player={player} />}</Tab.Screen>
+      <Tab.Screen name="Settings">{() => <Settings/>}</Tab.Screen>
     </Tab.Navigator>
   );
 }

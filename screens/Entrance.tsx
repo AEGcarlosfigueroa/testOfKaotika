@@ -3,6 +3,7 @@ import { View, Image, StyleSheet, Button, Alert } from 'react-native';
 import QRCode from 'react-native-qrcode-svg';
 import socketIO from '../socketIO';
 import { useNavigation } from '@react-navigation/native';
+import playerContext from '../context';
 
 const styles = StyleSheet.create({
   image: {
@@ -18,7 +19,10 @@ const styles = StyleSheet.create({
   },
 });
 
-function Entrance({ player }: { player: { email: string, isInside: boolean } }) {
+function Entrance() {
+
+  const context = React.useContext(playerContext);
+  const {player} = context
   const [showQR, setShowQR] = useState(false);
   const [socketId, setSocketId] = useState('');
   const navigation = useNavigation(); // this is needed for navigation
