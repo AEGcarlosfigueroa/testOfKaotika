@@ -21,7 +21,7 @@ const styles = StyleSheet.create({
 function Entrance({ player }: { player: { email: string } }) {
   const [showQR, setShowQR] = useState(false);
   const [socketId, setSocketId] = useState('');
-  const navigation = useNavigation(); // 👈 this is needed for navigation
+  const navigation = useNavigation(); // this is needed for navigation
 
   // --- Handle socket connection ---
   useEffect(() => {
@@ -51,6 +51,7 @@ function Entrance({ player }: { player: { email: string } }) {
 
     const handleEntryGranted = (data: any) => {
       if (data.verified) {
+        
         Alert.alert('Access Granted', 'You may enter the next room.');
         navigation.navigate('Laboratory', { verified: true });
       } else {

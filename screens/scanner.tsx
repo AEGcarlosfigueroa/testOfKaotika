@@ -71,7 +71,9 @@ export default function Scanner() {
       console.log('Scanned email:', scannedEmail);
 
       const socket = socketIO.getSocket();
-      if (socket) socket.emit('scan-acolito', { email: scannedEmail });
+      if (socket) socket.emit('scan', scannedEmail );
+
+      console.log("socket:", socket)
 
       Alert.alert('Scan Success!', `You scanned: ${scannedEmail}`);
     }
