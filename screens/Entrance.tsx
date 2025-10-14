@@ -22,7 +22,7 @@ const styles = StyleSheet.create({
 function Entrance() {
 
   const context = React.useContext(playerContext);
-  const {player} = context
+  const {player, setPlayer} = context
   const [showQR, setShowQR] = useState(false);
   const [socketId, setSocketId] = useState('');
   const navigation = useNavigation(); // this is needed for navigation
@@ -49,26 +49,48 @@ function Entrance() {
   const revealQR = () => setShowQR(prev => !prev);
 
   // --- Listen for entry verification from the server ---
+  //   useEffect(() => {
+  //   const socket = socketIO.getSocket();
+  //   if (!socket) return;
+
+  //   const handleEntryGranted = (data: any) => {
+  //     console.log(data)
+
+  //     if (data === "positive") {
+
+  //       Alert.alert('Access Granted', 'You may enter the next room.');
+
+  //       navigation.navigate('Laboratory');
+        
+  //     } else {
+  //       Alert.alert('Access Denied', 'You are not verified yet.');
+  //     }
+  //   };
+
+  //   socket.on('authorization', handleEntryGranted);
+  // }, [navigation]);
+
   useEffect(() => {
     const socket = socketIO.getSocket();
     if (!socket) return;
 
-    const handleEntryGranted = (data: any) => {
-      console.log(data)
-      if (data === "positive") {
+    const handleEntryGranted = (updatedPlayer) => {
+      setPlayer(updatedPlayer);
+
+      if (updatedPlayer.isInside) {
+
         Alert.alert('Access Granted', 'You may enter the next room.');
-        let isInside = player.isInside;
-
-        isInside = !isInside;
-
-        player.isInside = isInside;
-        navigation.navigate('Laboratory');
+        
       } else {
         Alert.alert('Access Denied', 'You are not verified yet.');
       }
+    
     };
 
     socket.on('authorization', handleEntryGranted);
+    return () => {
+      socket.off('authorization', handleEntryGranted)
+    }
   }, [navigation]);
 
   // --- Render UI ---

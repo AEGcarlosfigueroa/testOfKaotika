@@ -133,7 +133,7 @@ function App()
   if(user && success)
   {
     return(
-      <playerContext.Provider value = {{player : player}}>
+      <playerContext.Provider value = {{player, setPlayer}}>
       <NavigationContainer>
         
               <Navigator/>
