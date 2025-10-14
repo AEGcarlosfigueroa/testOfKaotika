@@ -21,7 +21,7 @@ const styles = StyleSheet.create({
 function Entrance({ player }: { player: { email: string, isInside: boolean } }) {
   const [showQR, setShowQR] = useState(false);
   const [socketId, setSocketId] = useState('');
-  const navigation = useNavigation(); // 👈 this is needed for navigation
+  const navigation = useNavigation(); // this is needed for navigation
 
   // --- Handle socket connection ---
   useEffect(() => {
