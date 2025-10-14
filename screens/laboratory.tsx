@@ -12,7 +12,7 @@ const styles = StyleSheet.create({
 
 function Laboratory({ player }: { player: any }) {
   // Only verified players can see lab content
-  if (!player?.verified) {
+  if (!player?.isInside) {
     return (
       <View style={{ flex: 1, backgroundColor: 'black', justifyContent: 'center', alignItems: 'center' }}>
         <Text style={{ color: 'white', fontSize: 20 }}>You are not verified yet!</Text>

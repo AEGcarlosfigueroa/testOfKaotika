@@ -18,7 +18,7 @@ const styles = StyleSheet.create({
   },
 });
 
-function Entrance({ player }: { player: { email: string } }) {
+function Entrance({ player }: { player: { email: string, isInside: boolean } }) {
   const [showQR, setShowQR] = useState(false);
   const [socketId, setSocketId] = useState('');
   const navigation = useNavigation(); // 👈 this is needed for navigation
@@ -50,16 +50,21 @@ function Entrance({ player }: { player: { email: string } }) {
     if (!socket) return;
 
     const handleEntryGranted = (data: any) => {
-      if (data.verified) {
+      console.log(data)
+      if (data === "positive") {
         Alert.alert('Access Granted', 'You may enter the next room.');
-        navigation.navigate('Laboratory', { verified: true });
+        let isInside = player.isInside;
+
+        isInside = !isInside;
+
+        player.isInside = isInside;
+        navigation.navigate('Laboratory');
       } else {
         Alert.alert('Access Denied', 'You are not verified yet.');
       }
     };
 
-    socket.on('entry-granted', handleEntryGranted);
-    return () => socket.off('entry-granted', handleEntryGranted);
+    socket.on('authorization', handleEntryGranted);
   }, [navigation]);
 
   // --- Render UI ---
