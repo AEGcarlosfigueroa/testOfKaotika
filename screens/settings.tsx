@@ -33,10 +33,29 @@ const styles = StyleSheet.create({
   }
 });
 
-function Settings() {
+function Settings({player}) {
+
+  let imageSource;
+
+    switch(player.profile.role) {
+
+    case "ACOLITO":
+      imageSource = require("./../assets/settings.png");
+      break;
+    case "ISTVAN":
+      imageSource = require("./../assets/istvanHome.webp");
+      break;
+    case "MORTIMER":
+      imageSource = require("./../assets/studyChamber.webp");
+      break;
+    case "VILLANO":
+      imageSource = require("./../assets/dungeon.png");
+      break;
+  }
+
     return (
           <>
-            <Image source={require("./../assets/settings.png")} style={styles.image}/>
+            <Image source={imageSource} style={styles.image}/>
         <TouchableOpacity style={styles.button}
           onPress={() => {
             signOut(getAuth());

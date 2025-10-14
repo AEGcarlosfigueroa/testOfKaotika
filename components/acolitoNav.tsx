@@ -5,6 +5,7 @@ import Ionicons from '@react-native-vector-icons/ionicons';
 import Home from '../screens/home';
 import Entrance from '../screens/Entrance';
 import Settings from '../screens/settings';
+import Laboratory from '../screens/laboratory';
 import { StyleSheet } from 'react-native';
 
 const styles = StyleSheet.create({
@@ -43,6 +44,7 @@ export function AcolitoNav({ player }: { player: any }) {
       <Tab.Screen name="Home">{() => <Home player={player} />}</Tab.Screen>
       <Tab.Screen name="Entrance">{() => <Entrance player={player} />}</Tab.Screen>
       <Tab.Screen name="Settings">{() => <Settings player={player} />}</Tab.Screen>
+      <Tab.Screen name="Laboratory">{() => <Laboratory player={player} />}</Tab.Screen>
     </Tab.Navigator>
   );
 }

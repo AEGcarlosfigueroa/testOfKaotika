@@ -98,7 +98,7 @@ export default function Scanner() {
 
   return (
     <View style={{ flex: 1 }}>
-      <Image source={require('./../assets/settings.png')} style={styles.image} />
+      <Image source={require('./../assets/orb.png')} style={styles.image} />
       {camera ? (
         <Camera
           style={{ flex: 1 }}
