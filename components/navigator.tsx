@@ -1,7 +1,7 @@
 import * as React from 'react';
 import IstvanNav from './istvanNav';
 // import villanoNav from './villanoNav';
-// import mortimerNav from './mortimerNav';
+import MortimerNav from './mortimerNav';
 import AcolitoNav from './acolitoNav';
 import playerContext from '../context';
 import LabNav from './labNav';
@@ -24,19 +24,21 @@ function Navigator ()
   switch (player.profile.role)
   {
     case 'ISTVAN':
-      return <IstvanNav player={player} />
+      return <IstvanNav/>
 
     case 'ACOLITO':
       if(player.isInside)
       {
-        return <LabNav player={player}/>
+        return <LabNav/>
       }
 
       else
       {
-        return  <AcolitoNav player={player} />
+        return  <AcolitoNav/>
       }
-            
+
+    case 'MORTIMER': 
+        return <MortimerNav/>
 
     default:
       return null;

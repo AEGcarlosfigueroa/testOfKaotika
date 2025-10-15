@@ -74,7 +74,7 @@ function Entrance() {
     const socket = socketIO.getSocket();
     if (!socket) return;
 
-    const handleEntryGranted = (updatedPlayer) => {
+    const handleEntryGranted = (updatedPlayer: any) => {
       setPlayer(updatedPlayer);
 
       if (updatedPlayer.isInside) {

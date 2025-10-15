@@ -5,12 +5,11 @@ import Ionicons from '@react-native-vector-icons/ionicons';
 import Home from '../screens/home';
 import Entrance from '../screens/Entrance';
 import Settings from '../screens/settings';
-import Laboratory from '../screens/laboratory';
 import { StyleSheet } from 'react-native';
 
 const styles = StyleSheet.create({
   topOffset: {
-    marginTop: '10%'
+    marginTop: '10%',
   }
 })
 
@@ -34,17 +33,17 @@ export function AcolitoNav() {
             color={color}
           />
         ),
-        tabBarIndicatorStyle: { backgroundColor: 'black' },
-        tabBarActiveTintColor: 'black',
-        tabBarInactiveTintColor: '#000000ff',
+        tabBarIndicatorStyle: { backgroundColor: 'yellow' },
+        tabBarActiveTintColor: 'yellow',
+        tabBarInactiveTintColor: 'gray',
         tabBarShowIcon: true,
         tabBarShowLabel: false,
+        tabBarStyle: { backgroundColor: 'black' }
       })}
     >
       <Tab.Screen name="Home">{() => <Home/>}</Tab.Screen>
       <Tab.Screen name="Entrance">{() => <Entrance/>}</Tab.Screen>
       <Tab.Screen name="Settings">{() => <Settings/>}</Tab.Screen>
-      <Tab.Screen name="Laboratory">{() => <Laboratory/>}</Tab.Screen>
     </Tab.Navigator>
   );
 }

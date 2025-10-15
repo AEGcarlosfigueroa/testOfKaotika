@@ -6,12 +6,20 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import Home from '../screens/home';
 import Settings from '../screens/settings';
 import Scanner from '../screens/scanner';
+import { StyleSheet } from 'react-native';
+
+const styles = StyleSheet.create({
+  topOffset: {
+    marginTop: '10%'
+  }
+})
 
 const Tab = createMaterialTopTabNavigator();
 
 export function IstvanNav() {
   return (
     <Tab.Navigator
+      style={styles.topOffset}
       screenOptions={({ route }) => ({
         tabBarIcon: ({ color }) => (
           <Ionicons
@@ -26,11 +34,12 @@ export function IstvanNav() {
             color={color}
           />
         ),
-        tabBarIndicatorStyle: { backgroundColor: 'black' },
-        tabBarActiveTintColor: 'black',
-        tabBarInactiveTintColor: '#000000ff',
-        tabBarShowIcon: false,
-        tabBarShowLabel: true,
+        tabBarIndicatorStyle: { backgroundColor: 'yellow' },
+        tabBarActiveTintColor: 'yellow',
+        tabBarInactiveTintColor: 'gray',
+        tabBarShowIcon: true,
+        tabBarShowLabel: false,
+        tabBarStyle: { backgroundColor: 'black' }
       })}
     >
       <Tab.Screen name="Home">{() => <Home/>}</Tab.Screen>
