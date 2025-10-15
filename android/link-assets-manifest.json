@@ -1,0 +1,13 @@
+{
+  "migIndex": 1,
+  "data": [
+    {
+      "path": "assets/fonts/OptimusPrinceps.ttf",
+      "sha1": "52c754b29869b1b6fb45cc782c64103fc77dd5e7"
+    },
+    {
+      "path": "assets/fonts/OptimusPrincepsSemiBold.ttf",
+      "sha1": "a9a252b54bb673a9e56729e9bb9e70354d460af0"
+    }
+  ]
+}

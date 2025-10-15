@@ -10,7 +10,7 @@ const styles = StyleSheet.create({
     top: '45%',
     left: '25%',
     width: '50%',
-    height : '5%',
+    height : '10%',
     backgroundColor: 'rgba(0,0,0,0.5)',
     position: 'absolute',
     borderRadius: '25%',
@@ -20,7 +20,9 @@ const styles = StyleSheet.create({
   text: {
     color: 'yellow',
     alignSelf: 'center',
-    margin: '5%'
+    margin: '15%',
+    fontSize: 12,
+    fontFamily: 'OptimusPrinceps'
   },
   view: {
     backgroundColor: 'grey',

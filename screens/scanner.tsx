@@ -12,12 +12,12 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 24,
-    fontWeight: 'bold',
     marginBottom: 20,
     color: '#fff',
     textShadowColor: 'rgba(0, 0, 0, 0.7)',
     textShadowOffset: { width: 2, height: 2 },
     textShadowRadius: 4,
+    fontFamily: 'OptimusPrinceps',
   },
   overlay: {
     position: 'absolute',
@@ -110,11 +110,12 @@ export default function Scanner() {
         />
       ) : (
         <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-          <Text style={{ color: '#fff', fontSize: 18 }}>Camera is off</Text>
+          <Text style={{ color: 'white', fontSize: 20, marginBottom: -400}}>Camera is off</Text>
+      
         </View>
       )}
       <View style={styles.overlay}>
-        <Text style={styles.title}>Scan an Acolito QR</Text>
+        <Text style={styles.title}>Scan the forbidden Scroll</Text>
       </View>
       <View style={styles.buttonContainer}>
         <Button

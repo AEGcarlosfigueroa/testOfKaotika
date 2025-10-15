@@ -48,27 +48,6 @@ function Entrance() {
   // --- Toggle QR visibility ---
   const revealQR = () => setShowQR(prev => !prev);
 
-  // --- Listen for entry verification from the server ---
-  //   useEffect(() => {
-  //   const socket = socketIO.getSocket();
-  //   if (!socket) return;
-
-  //   const handleEntryGranted = (data: any) => {
-  //     console.log(data)
-
-  //     if (data === "positive") {
-
-  //       Alert.alert('Access Granted', 'You may enter the next room.');
-
-  //       navigation.navigate('Laboratory');
-        
-  //     } else {
-  //       Alert.alert('Access Denied', 'You are not verified yet.');
-  //     }
-  //   };
-
-  //   socket.on('authorization', handleEntryGranted);
-  // }, [navigation]);
 
   useEffect(() => {
     const socket = socketIO.getSocket();
