@@ -21,7 +21,7 @@ GoogleSignin.configure({
 const serverURL = "https://testofkaotika-server.onrender.com";
 // const serverURL = "http://localhost:3000";
 // const serverURL = "http://10.0.2.2:3000"
-// const serverURL = "http://10.70.0.154:3000"
+// const serverURL = "http://10.70.0.22:3000"
 
 
 const styles = StyleSheet.create({
