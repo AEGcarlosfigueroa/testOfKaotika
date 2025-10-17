@@ -8,7 +8,7 @@ const styles = StyleSheet.create({
     view: {
         width: '90%',
         marginTop: '5%',
-        height: '15%',
+        height: 'auto',
         backgroundColor: 'rgba(0,0,0,0.5)',
         borderWidth: 5,
         borderStyle: 'solid',

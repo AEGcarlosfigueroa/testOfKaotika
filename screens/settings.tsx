@@ -2,8 +2,9 @@ import React from "react";
 import { StyleSheet, TouchableOpacity, Text, Image } from "react-native";
 import { getAuth, signOut } from "@react-native-firebase/auth";
 import { GoogleSignin } from "@react-native-google-signin/google-signin";
-import { View } from "react-native";
+import socketIO from "../socketIO";
 import playerContext from "../context";
+
 
 const styles = StyleSheet.create({
     button: {
@@ -65,6 +66,8 @@ function Settings() {
           onPress={() => {
             signOut(getAuth());
             GoogleSignin.revokeAccess();
+            const socket = socketIO.getSocket();
+            socket?.disconnect();
           }}
         >
           <Text style={styles.text}>SIGN OUT</Text>

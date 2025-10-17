@@ -1,6 +1,6 @@
 import { Image, ScrollView, StyleSheet } from "react-native";
 import React from "react";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useReducer } from "react";
 import socketIO from "../socketIO";
 import PlayerView from "../props/playerView";
 import {SafeAreaView, SafeAreaProvider} from 'react-native-safe-area-context';
@@ -19,9 +19,12 @@ function SpyCam() {
   // --- Handle socket connection ---
   const [socketId, setSocketId] = useState('');
   const [data, setData] = useState([]);
+  const [, forceUpdate] = useReducer(x => x + 1, 0);
 
   const handleNewData = (newData: any) => {
     setData(newData);
+    console.log(newData);
+    forceUpdate
   }
 
   // FAKE DATA FOR TESTING PURPOSES
@@ -95,9 +98,6 @@ function SpyCam() {
     if (!socket) return;
 
     socket.on('update', handleNewData);
-    return () => {
-      socket.off('update', handleNewData)
-    }
   })
 
     return (
