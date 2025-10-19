@@ -24,7 +24,7 @@ function Navigator ()
   switch (player.profile.role)
   {
     case 'ISTVAN':
-      return <IstvanNav player={player} />
+      return <IstvanNav/>
 
     case 'ACOLITO':
       if(player.isInside)

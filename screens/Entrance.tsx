@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Image, StyleSheet, Button, Alert } from 'react-native';
+import { View, Image, StyleSheet, Alert, TouchableOpacity, Text} from 'react-native';
 import QRCode from 'react-native-qrcode-svg';
 import socketIO from '../socketIO';
 import { useNavigation } from '@react-navigation/native';
@@ -17,6 +17,13 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
+  button: {
+    position: "absolute",
+    top: '10%',
+    
+
+  },
+    
 });
 
 function Entrance() {
@@ -76,10 +83,9 @@ function Entrance() {
   return (
     <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
       <Image source={require('./../assets/Entrance.webp')} style={styles.image} />
-      <Button
-        onPress={revealQR}
-        title={showQR ? 'Hide Esoteric Wisdom' : 'Reveal Mystery Scroll'}
-      />
+      <TouchableOpacity 
+         style= {styles.button} onPress={revealQR}><Text>{showQR ? 'Hide Esoteric Wisdom' : 'Reveal Mystery Scroll'}</Text>
+      </TouchableOpacity>
       {showQR && (
         <View style={styles.qrContainer}>
           <QRCode value={player?.email || 'no-email'} size={150} />

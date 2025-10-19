@@ -1,11 +1,13 @@
 // IstvanNavigator.tsx
 import React from 'react';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
-import Ionicons from 'react-native-vector-icons/Ionicons';
 import Home from '../screens/home';
 import Settings from '../screens/settings';
 import Scanner from '../screens/scanner';
-import { StyleSheet } from 'react-native';
+import { StyleSheet, Image } from 'react-native';
+import rune from "../assets/icons/rune.png"
+import pluto from "../assets/icons/pluto.png"
+import tarot from "../assets/icons/tarot.png"
 
 
 const Tab = createMaterialTopTabNavigator();
@@ -22,28 +24,29 @@ export function IstvanNav() {
       style={styles.topOffset}
       
       screenOptions={({ route }) => ({
-        tabBarIcon: ({ color }) => (
-          <Ionicons
-            name={
-              route.name === 'Home'
-                ? 'home'
-                : route.name === 'Entrance'
-                ? 'log-in'
-                : 'settings-sharp'
-            }
-            size={18}
-            color={color}
-          />
-        ),
+        tabBarIcon: ({ color }) => {
+          if(route.name === "Home")
+          {
+            return (<Image source={rune} style={{width : 30, height : 30}}/>)
+          }
+          else if(route.name === "Entrance")
+          {
+            return (<Image source={pluto} style={{width : 30, height : 30}}/>)
+          }
+          else {
+            return (<Image source={tarot} style={{width : 30, height : 30}}/>)
+
+          }
+        },
         tabBarIndicatorStyle: { backgroundColor: 'black' },
         tabBarActiveTintColor: 'black',
-        tabBarInactiveTintColor: '#000000ff',
+        tabBarInactiveTintColor: 'rgba(0,0,0,0.5)',
         tabBarShowIcon: true,
         tabBarShowLabel: true,
         tabBarLabelStyle: { fontSize: 18, fontFamily: 'OptimusPrincepsSemiBold' },
         // tabBarItemStyle: { width: 100 },
         tabBarStyle: { backgroundColor: '#E2DFD2' },
-          tabBarPressOpacity: 0.1, // Tab will fade to 50% opacity when pressed
+          tabBarPressOpacity: 0.9, // Tab will fade to 50% opacity when pressed
       })}
     >
       <Tab.Screen name="Home">{() => <Home/>}</Tab.Screen>

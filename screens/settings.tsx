@@ -15,14 +15,15 @@ const styles = StyleSheet.create({
     position: 'absolute',
     borderRadius: '25%',
     borderWidth: 2,
-    borderColor: 'grey'
+    borderColor: 'grey',
+    justifyContent: 'center'
+
   },
   text: {
     color: 'yellow',
     alignSelf: 'center',
-    margin: '15%',
-    fontSize: 12,
-    fontFamily: 'OptimusPrinceps'
+    fontSize: 18,
+    fontFamily: 'OptimusPrincepsSemiBold',
   },
   view: {
     backgroundColor: 'grey',
