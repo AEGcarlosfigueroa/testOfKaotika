@@ -18,10 +18,10 @@ GoogleSignin.configure({
 });
 
 // const serverURL = "http://10.50.0.50:6002";
-// const serverURL = "https://testofkaotika-server.onrender.com";
+const serverURL = "https://testofkaotika-server.onrender.com";
 // const serverURL = "http://localhost:3000";
 // const serverURL = "http://10.0.2.2:3000"
-const serverURL = 'http://192.168.1.131:3000'
+// const serverURL = 'http://192.168.1.131:3000'
 
 
 const styles = StyleSheet.create({

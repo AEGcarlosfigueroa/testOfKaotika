@@ -10,9 +10,9 @@ const styles = StyleSheet.create({
     zIndex: -10,
   },
   title: {
-    fontSize: 32,
+    fontSize: 28,
     marginBottom: 20,
-    color: '#ffdb00',
+    color: '#ff9a00',
     textShadowColor: 'rgba(0, 0, 0, 0.7)',
     textShadowOffset: { width: 2, height: 4 },
     textShadowRadius: 4,
