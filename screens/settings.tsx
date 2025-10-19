@@ -11,17 +11,20 @@ const styles = StyleSheet.create({
     top: '45%',
     left: '25%',
     width: '50%',
-    height : '5%',
+    height : '10%',
     backgroundColor: 'rgba(0,0,0,0.5)',
     position: 'absolute',
     borderRadius: '25%',
     borderWidth: 2,
-    borderColor: 'grey'
+    borderColor: 'grey',
+    justifyContent: 'center'
+
   },
   text: {
-    color: 'yellow',
+    color: '#ffce00',
     alignSelf: 'center',
-    margin: '5%'
+    fontSize: 18,
+    fontFamily: 'OptimusPrincepsSemiBold',
   },
   view: {
     backgroundColor: 'grey',

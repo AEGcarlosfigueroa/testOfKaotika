@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Image, StyleSheet, Button, Alert } from 'react-native';
+import { View, Image, StyleSheet, Alert, TouchableOpacity, Text} from 'react-native';
 import QRCode from 'react-native-qrcode-svg';
 import socketIO from '../socketIO';
 import { useNavigation } from '@react-navigation/native';
@@ -13,10 +13,33 @@ const styles = StyleSheet.create({
     zIndex: -10,
   },
   qrContainer: {
-    marginTop: 20,
     alignItems: 'center',
     justifyContent: 'center',
+    position: 'absolute',
+    marginBottom: 50
   },
+  button: {
+    position: "absolute",
+    alignItems: 'center',
+    top: '70%',
+    width: '70%',
+    height: 80,
+    backgroundColor: 'rgba(0,0,0,0.5)',
+    borderRadius: 5,
+    borderWidth: 2,
+    borderColor: 'black',
+    justifyContent: 'center'
+    
+  },
+  buttonText: {
+    // color: '#E2DFD2',
+    fontFamily: 'OptimusPrincepsSemiBold',
+    alignSelf: 'center',
+    fontSize: 20,
+    
+    
+  }
+    
 });
 
 function Entrance() {
@@ -26,6 +49,7 @@ function Entrance() {
   const [showQR, setShowQR] = useState(false);
   const [socketId, setSocketId] = useState('');
   const navigation = useNavigation(); // this is needed for navigation
+  const [buttonColor, setColor] = useState('#E2DFD2')
 
   // --- Handle socket connection ---
   useEffect(() => {
@@ -46,7 +70,14 @@ function Entrance() {
   }, []);
 
   // --- Toggle QR visibility ---
-  const revealQR = () => setShowQR(prev => !prev);
+const revealQR = () => {
+  setShowQR(prev => {
+    const newValue = !prev;
+    setColor(newValue ? '#ff9a00' : '#ffce00'); // toggle color
+    return newValue;
+  });
+};
+
 
   useEffect(() => {
     const socket = socketIO.getSocket();
@@ -75,13 +106,14 @@ function Entrance() {
   return (
     <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
       <Image source={require('./../assets/Entrance.webp')} style={styles.image} />
-      <Button
-        onPress={revealQR}
-        title={showQR ? 'Hide Esoteric Wisdom' : 'Reveal Mystery Scroll'}
-      />
+      <View style= {styles.button}>
+      <TouchableOpacity 
+        onPress={revealQR}><Text style={[styles.buttonText, {color : buttonColor}]}>{showQR ? 'Hide Esoteric Wisdom' : 'Reveal Mystery Scroll'}</Text>
+      </TouchableOpacity>
+      </View>
       {showQR && (
         <View style={styles.qrContainer}>
-          <QRCode value={player?.email || 'no-email'} size={150} />
+          <QRCode value={player?.email || 'no-email'} size={200} />
         </View>
       )}
     </View>

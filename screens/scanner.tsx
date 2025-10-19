@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, Alert, Text, Image, StyleSheet, Button, Platform, PermissionsAndroid } from 'react-native';
+import { View, Alert, Text, Image, StyleSheet, Platform, PermissionsAndroid, TouchableOpacity } from 'react-native';
 import { Camera, CameraType } from 'react-native-camera-kit';
 import socketIO from '../socketIO';
 
@@ -12,12 +12,13 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 24,
-    fontWeight: 'bold',
-    marginBottom: 20,
     color: '#fff',
     textShadowColor: 'rgba(0, 0, 0, 0.7)',
     textShadowOffset: { width: 2, height: 2 },
     textShadowRadius: 4,
+    fontFamily: 'OptimusPrincepsSemiBold',
+    position: 'absolute',
+    alignSelf: 'center',
   },
   overlay: {
     position: 'absolute',
@@ -27,7 +28,23 @@ const styles = StyleSheet.create({
   buttonContainer: {
     position: 'absolute',
     bottom: 50,
-    alignSelf: 'center',
+    left: '25%',
+    width: '50%',
+    height: 80,
+    backgroundColor: 'rgba(0,0,0,0.5)',
+    borderRadius: 5,
+    borderWidth: 2,
+    borderColor: 'grey',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  buttonText: {
+    fontSize: 24,
+    color: '#fff',
+    textShadowColor: 'rgba(0, 0, 0, 0.7)',
+    textShadowOffset: { width: 2, height: 2 },
+    textShadowRadius: 4,
+    fontFamily: 'OptimusPrincepsSemiBold',
   },
 });
 
@@ -37,33 +54,31 @@ export default function Scanner() {
   const [camera, setCamera] = useState(false);
 
   useEffect(() => {
-  async function requestPermission() {
-    try {
-      if (Platform.OS === 'android') {
-        const granted = await PermissionsAndroid.request(
-          PermissionsAndroid.PERMISSIONS.CAMERA,
-          {
-            title: 'Camera Permission',
-            message: 'We need access to your camera to scan QR codes',
-            buttonPositive: 'OK',
+    async function requestPermission() {
+      try {
+        if (Platform.OS === 'android') {
+          const granted = await PermissionsAndroid.request(
+            PermissionsAndroid.PERMISSIONS.CAMERA,
+            {
+              title: 'Camera Permission',
+              message: 'We need access to your camera to scan QR codes',
+              buttonPositive: 'OK',
+            }
+          );
+          setCameraPermission(granted === PermissionsAndroid.RESULTS.GRANTED);
+          if (granted !== PermissionsAndroid.RESULTS.GRANTED) {
+            Alert.alert('Camera permission denied');
           }
-        );
-        setCameraPermission(granted === PermissionsAndroid.RESULTS.GRANTED);
-        if (granted !== PermissionsAndroid.RESULTS.GRANTED) {
-          Alert.alert('Camera permission denied');
+        } else {
+          setCameraPermission(true);
         }
-      } else {
-        setCameraPermission(true); // iOS handled automatically
+      } catch (err) {
+        console.warn('Permission request error:', err);
       }
-    } catch (err) {
-      console.warn('Permission request error:', err);
     }
-  }
-  requestPermission();
-}, []);
+    requestPermission();
+  }, []);
 
-
-  // Handle QR code scan
   const onReadCode = (event: any) => {
     if (!scanned) {
       const scannedEmail = event.nativeEvent.codeStringValue;
@@ -71,15 +86,12 @@ export default function Scanner() {
       console.log('Scanned email:', scannedEmail);
 
       const socket = socketIO.getSocket();
-      if (socket) socket.emit('scan', scannedEmail );
-
-      console.log("socket:", socket)
+      if (socket) socket.emit('scan', scannedEmail);
 
       Alert.alert('Scan Success!', `You scanned: ${scannedEmail}`);
     }
   };
 
-  // Listen for server response
   useEffect(() => {
     const socket = socketIO.getSocket();
     if (!socket) return;
@@ -101,29 +113,26 @@ export default function Scanner() {
   return (
     <View style={{ flex: 1 }}>
       <Image source={require('./../assets/orb.png')} style={styles.image} />
-      {camera ? (
+      {camera && (
         <Camera
           style={{ flex: 1 }}
           cameraType={CameraType.Back}
           scanBarcode={true}
           onReadCode={onReadCode}
         />
-      ) : (
-        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-          <Text style={{ color: '#fff', fontSize: 18 }}>Camera is off</Text>
-        </View>
       )}
       <View style={styles.overlay}>
-        <Text style={styles.title}>Scan an Acolito QR</Text>
+        {!camera && <Text style={styles.title}>Scan the forbidden Scroll</Text>}
       </View>
       <View style={styles.buttonContainer}>
-        <Button
-          title={camera ? 'Close Camera' : 'Open Camera'}
+        <TouchableOpacity
           onPress={() => {
-            setScanned(false); // reset for new scans
+            setScanned(false);
             setCamera(prev => !prev);
           }}
-        />
+        >
+          <Text style={styles.buttonText}>{camera ? 'Close Camera' : 'Open Camera'}</Text>
+        </TouchableOpacity>
       </View>
     </View>
   );

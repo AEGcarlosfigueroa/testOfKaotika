@@ -17,11 +17,11 @@ GoogleSignin.configure({
   webClientId: googleJSON.client[0].oauth_client[1].client_id,
 });
 
-const serverURL = "http://10.50.0.50:6002";
+// const serverURL = "http://10.50.0.50:6002";
 // const serverURL = "https://testofkaotika-server.onrender.com";
 // const serverURL = "http://localhost:3000";
 // const serverURL = "http://10.0.2.2:3000"
-// const serverURL = "http://10.70.0.22:3000"
+const serverURL = 'http://192.168.1.131:3000'
 
 
 const styles = StyleSheet.create({
@@ -62,7 +62,7 @@ const styles = StyleSheet.create({
     zIndex: 10,
     width: '100%',
     backgroundColor: 'rgba(0,0,0,0.5)'
-  }, 
+  },
   spinner: {
     marginTop: '99%'
   }
@@ -135,13 +135,13 @@ function App()
     return(
       <playerContext.Provider value = {{player, setPlayer}}>
       <NavigationContainer>
-        
+
               <Navigator/>
 
       </NavigationContainer>
       </playerContext.Provider>
     )
-    
+
   }
 
   let component = <></>
@@ -152,7 +152,7 @@ function App()
        <ActivityIndicator size="large" style={styles.spinner}/>
     </View>
   }
-  
+
 return (
   <>
    {component}
@@ -169,7 +169,7 @@ return (
       console.log("Token:", firebaseIdToken);
 
       // Send token to server
-      const response = await fetch( serverURL + "/api/players/email/" + account.user._user.email, 
+      const response = await fetch( serverURL + "/api/players/email/" + account.user._user.email,
         {
           method: "GET",
         headers: {
@@ -214,7 +214,7 @@ return (
   </>
 )
 
-  
+
 }
 
 export default App;

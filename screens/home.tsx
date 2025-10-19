@@ -10,14 +10,20 @@ const styles = StyleSheet.create({
     zIndex: -10,
   },
   title: {
-    fontSize: 24,
-    fontWeight: 'bold',
+    fontSize: 32,
     marginBottom: 20,
-    color: '#fff',
+    color: '#ffdb00',
     textShadowColor: 'rgba(0, 0, 0, 0.7)',
-    textShadowOffset: { width: 2, height: 2 },
+    textShadowOffset: { width: 2, height: 4 },
     textShadowRadius: 4,
+    fontFamily: 'OptimusPrincepsSemiBold',
+    boxShadow: '5px 5px 5px 5px black',
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    padding: 15,
+    // elevation: 2
+    
   },
+  
 });
 
 
