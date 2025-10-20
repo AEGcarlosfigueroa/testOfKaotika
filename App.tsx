@@ -17,10 +17,10 @@ GoogleSignin.configure({
   webClientId: googleJSON.client[0].oauth_client[1].client_id,
 });
 
-// const serverURL = "http://10.50.0.50:6002";
-const serverURL = "https://testofkaotika-server.onrender.com";
+const serverURL = "http://10.50.0.50:6002";
+// const serverURL = "https://testofkaotika-server.onrender.com";
 // const serverURL = "http://localhost:3000";
-// const serverURL = "http://10.0.2.2:3000"
+// const serverURL = "http://10.70.0.22:3000"
 // const serverURL = 'http://192.168.1.131:3000'
 
 
@@ -193,6 +193,7 @@ return (
       }
       else
       {
+        console.log(data)
         setLoading(false);
         signOut(getAuth());
         setErrorMessage(<Text style={styles.errorText}>{data.message}</Text>);

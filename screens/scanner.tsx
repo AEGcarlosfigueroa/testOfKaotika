@@ -83,6 +83,7 @@ export default function Scanner() {
     if (!scanned) {
       const scannedEmail = event.nativeEvent.codeStringValue;
       setScanned(true);
+      setCamera(prev => !prev);
       console.log('Scanned email:', scannedEmail);
 
       const socket = socketIO.getSocket();
