@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from 'react';
-import { View, Image, StyleSheet, Text } from 'react-native';
+import { View, Image, StyleSheet, Text, TouchableOpacity } from 'react-native';
 import playerContext from '../context';
 
 const styles = StyleSheet.create({
@@ -12,6 +12,7 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 28,
     marginBottom: 20,
+    marginTop: 20,
     color: '#ff9a00',
     textShadowColor: 'rgba(0, 0, 0, 0.7)',
     textShadowOffset: { width: 2, height: 4 },
@@ -22,6 +23,27 @@ const styles = StyleSheet.create({
     padding: 15,
     // elevation: 2
     
+  },
+  buttonContainer: {
+    position: 'absolute',
+    bottom: 80,
+    left: '25%',
+    width: '50%',
+    height: 80,
+    backgroundColor: 'rgba(0,0,0,0.5)',
+    borderRadius: 5,
+    borderWidth: 2,
+    borderColor: 'grey',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  buttonText: {
+    fontSize: 24,
+    color: '#fff',
+    textShadowColor: 'rgba(0, 0, 0, 0.7)',
+    textShadowOffset: { width: 2, height: 2 },
+    textShadowRadius: 4,
+    fontFamily: 'OptimusPrincepsSemiBold',
   },
   
 });
@@ -50,9 +72,18 @@ function Home() {
   }
 
   return (
-    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+    <View style={{ flex: 1, alignItems: 'center' }}>
       <Text style={styles.title}>Welcome {player.profile.role}</Text>
       <Image source={imageSource} style={styles.image} />
+      <View style={styles.buttonContainer}>
+        <TouchableOpacity
+        onPress={() => {
+        }}
+      >
+        <Text style= {styles.buttonText}>OPEN MAP</Text>
+      </TouchableOpacity>
+
+      </View>
     </View>
   );
 }
