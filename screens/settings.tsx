@@ -3,7 +3,7 @@ import { StyleSheet, TouchableOpacity, Text, Image } from "react-native";
 import { getAuth, signOut } from "@react-native-firebase/auth";
 import { GoogleSignin } from "@react-native-google-signin/google-signin";
 import socketIO from "../socketIO";
-import playerContext from "../context";
+import {playerContext} from "../context";
 
 
 const styles = StyleSheet.create({
@@ -14,14 +14,13 @@ const styles = StyleSheet.create({
     height : '10%',
     backgroundColor: 'rgba(0,0,0,0.5)',
     position: 'absolute',
-    borderRadius: '25%',
-    borderWidth: 2,
+    borderRadius: 5,
     borderColor: 'grey',
     justifyContent: 'center'
 
   },
   text: {
-    color: '#ffce00',
+    color: '#E2DFD2',
     alignSelf: 'center',
     fontSize: 18,
     fontFamily: 'OptimusPrincepsSemiBold',
@@ -64,7 +63,7 @@ function Settings() {
 
     return (
           <>
-            <Image source={imageSource} style={styles.image}/>
+        <Image source={imageSource} style={styles.image}/>
         <TouchableOpacity style={styles.button}
           onPress={() => {
             signOut(getAuth());

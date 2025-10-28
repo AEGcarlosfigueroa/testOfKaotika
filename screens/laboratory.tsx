@@ -2,7 +2,7 @@ import React from 'react';
 import { Image, StyleSheet, View, Text, Button, Alert } from 'react-native';
 import { useState, useEffect } from 'react';
 import QRCode from 'react-native-qrcode-svg';
-import playerContext from '../context';
+import {playerContext} from '../context';
 import socketIO from '../socketIO';
 import { useNavigation } from '@react-navigation/native';
 

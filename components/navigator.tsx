@@ -3,14 +3,16 @@ import IstvanNav from './istvanNav';
 // import villanoNav from './villanoNav';
 import MortimerNav from './mortimerNav';
 import AcolitoNav from './acolitoNav';
-import playerContext from '../context';
+import {playerContext} from '../context';
 import LabNav from './labNav';
+// import mapNav from './mapNav'
 
 function Navigator ()
 {
   const context = React.useContext(playerContext)
 
   const {player} = context
+
 
   if(!context)
   {

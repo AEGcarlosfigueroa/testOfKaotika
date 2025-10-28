@@ -22,7 +22,6 @@ export function IstvanNav() {
   return (
     <Tab.Navigator
       style={styles.topOffset}
-      
       screenOptions={({ route }) => ({
         tabBarIcon: ({ color }) => {
           if(route.name === "Home")

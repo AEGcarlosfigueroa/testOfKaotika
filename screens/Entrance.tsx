@@ -3,7 +3,7 @@ import { View, Image, StyleSheet, Alert, TouchableOpacity, Text} from 'react-nat
 import QRCode from 'react-native-qrcode-svg';
 import socketIO from '../socketIO';
 import { useNavigation } from '@react-navigation/native';
-import playerContext from '../context';
+import {playerContext} from '../context';
 
 const styles = StyleSheet.create({
   image: {
@@ -32,7 +32,7 @@ const styles = StyleSheet.create({
     
   },
   buttonText: {
-    // color: '#E2DFD2',
+    color: '#E2DFD2',
     fontFamily: 'OptimusPrincepsSemiBold',
     alignSelf: 'center',
     fontSize: 20,
@@ -73,10 +73,11 @@ function Entrance() {
 const revealQR = () => {
   setShowQR(prev => {
     const newValue = !prev;
-    setColor(newValue ? '#ff9a00' : '#ffce00'); // toggle color
+    setColor(newValue ? '#E2DFD2' : '#ffce00'); // toggle color
     return newValue;
   });
 };
+
 
 
   useEffect(() => {
@@ -107,7 +108,8 @@ const revealQR = () => {
     <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
       <Image source={require('./../assets/Entrance.webp')} style={styles.image} />
       <View style= {styles.button}>
-      <TouchableOpacity 
+      <TouchableOpacity
+
         onPress={revealQR}><Text style={[styles.buttonText, {color : buttonColor}]}>{showQR ? 'Hide Esoteric Wisdom' : 'Reveal Mystery Scroll'}</Text>
       </TouchableOpacity>
       </View>

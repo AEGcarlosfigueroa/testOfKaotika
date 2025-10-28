@@ -1,5 +1,5 @@
 import React from 'react'
 
-const playerContext = React.createContext()
+export const playerContext = React.createContext()
 
-export default playerContext;
+export const mapContext = React.createContext()

@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { View, Image, StyleSheet, Text, TouchableOpacity } from 'react-native';
-import playerContext from '../context';
+import {playerContext} from '../context';
+import { mapContext } from '../context';
 
 const styles = StyleSheet.create({
   image: {
@@ -13,7 +14,7 @@ const styles = StyleSheet.create({
     fontSize: 28,
     marginBottom: 20,
     marginTop: 20,
-    color: '#ff9a00',
+    color: '#E2DFD2',
     textShadowColor: 'rgba(0, 0, 0, 0.7)',
     textShadowOffset: { width: 2, height: 4 },
     textShadowRadius: 4,
@@ -54,6 +55,12 @@ function Home() {
   const context = useContext(playerContext)
   const {player} = context;
 
+  const contextMap = useContext(mapContext)
+
+  const {mapView, setMap} = contextMap
+  
+
+
   let imageSource;
 
   switch(player.profile.role) {
@@ -77,7 +84,7 @@ function Home() {
       <Image source={imageSource} style={styles.image} />
       <View style={styles.buttonContainer}>
         <TouchableOpacity
-        onPress={() => {
+        onPress={() => {setMap(true);
         }}
       >
         <Text style= {styles.buttonText}>OPEN MAP</Text>

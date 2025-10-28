@@ -1,6 +1,6 @@
 import React from 'react';
 import { Image, StyleSheet, View, Text } from 'react-native';
-import playerContext from '../context';
+import {playerContext} from '../context';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 import Ionicons from '@react-native-vector-icons/ionicons';
 import Laboratory from '../screens/laboratory';

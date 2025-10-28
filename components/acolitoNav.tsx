@@ -3,24 +3,33 @@ import React from 'react';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 import Ionicons from '@react-native-vector-icons/ionicons';
 import Home from '../screens/home';
+import Map from '../screens/Map'
 import Entrance from '../screens/Entrance';
 import Settings from '../screens/settings';
 import { StyleSheet, Image } from 'react-native';
 import rune from "../assets/icons/rune.png"
 import moon from "../assets/icons/moon.png"
 import tarot from "../assets/icons/tarot.png"
+import { mapContext } from '../context';
+
 
 
 
 const styles = StyleSheet.create({
   topOffset: {
     marginTop: '10%',
+
   }
 })
 
 const Tab = createMaterialTopTabNavigator();
 
 export function AcolitoNav() {
+
+    const contextMap = React.useContext(mapContext)
+  
+    const {mapView, setMap} = contextMap;
+
   return (
     <Tab.Navigator
       style={styles.topOffset}
@@ -47,7 +56,7 @@ export function AcolitoNav() {
         tabBarStyle: { backgroundColor: 'rgba(0, 0, 0, 0.5)' }
       })}
     >
-      <Tab.Screen name="Home">{() => <Home/>}</Tab.Screen>
+      <Tab.Screen name="Home">{() => !mapView ? <Home/> : <Map/>}</Tab.Screen>
       <Tab.Screen name="Entrance">{() => <Entrance/>}</Tab.Screen>
       <Tab.Screen name="Settings">{() => <Settings/>}</Tab.Screen>
     </Tab.Navigator>
