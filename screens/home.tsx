@@ -2,6 +2,9 @@ import React, { useState, useEffect, useContext } from 'react';
 import { View, Image, StyleSheet, Text, TouchableOpacity } from 'react-native';
 import {playerContext} from '../context';
 import { mapContext } from '../context';
+import { useNavigation } from "@react-navigation/native";
+import {buttonStyles} from "../props/genericButton"
+
 
 const styles = StyleSheet.create({
   image: {
@@ -52,6 +55,8 @@ const styles = StyleSheet.create({
 
 function Home() {
 
+  const navigation = useNavigation();
+
   const context = useContext(playerContext)
   const {player} = context;
 
@@ -82,14 +87,13 @@ function Home() {
     <View style={{ flex: 1, alignItems: 'center' }}>
       <Text style={styles.title}>Welcome {player.profile.role}</Text>
       <Image source={imageSource} style={styles.image} />
-      <View style={styles.buttonContainer}>
+      <View style={buttonStyles.buttonContainer}>
         <TouchableOpacity
         onPress={() => {setMap(true);
-        }}
-      >
-        <Text style= {styles.buttonText}>OPEN MAP</Text>
+          navigation.navigate('Map')
+        }}>
+        <Text style= {buttonStyles.buttonText}>OPEN MAP</Text>
       </TouchableOpacity>
-
       </View>
     </View>
   );

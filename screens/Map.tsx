@@ -1,13 +1,20 @@
-import React from "react";
+import React, {useState} from "react";
 import { View, Image, StyleSheet, TouchableOpacity, Text } from "react-native";
+import { GenericButton, buttonStyles } from "../props/genericButton";
 import map from "../assets/map.png";
+import { useNavigation } from "@react-navigation/native";
 import { mapContext } from "../context";
 import rune from "../assets/icons/rune.png"
-import moon from "../assets/icons/moon.png"
+import SpyCam from '../screens/SpyCam';
+import stars from "../assets/icons/stars.png"
+import eye from "../assets/icons/eye.png"
 import tarot from "../assets/icons/tarot.png"
+import Entrance from "./Entrance";
 
 function Map() {
+  const navigation = useNavigation();
   const { mapView, setMap } = React.useContext(mapContext);
+  const [currentLocation, setText] = useState(false)
 
   const styles = StyleSheet.create({
     container: {
@@ -19,27 +26,7 @@ function Map() {
       width: "100%",
       height: "100%",
       zIndex: -10,
-    },
-  button: {
-    position: 'absolute',
-    bottom: 700,
-    left: '5%',
-    width: '25%',
-    height: 60,
-    backgroundColor: 'rgba(0,0,0,0.5)',
-    borderRadius: 5,
-    borderWidth: 2,
-    borderColor: 'grey',
-    justifyContent: 'center',
-    alignItems: 'center',
-
-    
-  },
-    buttonText: {
-      fontFamily: 'OptimusPrincepsSemiBold',
-      color: '#E2DFD2',
-      fontSize: 18,
-      textAlign: 'center',
+      position: 'absolute'
     },
   });
 
@@ -48,11 +35,30 @@ function Map() {
   return (
     <View style={styles.container}>
       <Image source={map} style={styles.mapImage} />
-      <TouchableOpacity style={styles.button} onPress={() => setMap(false)}>
-        <Text style={styles.buttonText}>BACK</Text>
+      <GenericButton/>
+      <View>
+      <TouchableOpacity onPress={() => {
+      // code to run when pressed
+      setText(!currentLocation)
+      }}> 
+        <Image source={rune} style={{width : 30, height : 30, top: '550%', tintColor: 'white'}}/>
       </TouchableOpacity>
-      <Image source={rune} style={{width : 30, height : 30, bottom: '10%', tintColor: 'white'}}/>
-
+      {currentLocation && <Text style= {{position: "absolute", fontFamily: 'OptimusPrinceps', color: 'white', top: '700%'}}>YOU ARE HERE</Text>}
+      </View>
+      <View>
+      <TouchableOpacity onPress={() =>
+      {
+        navigation.navigate('Entrance');
+      }}>
+        <Image source={stars} style={{ width : 30, height : 30, top: '350%', right: '350%', tintColor: 'white'}}/>
+      </TouchableOpacity>
+      </View>
+      <TouchableOpacity>
+        <Image source={tarot} style={{width : 30, height : 30, top: '500%', left: '35%', tintColor: 'white'}}/>
+      </TouchableOpacity>
+      <TouchableOpacity>
+        <Image source={eye} style={{width : 30, height : 30, bottom: '700%', left: '5%', tintColor: 'white'}}/>
+      </TouchableOpacity>
     </View>
   );
 }

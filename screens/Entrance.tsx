@@ -4,6 +4,7 @@ import QRCode from 'react-native-qrcode-svg';
 import socketIO from '../socketIO';
 import { useNavigation } from '@react-navigation/native';
 import {playerContext} from '../context';
+import { GenericButton, buttonStyles } from '../props/genericButton';
 
 const styles = StyleSheet.create({
   image: {
@@ -18,27 +19,6 @@ const styles = StyleSheet.create({
     position: 'absolute',
     marginBottom: 50
   },
-  button: {
-    position: "absolute",
-    alignItems: 'center',
-    top: '70%',
-    width: '70%',
-    height: 80,
-    backgroundColor: 'rgba(0,0,0,0.5)',
-    borderRadius: 5,
-    borderWidth: 2,
-    borderColor: 'black',
-    justifyContent: 'center'
-    
-  },
-  buttonText: {
-    color: '#E2DFD2',
-    fontFamily: 'OptimusPrincepsSemiBold',
-    alignSelf: 'center',
-    fontSize: 20,
-    
-    
-  }
     
 });
 
@@ -107,10 +87,10 @@ const revealQR = () => {
   return (
     <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
       <Image source={require('./../assets/Entrance.webp')} style={styles.image} />
-      <View style= {styles.button}>
+      <View style= {buttonStyles.buttonContainer}>
       <TouchableOpacity
 
-        onPress={revealQR}><Text style={[styles.buttonText, {color : buttonColor}]}>{showQR ? 'Hide Esoteric Wisdom' : 'Reveal Mystery Scroll'}</Text>
+        onPress={revealQR}><Text style={[buttonStyles.buttonText2, {color : buttonColor}]}>{showQR ? 'Hide Esoteric Wisdom' : 'Reveal Mystery Scroll'}</Text>
       </TouchableOpacity>
       </View>
       {showQR && (
@@ -118,6 +98,7 @@ const revealQR = () => {
           <QRCode value={player?.email || 'no-email'} size={200} />
         </View>
       )}
+        <GenericButton/>
     </View>
   );
 }
