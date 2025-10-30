@@ -53,10 +53,14 @@ function Map() {
         <Image source={stars} style={{ width : 30, height : 30, top: '350%', right: '350%', tintColor: 'white'}}/>
       </TouchableOpacity>
       </View>
-      <TouchableOpacity>
+      <TouchableOpacity onPress={() => {
+        navigation.navigate('Lair')
+      }}>
         <Image source={tarot} style={{width : 30, height : 30, top: '500%', left: '35%', tintColor: 'white'}}/>
       </TouchableOpacity>
-      <TouchableOpacity>
+      <TouchableOpacity onPress={() => {
+        navigation.navigate('SpyCam')
+      }}>
         <Image source={eye} style={{width : 30, height : 30, bottom: '700%', left: '5%', tintColor: 'white'}}/>
       </TouchableOpacity>
     </View>

@@ -1,9 +1,11 @@
-import { Image, ScrollView, StyleSheet } from "react-native";
+import { Image, ScrollView, StyleSheet, View } from "react-native";
 import React from "react";
-import { useEffect, useState, useReducer } from "react";
+import { useEffect, useState, useReducer, useContext } from "react";
+import { playerContext } from "../context";
 import socketIO from "../socketIO";
 import PlayerView from "../props/playerView";
 import {SafeAreaView, SafeAreaProvider} from 'react-native-safe-area-context';
+import { GenericButton } from "../props/genericButton";
 
 const styles = StyleSheet.create({
     image: {
@@ -15,6 +17,8 @@ const styles = StyleSheet.create({
 });
 
 function SpyCam() {
+  const context = useContext(playerContext)
+  const {player}= context
 
   // --- Handle socket connection ---
   const [socketId, setSocketId] = useState('');
@@ -100,7 +104,21 @@ function SpyCam() {
     socket.on('update', handleNewData);
   })
 
+  if(player.profile.role !== 'MORTIMER')
+  {
     return (
+      <>
+      <Image source={require('../assets/evilEye.jpg')} style={[styles.image, {width: '100%', height: '100%'}]}/>
+      <GenericButton/>
+
+      </>
+
+      
+    )
+  }
+  else
+  {
+     return (
       <>
       <Image source={require("./../assets/tasks.png")} style={styles.image}/>
       <SafeAreaProvider>
@@ -112,5 +130,7 @@ function SpyCam() {
       </SafeAreaProvider>
       </>
   );
+  }
+   
 }
 export default SpyCam
