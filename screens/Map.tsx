@@ -1,5 +1,5 @@
 import React, {useState} from "react";
-import { View, Image, StyleSheet, TouchableOpacity, Text } from "react-native";
+import { View, Image, StyleSheet, TouchableOpacity, Text, useWindowDimensions } from "react-native";
 import { GenericButton, buttonStyles } from "../props/genericButton";
 import map from "../assets/map.png";
 import { useNavigation } from "@react-navigation/native";
@@ -19,8 +19,8 @@ function Map() {
   const styles = StyleSheet.create({
     container: {
       flex: 1,
-      justifyContent: "center",
-      alignItems: "center",
+      width: "100%",
+      height: "100%"
     },
     mapImage: {
       width: "100%",
@@ -30,7 +30,7 @@ function Map() {
     },
   });
 
-
+  const {height, width, scale, fontScale} = useWindowDimensions();
 
   return (
     <View style={styles.container}>
@@ -46,18 +46,20 @@ function Map() {
       {
         navigation.navigate('Entrance');
       }}>
-        <Image source={stars} style={{ width : 30, height : 30, top: '350%', right: '350%', tintColor: 'white'}}/>
+        <View>
+        <Image source={stars} style={{ width: (15*scale), height: (15*scale), top: '1400%', left: '10%', tintColor: 'white', position: 'fixed', zIndex: 20}}/>
+        </View>
       </TouchableOpacity>
       </View>
       <TouchableOpacity onPress={() => {
         navigation.navigate('Lair')
       }}>
-        <Image source={tarot} style={{width : 30, height : 30, top: '500%', left: '35%', tintColor: 'white'}}/>
+        <Image source={tarot} style={{ width : (15*scale), height : (15*scale), top: "1300%", left: '85%', tintColor: 'white', position: 'fixed', zIndex: 20}}/>
       </TouchableOpacity>
       <TouchableOpacity onPress={() => {
         navigation.navigate('SpyCam')
       }}>
-        <Image source={eye} style={{width : 30, height : 30, bottom: '700%', left: '5%', tintColor: 'white'}}/>
+        <Image source={eye} style={{width : (15*scale), height : (15*scale), top: "500%", left: '50%', tintColor: 'white', position: 'fixed', zIndex: 20}}/>
       </TouchableOpacity>
     </View>
   );
