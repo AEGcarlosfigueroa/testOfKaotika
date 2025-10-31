@@ -1,14 +1,14 @@
-import { View, Image, StyleSheet, Text, TouchableOpacity } from 'react-native';
+import { View, Image, StyleSheet, Text, TouchableOpacity, StatusBar } from 'react-native';
 import { useNavigation } from "@react-navigation/native";
 
 const buttonStyles = StyleSheet.create({
     
   buttonContainer: {
     position: 'absolute',
-    bottom: 80,
+    bottom: '10%',
     left: '25%',
     width: '50%',
-    height: 80,
+    height: '8%',
     backgroundColor: 'rgba(0,0,0,0.5)',
     borderRadius: 5,
     borderWidth: 2,
@@ -26,17 +26,17 @@ const buttonStyles = StyleSheet.create({
   },
    button2: {
     position: 'absolute',
-    bottom: 800,
+    top: StatusBar.currentHeight,
     left: '5%',
     width: '25%',
-    height: 60,
+    height: '10%',
     backgroundColor: 'rgba(0,0,0,0.5)',
     borderRadius: 5,
     borderWidth: 2,
     borderColor: 'grey',
     justifyContent: 'center',
     alignItems: 'center',
-
+    zIndex: 15
     
   },
     buttonText2: {
@@ -54,7 +54,7 @@ function GenericButton() {
   return (
     <TouchableOpacity
       style={buttonStyles.button2}
-      onPress={() => navigation.navigate("Home")}
+      onPress={() => navigation.navigate("Map")}
     >
       <Text style={buttonStyles.buttonText2}>Back</Text>
     </TouchableOpacity>

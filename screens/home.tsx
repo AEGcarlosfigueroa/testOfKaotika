@@ -1,10 +1,12 @@
 import React, { useState, useEffect, useContext } from 'react';
-import { View, Image, StyleSheet, Text, TouchableOpacity } from 'react-native';
+import { View, Image, StyleSheet, Text, TouchableOpacity, useWindowDimensions, StatusBar } from 'react-native';
 import {playerContext} from '../context';
 import { mapContext } from '../context';
 import { useNavigation } from "@react-navigation/native";
-import {buttonStyles} from "../props/genericButton"
-
+import {buttonStyles} from "../props/genericButton";
+import socketIO from '../socketIO';
+import { GoogleSignin } from '@react-native-google-signin/google-signin';
+import { getAuth, signOut } from '@react-native-firebase/auth';
 
 const styles = StyleSheet.create({
   image: {
@@ -15,8 +17,8 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 28,
-    marginBottom: 20,
-    marginTop: 20,
+    marginBottom: '5%',
+    marginTop: StatusBar.currentHeight,
     color: '#E2DFD2',
     textShadowColor: 'rgba(0, 0, 0, 0.7)',
     textShadowOffset: { width: 2, height: 4 },
@@ -24,22 +26,9 @@ const styles = StyleSheet.create({
     fontFamily: 'OptimusPrincepsSemiBold',
     boxShadow: '5px 5px 5px 5px black',
     backgroundColor: 'rgba(0, 0, 0, 0.5)',
-    padding: 15,
+    padding: '5%',
     // elevation: 2
     
-  },
-  buttonContainer: {
-    position: 'absolute',
-    bottom: 80,
-    left: '25%',
-    width: '50%',
-    height: 80,
-    backgroundColor: 'rgba(0,0,0,0.5)',
-    borderRadius: 5,
-    borderWidth: 2,
-    borderColor: 'grey',
-    justifyContent: 'center',
-    alignItems: 'center',
   },
   buttonText: {
     fontSize: 24,
@@ -49,7 +38,19 @@ const styles = StyleSheet.create({
     textShadowRadius: 4,
     fontFamily: 'OptimusPrincepsSemiBold',
   },
-  
+  logoutButton: {
+    position: 'absolute',
+    bottom: '20%',
+    left: '25%',
+    width: '50%',
+    height: '8%',
+    backgroundColor: 'rgba(0,0,0,0.5)',
+    borderRadius: 5,
+    borderWidth: 2,
+    borderColor: 'grey',
+    justifyContent: 'center',
+    alignItems: 'center',
+  }
 });
 
 
@@ -87,6 +88,17 @@ function Home() {
     <View style={{ flex: 1, alignItems: 'center' }}>
       <Text style={styles.title}>Welcome {player.profile.role}</Text>
       <Image source={imageSource} style={styles.image} />
+       <View style={styles.logoutButton}>
+        <TouchableOpacity
+        onPress={() => {
+          signOut(getAuth());
+          GoogleSignin.revokeAccess();
+          const socket = socketIO.getSocket();
+          socket?.disconnect();
+        }}>
+        <Text style= {buttonStyles.buttonText}>SIGN OUT</Text>
+      </TouchableOpacity>
+      </View>
       <View style={buttonStyles.buttonContainer}>
         <TouchableOpacity
         onPress={() => {setMap(true);

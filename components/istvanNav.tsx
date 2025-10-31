@@ -5,8 +5,8 @@ import { createStackNavigator } from '@react-navigation/stack'
 import Home from '../screens/home';
 import Map from '../screens/Map'
 import Scanner from '../screens/scanner';
-
-
+import EvilLair from '../screens/evilLair';
+import SpyCam from '../screens/SpyCam';
 
 const Stack = createStackNavigator()
 
@@ -55,6 +55,8 @@ export function IstvanNav() {
       <Stack.Screen name="Home" component={Home} />
       <Stack.Screen name="Map" component={Map} />
       <Stack.Screen name="Entrance" component={Scanner} />
+      <Stack.Screen name="Lair" component={EvilLair}/>
+      <Stack.Screen name='SpyCam' component={SpyCam}/>
     </Stack.Navigator>
   )
 }

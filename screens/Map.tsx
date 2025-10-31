@@ -35,16 +35,12 @@ function Map() {
   return (
     <View style={styles.container}>
       <Image source={map} style={styles.mapImage} />
-      <GenericButton/>
-      <View>
-      <TouchableOpacity onPress={() => {
-      // code to run when pressed
-      setText(!currentLocation)
-      }}> 
-        <Image source={rune} style={{width : 30, height : 30, top: '550%', tintColor: 'white'}}/>
-      </TouchableOpacity>
-      {currentLocation && <Text style= {{position: "absolute", fontFamily: 'OptimusPrinceps', color: 'white', top: '700%'}}>YOU ARE HERE</Text>}
-      </View>
+      <TouchableOpacity
+      style={buttonStyles.button2}
+      onPress={() => navigation.navigate("Home")}
+    >
+      <Text style={buttonStyles.buttonText2}>Back</Text>
+    </TouchableOpacity>
       <View>
       <TouchableOpacity onPress={() =>
       {

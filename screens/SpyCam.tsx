@@ -120,6 +120,7 @@ function SpyCam() {
   {
      return (
       <>
+      <GenericButton/>
       <Image source={require("./../assets/tasks.png")} style={styles.image}/>
       <SafeAreaProvider>
         <SafeAreaView>

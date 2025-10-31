@@ -10,16 +10,6 @@ import { StyleSheet } from 'react-native';
 import { mapContext } from '../context';
 import { createStackNavigator } from '@react-navigation/stack'
 
-
-
-const styles = StyleSheet.create({
-  topOffset: {
-    marginTop: '10%',
-
-  }
-})
-
-const Tab = createMaterialTopTabNavigator();
 const Stack = createStackNavigator()
 
 export function AcolitoNav() {
