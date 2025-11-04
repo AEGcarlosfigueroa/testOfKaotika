@@ -6,7 +6,7 @@ import { StyleSheet, Image } from 'react-native';
 import SpyCam from '../screens/SpyCam';
 import { createStackNavigator } from '@react-navigation/stack';
 import Map from '../screens/Map';
-import EvilLair from '../screens/evilLair';
+import TowerEntrance from '../screens/TowerEntrance';
 
 const Stack = createStackNavigator();
 
@@ -16,7 +16,7 @@ export function MortimerNav() {
       <Stack.Screen name="Home" component={Home}/>
       <Stack.Screen name="Map" component={Map}/>
       <Stack.Screen name="Entrance" component={Entrance}/>
-      <Stack.Screen name="Lair" component={EvilLair}/>
+      <Stack.Screen name="Lair" component={TowerEntrance}/>
       <Stack.Screen name='SpyCam' component={SpyCam}/>
     </Stack.Navigator>
   );

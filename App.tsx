@@ -10,18 +10,17 @@ import BootSplash from "react-native-bootsplash";
 import Navigator from './components/navigator';
 import socketIO  from "./socketIO";
 import { NavigationContainer } from '@react-navigation/native';
-import {playerContext} from './context';
-import {mapContext} from './context'
+import { mapContext, isInTowerContext, playerContext } from './context'
 
 GoogleSignin.configure({
   //REMEMBER TO DOWNLOAD google-services.json and put it into the /android/app directory
   webClientId: googleJSON.client[0].oauth_client[1].client_id,
 });
 
-const serverURL = "http://10.50.0.50:6002";
+// const serverURL = "http://10.50.0.50:6002";
 // const serverURL = "https://testofkaotika-server.onrender.com";
 // const serverURL = "http://localhost:3000";
-// const serverURL = "http://10.70.0.22:3000"
+const serverURL = "http://10.70.0.22:3000"
 // const serverURL = 'http://192.168.1.131:3000'
 
 
@@ -115,6 +114,8 @@ function App()
 
   const [player, setPlayer] = useState();
 
+  const [isInTower, setIsInTower] = useState(false);
+
   const [mapView, setMap] = useState(false)
   
 
@@ -139,12 +140,13 @@ function App()
     return(
       <playerContext.Provider value = {{player, setPlayer}}>
       <mapContext.Provider value = {{mapView, setMap}}>
-
+      <isInTowerContext.Provider value = {{isInTower, setIsInTower}}>
       <NavigationContainer>
 
       <Navigator/>
 
       </NavigationContainer>
+      </isInTowerContext.Provider>
       </mapContext.Provider>
       </playerContext.Provider>
       

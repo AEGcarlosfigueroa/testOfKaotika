@@ -4,7 +4,7 @@ import IstvanNav from './istvanNav';
 import MortimerNav from './mortimerNav';
 import AcolitoNav from './acolitoNav';
 import {playerContext} from '../context';
-import LabNav from './labNav';
+import Laboratory from '../screens/laboratory';
 // import mapNav from './mapNav'
 
 function Navigator ()
@@ -31,7 +31,7 @@ function Navigator ()
     case 'ACOLITO':
       if(player.isInside)
       {
-        return <LabNav/>
+        return <Laboratory/>
       }
 
       else

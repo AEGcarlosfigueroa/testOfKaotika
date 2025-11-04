@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { View, Alert, Text, Image, StyleSheet, Platform, PermissionsAndroid, TouchableOpacity } from 'react-native';
 import { Camera, CameraType } from 'react-native-camera-kit';
 import socketIO from '../socketIO';
+import { GenericButton } from '../props/genericButton';
 
 const styles = StyleSheet.create({
   image: {
@@ -22,7 +23,7 @@ const styles = StyleSheet.create({
   },
   overlay: {
     position: 'absolute',
-    top: 50,
+    top: '15%',
     alignSelf: 'center',
   },
   buttonContainer: {
@@ -113,6 +114,7 @@ export default function Scanner() {
 
   return (
     <View style={{ flex: 1 }}>
+      <GenericButton/>
       <Image source={require('./../assets/orb.png')} style={styles.image} />
       {camera && (
         <Camera

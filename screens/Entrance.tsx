@@ -89,7 +89,6 @@ const revealQR = () => {
       <Image source={require('./../assets/Entrance.webp')} style={styles.image} />
       <View style= {buttonStyles.buttonContainer}>
       <TouchableOpacity
-
         onPress={revealQR}><Text style={[buttonStyles.buttonText2, {color : buttonColor}]}>{showQR ? 'Hide Esoteric Wisdom' : 'Reveal Mystery Scroll'}</Text>
       </TouchableOpacity>
       </View>
