@@ -1,20 +1,17 @@
-import React, {useState} from "react";
+import React from "react";
 import { View, Image, StyleSheet, TouchableOpacity, Text, useWindowDimensions } from "react-native";
-import { GenericButton, buttonStyles } from "../props/genericButton";
+import { buttonStyles } from "../props/genericButton";
 import map from "../assets/map.png";
 import { useNavigation } from "@react-navigation/native";
-import { mapContext } from "../context";
-import rune from "../assets/icons/rune.png"
-import SpyCam from '../screens/SpyCam';
+import { isInTowerContext } from "../context";
 import stars from "../assets/icons/stars.png"
 import eye from "../assets/icons/eye.png"
 import tarot from "../assets/icons/tarot.png"
-import Entrance from "./Entrance";
 
 function Map() {
   const navigation = useNavigation();
-  const { mapView, setMap } = React.useContext(mapContext);
-  const [currentLocation, setText] = useState(false)
+  const towerContext = React.useContext(isInTowerContext);
+  const {isInTower, setIsInTower} = towerContext;
 
   const styles = StyleSheet.create({
     container: {
@@ -52,7 +49,8 @@ function Map() {
       </TouchableOpacity>
       </View>
       <TouchableOpacity onPress={() => {
-        navigation.navigate('Lair')
+        navigation.navigate('Tower')
+        setIsInTower(true);
       }}>
         <Image source={tarot} style={{ width : (15*scale), height : (15*scale), top: "1300%", left: '85%', tintColor: 'white', position: 'fixed', zIndex: 20}}/>
       </TouchableOpacity>

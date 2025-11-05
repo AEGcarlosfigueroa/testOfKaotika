@@ -25,7 +25,7 @@ const styles = StyleSheet.create({
 function Entrance() {
 
   const context = React.useContext(playerContext);
-  const {player, setPlayer} = context
+  const {player, setPlayer} = context;
   const [showQR, setShowQR] = useState(false);
   const [socketId, setSocketId] = useState('');
   const navigation = useNavigation(); // this is needed for navigation

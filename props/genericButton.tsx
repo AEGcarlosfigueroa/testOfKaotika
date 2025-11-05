@@ -1,5 +1,7 @@
 import { View, Image, StyleSheet, Text, TouchableOpacity, StatusBar } from 'react-native';
 import { useNavigation } from "@react-navigation/native";
+import React from 'react';
+import { isInTowerContext } from "../context";
 
 const buttonStyles = StyleSheet.create({
     
@@ -50,11 +52,16 @@ const buttonStyles = StyleSheet.create({
 function GenericButton() {
   const navigation = useNavigation();
 
+  const towerContext = React.useContext(isInTowerContext);
+  const {isInTower, setIsInTower} = towerContext;
 
   return (
     <TouchableOpacity
       style={buttonStyles.button2}
-      onPress={() => navigation.navigate("Map")}
+      onPress={() => {
+        navigation.navigate("Map");
+        setIsInTower(false);
+      }}
     >
       <Text style={buttonStyles.buttonText2}>Back</Text>
     </TouchableOpacity>

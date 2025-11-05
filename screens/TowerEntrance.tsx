@@ -1,6 +1,6 @@
 import { View, Text, Image, StyleSheet, Alert } from "react-native"
 import React, { useContext, useEffect, useState } from "react";
-import { playerContext, isInTowerContext } from "../context";
+import { playerContext } from "../context";
 import { GenericButton } from "../props/genericButton";
 import socketIO from "../socketIO";
 import { useNavigation } from '@react-navigation/native';
@@ -34,13 +34,11 @@ function TowerEntrance ()
 { 
   
     const warning = "Turn back, traveler. The gate ahead does not open to the world of men."
-    const context = useContext(playerContext)
+    const context = React.useContext(playerContext);
     const {player, setPlayer} = context
     const imageSource = require('../assets/settings.png')
     const [socketId, setSocketId] = useState('');
     const navigation = useNavigation();
-    const towerContext = useContext(isInTowerContext)
-    const [isInTower] = towerContext;
 
     // --- Handle socket connection ---
       useEffect(() => {
