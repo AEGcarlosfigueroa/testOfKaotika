@@ -4,6 +4,8 @@ import { buttonStyles } from "../props/genericButton";
 import map from "../assets/map.png";
 import { useNavigation } from "@react-navigation/native";
 import { isInTowerContext } from "../context";
+
+import { playerContext } from "../context";
 import stars from "../assets/icons/stars.png"
 import eye from "../assets/icons/eye.png"
 import tarot from "../assets/icons/tarot.png"
@@ -14,6 +16,10 @@ function Map() {
   const navigation = useNavigation();
   const towerContext = React.useContext(isInTowerContext);
   const {isInTower, setIsInTower} = towerContext;
+
+  const context = React.useContext(playerContext)
+  const {player} = context
+
 
   const styles = StyleSheet.create({
     container: {
@@ -35,14 +41,14 @@ function Map() {
       const socket = socketIO.getSocket();
       if(!socket)return;
       
-      if(isInTower)
+      if(!player.isInTower && isInTower)
       {
         socket.emit('is the player at the gates?', true )
       }
-      else{
-        socket.emit('the player has left the gates')
+      else if (!player.isInTower && !isInTower) {
+        socket.emit('the player has left the gates', false)
       }
-    },[isInTower])
+    },[isInTower, player.isInTower])
 
   return (
     <View style={styles.container}>
