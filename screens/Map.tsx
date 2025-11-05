@@ -31,18 +31,18 @@ function Map() {
 
   const {height, width, scale, fontScale} = useWindowDimensions();
 
-  const standingAtheGates = () => 
-    {
+    useEffect(() => {
       const socket = socketIO.getSocket();
-
       if(!socket)return;
-
+      
       if(isInTower)
       {
         socket.emit('is the player at the gates?', true )
-
       }
-    }
+      else{
+        socket.emit('the player has left the gates')
+      }
+    },[isInTower])
 
   return (
     <View style={styles.container}>
@@ -66,7 +66,6 @@ function Map() {
       <TouchableOpacity onPress={() => {
         navigation.navigate('Tower')
         setIsInTower(true);
-        standingAtheGates
       }}>
         <Image source={tarot} style={{ width : (15*scale), height : (15*scale), top: "1300%", left: '85%', tintColor: 'white', position: 'fixed', zIndex: 20}}/>
       </TouchableOpacity>
