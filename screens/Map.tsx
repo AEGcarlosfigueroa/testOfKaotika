@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useEffect} from "react";
 import { View, Image, StyleSheet, TouchableOpacity, Text, useWindowDimensions } from "react-native";
 import { buttonStyles } from "../props/genericButton";
 import map from "../assets/map.png";
@@ -7,6 +7,8 @@ import { isInTowerContext } from "../context";
 import stars from "../assets/icons/stars.png"
 import eye from "../assets/icons/eye.png"
 import tarot from "../assets/icons/tarot.png"
+import socketIO from '../socketIO';
+
 
 function Map() {
   const navigation = useNavigation();
@@ -28,6 +30,19 @@ function Map() {
   });
 
   const {height, width, scale, fontScale} = useWindowDimensions();
+
+  const standingAtheGates = () => 
+    {
+      const socket = socketIO.getSocket();
+
+      if(!socket)return;
+
+      if(isInTower)
+      {
+        socket.emit('is the player at the gates?', true )
+
+      }
+    }
 
   return (
     <View style={styles.container}>
@@ -51,6 +66,7 @@ function Map() {
       <TouchableOpacity onPress={() => {
         navigation.navigate('Tower')
         setIsInTower(true);
+        standingAtheGates
       }}>
         <Image source={tarot} style={{ width : (15*scale), height : (15*scale), top: "1300%", left: '85%', tintColor: 'white', position: 'fixed', zIndex: 20}}/>
       </TouchableOpacity>

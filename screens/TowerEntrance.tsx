@@ -35,7 +35,8 @@ function TowerEntrance ()
   
     const warning = "Turn back, traveler. The gate ahead does not open to the world of men."
     const context = React.useContext(playerContext);
-    const {player, setPlayer} = context
+    const {player, setPlayer} = context;
+
     const imageSource = require('../assets/settings.png')
     const [socketId, setSocketId] = useState('');
     const navigation = useNavigation();
@@ -57,6 +58,7 @@ function TowerEntrance ()
           socket.off('connect', handleConnect);
         };
       }, []);
+
 
       useEffect(() => {
           const socket = socketIO.getSocket();
