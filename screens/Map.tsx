@@ -1,4 +1,4 @@
-import React, {useEffect} from "react";
+import React from "react";
 import { View, Image, StyleSheet, TouchableOpacity, Text, useWindowDimensions } from "react-native";
 import { buttonStyles } from "../props/genericButton";
 import map from "../assets/map.png";
@@ -9,17 +9,12 @@ import { playerContext } from "../context";
 import stars from "../assets/icons/stars.png"
 import eye from "../assets/icons/eye.png"
 import tarot from "../assets/icons/tarot.png"
-import socketIO from '../socketIO';
 
 
 function Map() {
   const navigation = useNavigation();
   const towerContext = React.useContext(isInTowerContext);
   const {isInTower, setIsInTower} = towerContext;
-
-  const context = React.useContext(playerContext)
-  const {player} = context
-
 
   const styles = StyleSheet.create({
     container: {
@@ -36,19 +31,6 @@ function Map() {
   });
 
   const {height, width, scale, fontScale} = useWindowDimensions();
-
-    useEffect(() => {
-      const socket = socketIO.getSocket();
-      if(!socket)return;
-      
-      if(!player.isInTower && isInTower)
-      {
-        socket.emit('is the player at the gates?', true )
-      }
-      else if (!player.isInTower && !isInTower) {
-        socket.emit('the player has left the gates', false)
-      }
-    },[isInTower, player.isInTower])
 
   return (
     <View style={styles.container}>
