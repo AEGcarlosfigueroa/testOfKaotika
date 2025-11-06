@@ -1,9 +1,7 @@
 import { View, Text, Image, StyleSheet, Alert } from "react-native"
-import React, { useContext, useEffect, useState } from "react";
+import React from "react";
 import { playerContext } from "../context";
 import { GenericButton } from "../props/genericButton";
-import socketIO from "../socketIO";
-import { useNavigation } from '@react-navigation/native';
 
 //Refractor later put in a seperate file called styles 
 const styles = StyleSheet.create({
@@ -38,50 +36,6 @@ function TowerEntrance ()
     const {player, setPlayer} = context;
 
     const imageSource = require('../assets/settings.png')
-    const [socketId, setSocketId] = useState('');
-    const navigation = useNavigation();
-
-    // --- Handle socket connection ---
-      useEffect(() => {
-        const socket = socketIO.getSocket();
-        if (!socket) return;
-    
-        const handleConnect = () => setSocketId(socket.id || '');
-    
-        if (socket.connected) {
-          handleConnect();
-        } else {
-          socket.on('connect', handleConnect);
-        }
-    
-        return () => {
-          socket.off('connect', handleConnect);
-        };
-      }, []);
-
-
-      useEffect(() => {
-          const socket = socketIO.getSocket();
-          if (!socket) return;
-      
-          const handleEntryGranted = (updatedPlayer: any) => {
-            setPlayer(updatedPlayer);
-      
-            if (updatedPlayer.isInTower) {
-      
-              Alert.alert('Access Granted', 'You may enter the next room.');
-              
-            } else {
-              Alert.alert('Access Denied', 'You are not verified yet.');
-            }
-          
-          };
-      
-          socket.on('authorization', handleEntryGranted);
-          return () => {
-            socket.off('authorization', handleEntryGranted)
-          }
-        }, [navigation]);
 
         return (
             <View style={{ flex: 1, alignItems: 'center' }}>

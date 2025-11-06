@@ -64,8 +64,9 @@ function Map() {
       </TouchableOpacity>
       </View>
       <TouchableOpacity onPress={() => {
-        navigation.navigate('Tower')
         setIsInTower(true);
+        console.log("entered tower");
+        navigation.navigate('Tower');
       }}>
         <Image source={tarot} style={{ width : (15*scale), height : (15*scale), top: "1300%", left: '85%', tintColor: 'white', position: 'fixed', zIndex: 20}}/>
       </TouchableOpacity>
