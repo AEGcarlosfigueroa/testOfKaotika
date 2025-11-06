@@ -11,6 +11,12 @@ import Navigator from './components/navigator';
 import socketIO  from "./socketIO";
 import { NavigationContainer } from '@react-navigation/native';
 import { mapContext, isInTowerContext, playerContext } from './context'
+import pNotify from './pushNotification';
+import messaging from '@react-native-firebase/messaging'
+
+messaging().setBackgroundMessageHandler(async remoteMessage => {
+  console.log('Message handled in the background!', remoteMessage);
+});
 
 GoogleSignin.configure({
   //REMEMBER TO DOWNLOAD google-services.json and put it into the /android/app directory
@@ -132,6 +138,16 @@ function App()
     const subscriber = onAuthStateChanged(getAuth(), handleAuthStateChanged);
     return subscriber; // unsubscribe on unmount
   }, []);
+
+  useEffect(() =>{
+
+    pNotify(serverURL)
+
+    const unsubscribe = messaging().onMessage(async remoteMessage => {
+      console.log('notification recieved (foreground):', remoteMessage);
+    })
+    return unsubscribe
+  }, [])
 
   if (initializing) return null;
 
