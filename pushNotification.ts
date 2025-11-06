@@ -11,7 +11,7 @@ import messaging from '@react-native-firebase/messaging'
 
     const sendTokenToServer = async (SERVER_URL, token) => {
         try {
-            await fetch(`${SERVER_URL}/register-token`, {
+            await fetch(`${SERVER_URL}/api/players/register-token`, {
                 method: 'POST',
                 headers: {'Content-Type': 'application/json'},
                 body: JSON.stringify({ token }),
@@ -37,7 +37,7 @@ export default async function pNotify (SERVER_URL)
 
             await sendTokenToServer(SERVER_URL, token);
 
-             messaging().onTokenRefresh(newToken => {
+            messaging().onTokenRefresh(newToken => {
             console.log('New FCM token:', newToken);
             sendTokenToServer(SERVER_URL, newToken);
         });
