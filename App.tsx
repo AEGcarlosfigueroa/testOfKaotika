@@ -141,7 +141,7 @@ function App()
 
   useEffect(() =>{
 
-    pNotify(serverURL)
+    pNotify(serverURL, player?.email)
 
     const unsubscribe = messaging().onMessage(async remoteMessage => {
       console.log('notification recieved (foreground):', remoteMessage);
