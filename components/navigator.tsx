@@ -1,16 +1,16 @@
 import * as React from 'react';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useReducer } from 'react';
 import IstvanNav from './istvanNav';
 // import villanoNav from './villanoNav';
 import MortimerNav from './mortimerNav';
 import AcolitoNav from './acolitoNav';
-import {playerContext, isInTowerContext} from '../context';
+import { playerContext, isInTowerContext, playerListContext } from '../context';
 import Laboratory from '../screens/laboratory';
 import { useNavigation } from '@react-navigation/native';
-import { Alert } from 'react-native';
+import { Alert, BackHandler } from 'react-native';
 import socketIO from '../socketIO';
 import Tower from '../screens/Tower';
-// import mapNav from './mapNav'
+
 
 function Navigator ()
 {
@@ -18,9 +18,21 @@ function Navigator ()
 
   const towerContext = React.useContext(isInTowerContext);
 
+  const listContext = React.useContext(playerListContext);
+
+  const {playerList, setPlayerList} = listContext;
+
   const {isInTower, setIsInTower} = towerContext;
 
   const {player, setPlayer} = context;
+
+  const [, forceUpdate] = useReducer(x => x + 1, 0);
+  
+    const handleNewData = (newData: any) => {
+      setPlayerList(newData);
+      console.log(newData);
+      forceUpdate
+    }
 
   const [socketId, setSocketId] = useState('');
     const navigation = useNavigation();
@@ -69,11 +81,23 @@ function Navigator ()
           
           socket.on('isInTowerEntranceRequest', sendIsInTower);
           socket.on('authorization', handleEntryGranted);
+          socket.on('update', handleNewData);
           return () => {
             socket.off('authorization', handleEntryGranted);
-            socket.off('isInTowerEntranceRequest', sendIsInTower)
+            socket.off('isInTowerEntranceRequest', sendIsInTower);
+            socket.off('update', handleNewData);
           }
         }, [navigation, isInTower]);
+
+  BackHandler.addEventListener('hardwareBackPress', () => {
+    
+    if(!player.isInTower)
+    {
+      setIsInTower(false);
+    }
+    
+    return false;
+  });
  
 
 

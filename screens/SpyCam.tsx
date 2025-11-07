@@ -1,11 +1,12 @@
-import { Image, ScrollView, StyleSheet, View } from "react-native";
+import { Image, ScrollView, StyleSheet, StatusBar, TouchableOpacity, Text } from "react-native";
 import React from "react";
-import { useEffect, useState, useReducer, useContext } from "react";
-import { playerContext } from "../context";
+import { useEffect, useState, useContext } from "react";
+import { playerContext, playerListContext } from "../context";
 import socketIO from "../socketIO";
 import PlayerView from "../props/playerView";
 import {SafeAreaView, SafeAreaProvider} from 'react-native-safe-area-context';
 import { GenericButton } from "../props/genericButton";
+import TowerPlayerView from "../props/towerPlayerView";
 
 const styles = StyleSheet.create({
     image: {
@@ -13,96 +14,38 @@ const styles = StyleSheet.create({
     position: 'absolute',
     zIndex: -10,
     width: '100%'
-  }
+  },
+  button: {
+    position: 'absolute',
+    top: StatusBar.currentHeight,
+    right: '5%',
+    width: '25%',
+    height: '5%',
+    backgroundColor: 'rgba(0,0,0,0.5)',
+    borderRadius: 5,
+    borderWidth: 2,
+    borderColor: 'grey',
+    justifyContent: 'center',
+    alignItems: 'center',
+    zIndex: 15
+  },
+  buttonText: {
+    fontFamily: 'OptimusPrincepsSemiBold',
+    color: '#E2DFD2',
+    fontSize: 18,
+    textAlign: 'center',
+    },
 });
 
 function SpyCam() {
   const context = useContext(playerContext)
   const {player}= context
 
-  // --- Handle socket connection ---
-  const [socketId, setSocketId] = useState('');
-  const [data, setData] = useState([]);
-  const [, forceUpdate] = useReducer(x => x + 1, 0);
+  const listContext = useContext(playerListContext);
 
-  const handleNewData = (newData: any) => {
-    setData(newData);
-    console.log(newData);
-    forceUpdate
-  }
+  const {playerList, setPlayerList} = listContext;
 
-  // FAKE DATA FOR TESTING PURPOSES
-  // const fakeData = [
-  //   {
-  //     image: "https://lh3.googleusercontent.com/a/ACg8ocJyb_mQCSSyhEz9kL_UeS560nXbllgOdDJpmKVt4gsgsnHiAw=s96-c",
-  //     nickname: "TEST PLAYER1",
-  //     isInside: true
-  //   },
-  //   {
-  //     image: "https://lh3.googleusercontent.com/a/ACg8ocJyb_mQCSSyhEz9kL_UeS560nXbllgOdDJpmKVt4gsgsnHiAw=s96-c",
-  //     nickname: "TEST PLAYER2",
-  //     isInside: true
-  //   },
-  //   {
-  //     image: "https://lh3.googleusercontent.com/a/ACg8ocJyb_mQCSSyhEz9kL_UeS560nXbllgOdDJpmKVt4gsgsnHiAw=s96-c",
-  //     nickname: "TEST PLAYER3",
-  //     isInside: true
-  //   },
-  //   {
-  //     image: "https://lh3.googleusercontent.com/a/ACg8ocJyb_mQCSSyhEz9kL_UeS560nXbllgOdDJpmKVt4gsgsnHiAw=s96-c",
-  //     nickname: "TEST PLAYER4",
-  //     isInside: true
-  //   },
-  //   {
-  //     image: "https://lh3.googleusercontent.com/a/ACg8ocJyb_mQCSSyhEz9kL_UeS560nXbllgOdDJpmKVt4gsgsnHiAw=s96-c",
-  //     nickname: "TEST PLAYER5",
-  //     isInside: false
-  //   },
-  //   {
-  //     image: "https://lh3.googleusercontent.com/a/ACg8ocJyb_mQCSSyhEz9kL_UeS560nXbllgOdDJpmKVt4gsgsnHiAw=s96-c",
-  //     nickname: "TEST PLAYER6",
-  //     isInside: true
-  //   },
-  //   {
-  //     image: "https://lh3.googleusercontent.com/a/ACg8ocJyb_mQCSSyhEz9kL_UeS560nXbllgOdDJpmKVt4gsgsnHiAw=s96-c",
-  //     nickname: "TEST PLAYER4",
-  //     isInside: true
-  //   },
-  //   {
-  //     image: "https://lh3.googleusercontent.com/a/ACg8ocJyb_mQCSSyhEz9kL_UeS560nXbllgOdDJpmKVt4gsgsnHiAw=s96-c",
-  //     nickname: "TEST PLAYER5",
-  //     isInside: false
-  //   },
-  //   {
-  //     image: "https://lh3.googleusercontent.com/a/ACg8ocJyb_mQCSSyhEz9kL_UeS560nXbllgOdDJpmKVt4gsgsnHiAw=s96-c",
-  //     nickname: "TEST PLAYER6",
-  //     isInside: true
-  //   }
-  // ]
-
-  useEffect(() => {
-    const socket = socketIO.getSocket();
-    if (!socket) return;
-
-    const handleConnect = () => setSocketId(socket.id || '');
-
-    if (socket.connected) {
-      handleConnect();
-    } else {
-      socket.on('connect', handleConnect);
-    }
-
-    return () => {
-      socket.off('connect', handleConnect);
-    };
-  }, []);
-
-  useEffect(() => {
-    const socket = socketIO.getSocket();
-    if (!socket) return;
-
-    socket.on('update', handleNewData);
-  })
+  const [isShowingTowerList, setIsShowingTowerList] = useState(false);
 
   if(player.profile.role !== 'MORTIMER')
   {
@@ -121,11 +64,35 @@ function SpyCam() {
      return (
       <>
       <GenericButton/>
+      <TouchableOpacity
+        style={styles.button}
+        onPress={() => {
+          if(isShowingTowerList)
+          {
+            setIsShowingTowerList(false);
+          }
+          else
+          {
+            setIsShowingTowerList(true);
+          }
+        }}
+      >
+        <Text style={styles.buttonText}>Show {isShowingTowerList ? 'Lab List' : 'Tower List'}</Text>
+      </TouchableOpacity>
       <Image source={require("./../assets/tasks.png")} style={styles.image}/>
       <SafeAreaProvider>
         <SafeAreaView>
-          <ScrollView overScrollMode="always" style={{height: '100%'}}>
-            {data.map( (elem, i) =>  PlayerView(elem, i))}
+          <ScrollView overScrollMode="always" style={{height: '100%', marginTop: '8%'}}>
+            {playerList.map( (elem, i) =>  {
+              if(!isShowingTowerList)
+              {
+                return PlayerView(elem, i)
+              }
+              else
+              {
+                return TowerPlayerView(elem, i);
+              }
+            })}
           </ScrollView>  
         </SafeAreaView>
       </SafeAreaProvider>

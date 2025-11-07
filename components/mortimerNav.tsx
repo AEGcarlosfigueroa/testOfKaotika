@@ -16,7 +16,7 @@ export function MortimerNav() {
       <Stack.Screen name="Home" component={Home}/>
       <Stack.Screen name="Map" component={Map}/>
       <Stack.Screen name="Entrance" component={Entrance}/>
-      <Stack.Screen name="Lair" component={TowerEntrance}/>
+      <Stack.Screen name="Tower" component={TowerEntrance}/>
       <Stack.Screen name='SpyCam' component={SpyCam}/>
     </Stack.Navigator>
   );

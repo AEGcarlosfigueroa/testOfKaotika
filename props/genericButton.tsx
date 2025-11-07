@@ -31,7 +31,7 @@ const buttonStyles = StyleSheet.create({
     top: StatusBar.currentHeight,
     left: '5%',
     width: '25%',
-    height: '10%',
+    height: '5%',
     backgroundColor: 'rgba(0,0,0,0.5)',
     borderRadius: 5,
     borderWidth: 2,

@@ -10,7 +10,7 @@ import BootSplash from "react-native-bootsplash";
 import Navigator from './components/navigator';
 import socketIO  from "./socketIO";
 import { NavigationContainer } from '@react-navigation/native';
-import { mapContext, isInTowerContext, playerContext } from './context'
+import { mapContext, isInTowerContext, playerContext, playerListContext } from './context'
 
 GoogleSignin.configure({
   //REMEMBER TO DOWNLOAD google-services.json and put it into the /android/app directory
@@ -104,6 +104,8 @@ function App()
 
   const [initializing, setInitializing] = useState(true);
 
+  const [playerList, setPlayerList] = useState([]);
+
   const [user, setUser] = useState();
 
   const [loading, setLoading] = useState(false);
@@ -141,11 +143,13 @@ function App()
       <playerContext.Provider value = {{player, setPlayer}}>
       <mapContext.Provider value = {{mapView, setMap}}>
       <isInTowerContext.Provider value = {{isInTower, setIsInTower}}>
+      <playerListContext.Provider value = {{playerList, setPlayerList}}>
       <NavigationContainer>
 
       <Navigator/>
 
       </NavigationContainer>
+      </playerListContext.Provider>
       </isInTowerContext.Provider>
       </mapContext.Provider>
       </playerContext.Provider>
