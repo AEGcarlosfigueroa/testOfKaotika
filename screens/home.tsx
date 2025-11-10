@@ -15,6 +15,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     zIndex: -10,
   },
+
   title: {
     fontSize: 28,
     marginBottom: '5%',
@@ -27,8 +28,9 @@ const styles = StyleSheet.create({
     boxShadow: '5px 5px 5px 5px black',
     backgroundColor: 'rgba(0, 0, 0, 0.5)',
     padding: '5%',
+
     // elevation: 2
-    
+
   },
   buttonText: {
     fontSize: 24,

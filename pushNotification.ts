@@ -20,7 +20,7 @@ import socketIO from './socketIO';
 
     }
 
-export default async function pNotify (SERVER_URL, playerEmail)
+export default async function pNotify (playerEmail)
 {
         const authStatus = await messaging().requestPermission();
         const enable =
