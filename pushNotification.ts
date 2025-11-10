@@ -1,4 +1,5 @@
 import messaging from '@react-native-firebase/messaging'
+import socketIO from './socketIO';
 
 
 
@@ -9,21 +10,17 @@ import messaging from '@react-native-firebase/messaging'
             return token
     }
 
-    const sendTokenToServer = async (SERVER_URL, token) => {
-        try {
-            await fetch(`${SERVER_URL}/api/players/register-token`, {
-                method: 'POST',
-                headers: {'Content-Type': 'application/json'},
-                body: JSON.stringify({ token }),
-    });
-    console.log('Token sent to server');
-  } 
-        catch{
-            
-        }
+    const sendTokenToServer = async (token, playerEmail) => {
+
+        const socket = socketIO.getSocket()
+
+        //send token via socket
+        socket?.emit('register FCM Token', {token, playerEmail})
+
+
     }
 
-export default async function pNotify (SERVER_URL)
+export default async function pNotify (playerEmail)
 {
         const authStatus = await messaging().requestPermission();
         const enable =
@@ -35,11 +32,11 @@ export default async function pNotify (SERVER_URL)
             console.log('Authorization status', authStatus)
             const token = await getToken();
 
-            await sendTokenToServer(SERVER_URL, token);
+            await sendTokenToServer(token, playerEmail);
 
             messaging().onTokenRefresh(newToken => {
             console.log('New FCM token:', newToken);
-            sendTokenToServer(SERVER_URL, newToken);
+            sendTokenToServer(newToken, playerEmail);
         });
             
         }
