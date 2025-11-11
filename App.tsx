@@ -1,5 +1,5 @@
 import { GoogleSignin, User } from '@react-native-google-signin/google-signin';
-import { Text, Image, View, Alert } from 'react-native';
+import { Text, Image, View, Alert, ToastAndroid } from 'react-native';
 import { TouchableOpacity } from 'react-native';
 import { StyleSheet, ActivityIndicator } from 'react-native';
 import { GoogleAuthProvider, getAuth, signInWithCredential, signOut, onAuthStateChanged } from '@react-native-firebase/auth';
@@ -140,8 +140,9 @@ function App()
   }, []);
 
   useEffect(() => {
-    const unsubscribe = messaging().onMessage(async remoteMessage => {
-      Alert.alert('A new FCM message arrived!', JSON.stringify(remoteMessage));
+    const unsubscribe = messaging().onMessage(async (remoteMessage) => {
+      if(remoteMessage.notification?.body)
+      ToastAndroid.show(remoteMessage.notification?.body, 5);
     });
 
     return unsubscribe;
