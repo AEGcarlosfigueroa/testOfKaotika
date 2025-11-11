@@ -227,6 +227,8 @@ return (
         {
           setIsInTower(false);
         }
+
+        pNotify(serverURL, data.data.email);
       }
       else
       {
