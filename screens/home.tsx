@@ -2,7 +2,7 @@ import React, { useState, useEffect, useContext } from 'react';
 import { View, Image, StyleSheet, Text, TouchableOpacity, useWindowDimensions, StatusBar } from 'react-native';
 import {playerContext} from '../context';
 import { mapContext } from '../context';
-import { useNavigation } from "@react-navigation/native";
+import { useNavigation, NavigationProp } from "@react-navigation/native";
 import {buttonStyles} from "../props/genericButton";
 import socketIO from '../socketIO';
 import { GoogleSignin } from '@react-native-google-signin/google-signin';
@@ -58,7 +58,16 @@ const styles = StyleSheet.create({
 
 function Home() {
 
-  const navigation = useNavigation();
+  type RootStackParamList = {
+      Home: undefined,
+      Entrance: undefined,
+      Tower: undefined,
+      TowerEntrance: undefined,
+      SpyCam: undefined,
+      Map: undefined
+    }
+  
+    const navigation = useNavigation<NavigationProp<RootStackParamList>>();
 
   const context = useContext(playerContext)
   const {player} = context;

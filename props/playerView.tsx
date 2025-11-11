@@ -2,7 +2,6 @@ import { Image, Text, View } from "react-native";
 import { StyleSheet } from "react-native";
 import React from "react";
 import CheckBox from "@react-native-community/checkbox";
-import { DimensionValue } from "react-native";
 
 const styles = StyleSheet.create({
     view: {

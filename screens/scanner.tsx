@@ -96,7 +96,6 @@ export default function Scanner() {
 
   useEffect(() => {
     const socket = socketIO.getSocket();
-    if (!socket) return;
 
     const handleScanResult = (data: any) => {
       if (data.success) {
@@ -106,8 +105,12 @@ export default function Scanner() {
       }
     };
 
+    if (!socket)
+    {
+      return;
+    }
+
     socket.on('scan-result', handleScanResult);
-    return () => socket.off('scan-result', handleScanResult);
   }, []);
 
   if (!cameraPermission) return <Text>Loading camera...</Text>;

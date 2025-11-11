@@ -1,5 +1,5 @@
-import { GoogleSignin } from '@react-native-google-signin/google-signin';
-import { Text, Image, View} from 'react-native';
+import { GoogleSignin, User } from '@react-native-google-signin/google-signin';
+import { Text, Image, View, Alert } from 'react-native';
 import { TouchableOpacity } from 'react-native';
 import { StyleSheet, ActivityIndicator } from 'react-native';
 import { GoogleAuthProvider, getAuth, signInWithCredential, signOut, onAuthStateChanged } from '@react-native-firebase/auth';
@@ -12,7 +12,8 @@ import socketIO  from "./socketIO";
 import { NavigationContainer } from '@react-navigation/native';
 import { mapContext, isInTowerContext, playerContext, playerListContext } from './context'
 import pNotify from './pushNotification';
-import messaging from '@react-native-firebase/messaging'
+import messaging from '@react-native-firebase/messaging';
+import { Player } from './interfaces/interfaces';
 
 messaging().setBackgroundMessageHandler(async remoteMessage => {
   console.log('Message handled in the background!', remoteMessage);
@@ -78,14 +79,11 @@ const onGoogleButtonPress = async () => {
   // Check if your device supports Google Play
   await GoogleSignin.hasPlayServices({ showPlayServicesUpdateDialog: true });
   // Get the users ID token
-  const signInResult = await GoogleSignin.signIn();
+  await GoogleSignin.signIn();
 
   // Try the new style of google-sign in result, from v13+ of that module
   let idToken = (await (GoogleSignin.getTokens())).idToken;
-  if (!idToken) {
-    // if you are using older versions of google-signin, try old style result
-    idToken = signInResult.idToken;
-  }
+
   if (!idToken) {
     throw new Error('No ID token found');
   }
@@ -98,7 +96,7 @@ const onGoogleButtonPress = async () => {
 
   const firebaseIdToken = await account.user.getIdToken();
 
-  return { account, firebaseIdToken};
+  return { account, firebaseIdToken };
 };
 
 function App()
@@ -108,26 +106,26 @@ function App()
     console.log("BootSplash has been hidden successfully");
   }, 1000)
 
-  const [initializing, setInitializing] = useState(true);
+  const [initializing, setInitializing] = useState<Boolean>(true);
 
-  const [playerList, setPlayerList] = useState([]);
+  const [playerList, setPlayerList] = useState<typeof Player[]>([]);
 
-  const [user, setUser] = useState();
+  const [user, setUser] = useState<User | null>(null);
 
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState<Boolean>(false);
 
-  const [success, setSuccess] = useState(false);
+  const [success, setSuccess] = useState<Boolean>(false);
 
-  const [errorMessage, setErrorMessage] = useState(<></>);
+  const [errorMessage, setErrorMessage] = useState<Element>(<></>);
 
-  const [player, setPlayer] = useState();
+  const [player, setPlayer] = useState<typeof Player | null>(null);
 
-  const [isInTower, setIsInTower] = useState();
+  const [isInTower, setIsInTower] = useState<Boolean>(false);
 
-  const [mapView, setMap] = useState(false)
+  const [mapView, setMap] = useState<Boolean>(false)
   
 
-  function handleAuthStateChanged(user) {
+  function handleAuthStateChanged(user: any) {
     setUser(user);
     if (initializing) setInitializing(false);
     if(!user)
@@ -141,14 +139,13 @@ function App()
     return subscriber; // unsubscribe on unmount
   }, []);
 
-  useEffect(() =>{
-
+  useEffect(() => {
     const unsubscribe = messaging().onMessage(async remoteMessage => {
+      Alert.alert('A new FCM message arrived!', JSON.stringify(remoteMessage));
+    });
 
-      console.log('notification recieved (foreground):', remoteMessage);
-    })
-    return unsubscribe
-  }, [])
+    return unsubscribe;
+  }, []);
 
   if (initializing) return null;
 
@@ -194,11 +191,11 @@ return (
       // Sign in the user and get the token
       const { account, firebaseIdToken } = await onGoogleButtonPress();
 
-      console.log("User:", account.user);
+      console.log("User:", account.user.email);
       console.log("Token:", firebaseIdToken);
 
       // Send token to server
-      const response = await fetch( serverURL + "/api/players/email/" + account.user._user.email,
+      const response = await fetch( serverURL + "/api/players/email/" + account.user.email,
         {
           method: "GET",
         headers: {
@@ -228,7 +225,7 @@ return (
           setIsInTower(false);
         }
 
-        pNotify(serverURL, data.data.email);
+        await pNotify(serverURL, data.data.email);
       }
       else
       {

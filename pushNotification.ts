@@ -1,6 +1,6 @@
 import messaging from '@react-native-firebase/messaging'
 import { getAuth } from '@react-native-firebase/auth';
-import { GoogleSignin } from '@react-native-google-signin/google-signin';
+import {PermissionsAndroid} from 'react-native';
 
 
 
@@ -39,14 +39,11 @@ import { GoogleSignin } from '@react-native-google-signin/google-signin';
 
 export default async function pNotify (SERVER_URL: string, playerEmail: string)
 {
-        const authStatus = await messaging().requestPermission();
-        const enable =
-        authStatus === messaging.AuthorizationStatus.AUTHORIZED ||
-        authStatus === messaging.AuthorizationStatus.PROVISIONAL;
+        const enable = await PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.POST_NOTIFICATIONS);
 
         if(enable) 
         {
-            console.log('Authorization status', authStatus)
+            console.log('Authorization status', enable)
             const token = await getToken();
 
             await sendTokenToServer(SERVER_URL ,token, playerEmail);
@@ -54,7 +51,8 @@ export default async function pNotify (SERVER_URL: string, playerEmail: string)
             messaging().onTokenRefresh(newToken => {
             console.log('New FCM token:', newToken);
             sendTokenToServer(SERVER_URL, newToken, playerEmail);
-        });
+            });
+
             
         }
     

@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { View, Image, StyleSheet, Alert, TouchableOpacity, Text} from 'react-native';
+import { View, Image, StyleSheet, Alert, TouchableOpacity, Text, ColorValue} from 'react-native';
 import QRCode from 'react-native-qrcode-svg';
 import socketIO from '../socketIO';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, NavigationProp } from '@react-navigation/native';
 import {playerContext} from '../context';
 import { GenericButton, buttonStyles } from '../props/genericButton';
 
@@ -24,12 +24,22 @@ const styles = StyleSheet.create({
 
 function Entrance() {
 
+  type RootStackParamList = {
+    Home: undefined,
+    Entrance: undefined,
+    Tower: undefined,
+    TowerEntrance: undefined,
+    SpyCam: undefined,
+    Map: undefined
+  }
+
+  const navigation = useNavigation<NavigationProp<RootStackParamList>>();
+
   const context = React.useContext(playerContext);
   const {player, setPlayer} = context;
-  const [showQR, setShowQR] = useState(false);
-  const [socketId, setSocketId] = useState('');
-  const navigation = useNavigation(); // this is needed for navigation
-  const [buttonColor, setColor] = useState('#E2DFD2')
+  const [showQR, setShowQR] = useState<Boolean>(false);
+  const [socketId, setSocketId] = useState<String>('');
+  const [buttonColor, setColor] = useState<ColorValue>('#E2DFD2')
 
   // --- Handle socket connection ---
   useEffect(() => {

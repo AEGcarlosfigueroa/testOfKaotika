@@ -1,5 +1,5 @@
 import React from 'react';
-import { Image, StyleSheet, View, Text, TouchableOpacity, Alert } from 'react-native';
+import { Image, StyleSheet, View, Text, TouchableOpacity, Alert, ColorValue } from 'react-native';
 import { useState, useEffect } from 'react';
 import QRCode from 'react-native-qrcode-svg';
 import {playerContext} from '../context';
@@ -41,10 +41,10 @@ const styles = StyleSheet.create({
 
 function Laboratory() {
 
-  const [showQR, setShowQR] = useState(false);
-  const [socketId, setSocketId] = useState('');
+  const [showQR, setShowQR] = useState<Boolean>(false);
+  const [socketId, setSocketId] = useState<String>('');
 
-  const [buttonColor, setColor] = useState('#E2DFD2');
+  const [buttonColor, setColor] = useState<ColorValue>('#E2DFD2');
 
   const context = React.useContext(playerContext);
   const {player, setPlayer} = context;

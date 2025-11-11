@@ -1,5 +1,5 @@
-import { View, Image, StyleSheet, Text, TouchableOpacity, StatusBar } from 'react-native';
-import { useNavigation } from "@react-navigation/native";
+import { StyleSheet, Text, TouchableOpacity, StatusBar } from 'react-native';
+import { useNavigation, NavigationProp } from "@react-navigation/native";
 import React from 'react';
 import { isInTowerContext } from "../context";
 
@@ -50,7 +50,16 @@ const buttonStyles = StyleSheet.create({
   
 })
 function GenericButton() {
-  const navigation = useNavigation();
+  type RootStackParamList = {
+        Home: undefined,
+        Entrance: undefined,
+        Tower: undefined,
+        TowerEntrance: undefined,
+        SpyCam: undefined,
+        Map: undefined
+      }
+    
+      const navigation = useNavigation<NavigationProp<RootStackParamList>>();
 
   const towerContext = React.useContext(isInTowerContext);
   const {isInTower, setIsInTower} = towerContext;

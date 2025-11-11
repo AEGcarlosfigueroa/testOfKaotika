@@ -7,6 +7,7 @@ import PlayerView from "../props/playerView";
 import {SafeAreaView, SafeAreaProvider} from 'react-native-safe-area-context';
 import { GenericButton } from "../props/genericButton";
 import TowerPlayerView from "../props/towerPlayerView";
+import { Player } from "../interfaces/interfaces";
 
 const styles = StyleSheet.create({
     image: {
@@ -83,7 +84,7 @@ function SpyCam() {
       <SafeAreaProvider>
         <SafeAreaView>
           <ScrollView overScrollMode="always" style={{height: '100%', marginTop: '8%'}}>
-            {playerList.map( (elem, i) =>  {
+            {playerList.map( (elem: typeof Player, i: Number) =>  {
               if(!isShowingTowerList)
               {
                 return PlayerView(elem, i)
