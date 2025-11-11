@@ -26,7 +26,7 @@ GoogleSignin.configure({
 // const serverURL = "http://10.50.0.50:6002";
 // const serverURL = "https://testofkaotika-server.onrender.com";
 // const serverURL = "http://localhost:3000";
-const serverURL = "http://10.70.0.22:3000"
+export const serverURL = "http://10.70.0.22:3000"
 // const serverURL = 'http://10.70.0.154:3000'
 
 
@@ -143,11 +143,8 @@ function App()
 
   useEffect(() =>{
 
-    pNotify(player?.email)
-
-    console.log('notification sent by', player?.email)
-
     const unsubscribe = messaging().onMessage(async remoteMessage => {
+
       console.log('notification recieved (foreground):', remoteMessage);
     })
     return unsubscribe

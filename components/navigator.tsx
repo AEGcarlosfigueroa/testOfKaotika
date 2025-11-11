@@ -10,6 +10,8 @@ import { useNavigation } from '@react-navigation/native';
 import { Alert, BackHandler } from 'react-native';
 import socketIO from '../socketIO';
 import Tower from '../screens/Tower';
+import pNotify from '../pushNotification';
+import { serverURL } from '../App';
 
 
 function Navigator ()
@@ -31,6 +33,7 @@ function Navigator ()
     const handleNewData = (newData: any) => {
       setPlayerList(newData);
       console.log(newData);
+      pNotify(serverURL, player.email)
       forceUpdate
     }
 

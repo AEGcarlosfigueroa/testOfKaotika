@@ -10,17 +10,31 @@ import socketIO from './socketIO';
             return token
     }
 
-    const sendTokenToServer = async (token, playerEmail) => {
+    // const sendTokenToServer = async (token, playerEmail) => {
 
-        const socket = socketIO.getSocket()
+    //     const socket = socketIO.getSocket()
 
-        //send token via socket
-        socket?.emit('register FCM Token', {token, playerEmail})
+    //     //send token via socket
+    //     socket?.emit('register FCM Token', {token, playerEmail})
 
 
+    // }
+
+    const sendTokenToServer = async (SERVER_URL: string , token: string, playerEmail: string) => {
+        try {
+            await fetch(`${SERVER_URL}/api/players/register-token`, {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({ token }),
+    });
+    console.log('Token sent to server');
+        } 
+        catch(error){
+            console.error("could not post the data", error)
+        }
     }
 
-export default async function pNotify (playerEmail)
+export default async function pNotify (SERVER_URL: string, playerEmail: string)
 {
         const authStatus = await messaging().requestPermission();
         const enable =
@@ -32,11 +46,11 @@ export default async function pNotify (playerEmail)
             console.log('Authorization status', authStatus)
             const token = await getToken();
 
-            await sendTokenToServer(token, playerEmail);
+            await sendTokenToServer(SERVER_URL ,token, playerEmail);
 
             messaging().onTokenRefresh(newToken => {
             console.log('New FCM token:', newToken);
-            sendTokenToServer(newToken, playerEmail);
+            sendTokenToServer(SERVER_URL, newToken, playerEmail);
         });
             
         }
