@@ -25,7 +25,7 @@ import socketIO from './socketIO';
             await fetch(`${SERVER_URL}/api/players/register-token`, {
                 method: 'POST',
                 headers: {'Content-Type': 'application/json'},
-                body: JSON.stringify({ token }),
+                body: JSON.stringify({ token: token, email: playerEmail }),
     });
     console.log('Token sent to server');
         } 
