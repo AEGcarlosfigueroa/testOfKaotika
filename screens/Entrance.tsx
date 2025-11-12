@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Image, StyleSheet, Alert, TouchableOpacity, Text, ColorValue} from 'react-native';
+import { View, Image, StyleSheet, TouchableOpacity, Text, ColorValue} from 'react-native';
 import QRCode from 'react-native-qrcode-svg';
 import socketIO from '../socketIO';
 import { useNavigation, NavigationProp } from '@react-navigation/native';
@@ -76,14 +76,6 @@ const revealQR = () => {
 
     const handleEntryGranted = (updatedPlayer: any) => {
       setPlayer(updatedPlayer);
-
-      if (updatedPlayer.isInside) {
-
-        Alert.alert('Access Granted', 'You may enter the next room.');
-        
-      } else {
-        Alert.alert('Access Denied', 'You are not verified yet.');
-      }
     
     };
 

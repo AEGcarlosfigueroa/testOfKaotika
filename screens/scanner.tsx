@@ -89,8 +89,6 @@ export default function Scanner() {
 
       const socket = socketIO.getSocket();
       if (socket) socket.emit('scan', scannedEmail);
-
-      Alert.alert('Scan Success!', `You scanned: ${scannedEmail}`);
     }
   };
 

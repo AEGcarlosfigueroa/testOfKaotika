@@ -1,8 +1,7 @@
 import { Image, ScrollView, StyleSheet, StatusBar, TouchableOpacity, Text } from "react-native";
 import React from "react";
-import { useEffect, useState, useContext } from "react";
+import { useState, useContext } from "react";
 import { playerContext, playerListContext } from "../context";
-import socketIO from "../socketIO";
 import PlayerView from "../props/playerView";
 import {SafeAreaView, SafeAreaProvider} from 'react-native-safe-area-context';
 import { GenericButton } from "../props/genericButton";

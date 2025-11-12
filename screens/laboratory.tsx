@@ -1,5 +1,5 @@
 import React from 'react';
-import { Image, StyleSheet, View, Text, TouchableOpacity, Alert, ColorValue } from 'react-native';
+import { Image, StyleSheet, View, Text, TouchableOpacity, ColorValue } from 'react-native';
 import { useState, useEffect } from 'react';
 import QRCode from 'react-native-qrcode-svg';
 import {playerContext} from '../context';
@@ -75,14 +75,6 @@ function Laboratory() {
   
       const handleEntryGranted = (updatedPlayer: any) => {
         setPlayer(updatedPlayer);
-  
-        if (updatedPlayer.isInside) {
-  
-          Alert.alert('Access Denied', 'You may not exit the laboratory');
-          
-        } else {
-          Alert.alert('Access Granted', 'You may exit the laboratory');
-        }
       
       };
   

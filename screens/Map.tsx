@@ -7,6 +7,7 @@ import { isInTowerContext } from "../context";
 import stars from "../assets/icons/stars.png"
 import eye from "../assets/icons/eye.png"
 import tarot from "../assets/icons/tarot.png"
+import rune from "../assets/icons/rune.png"
 
 
 function Map() {
@@ -41,10 +42,10 @@ function Map() {
       width: (15*scale), height: (15*scale), top: (0.55*height), left: '10%', tintColor: 'white', position: 'absolute', zIndex: 20
     },
     towerStyle: {
-      width : (15*scale), height : (15*scale), top: (0.6*height), left: '85%', tintColor: 'white', position: 'absolute', zIndex: 20
+      width : (15*scale), height : (15*scale), top: (0.3*height), left: '50%', tintColor: 'white', position: 'absolute', zIndex: 20
     },
     spycamStyle: {
-      width : (15*scale), height : (15*scale), top: (0.3*height), left: '50%', tintColor: 'white', position: 'absolute', zIndex: 20
+      width : (15*scale), height : (15*scale), top: (0.6*height), left: '85%', tintColor: 'white', position: 'absolute', zIndex: 20
     }
   });
 
@@ -72,7 +73,7 @@ function Map() {
         console.log("entered tower");
         navigation.navigate('Tower');
       }}>
-        <Image source={tarot} style={styles.towerStyle}/>
+        <Image source={rune} style={styles.towerStyle}/>
       </TouchableOpacity>
       <TouchableOpacity onPress={() => {
         navigation.navigate('SpyCam')

@@ -35,7 +35,7 @@ function TowerEntrance ()
     const context = React.useContext(playerContext);
     const {player, setPlayer} = context;
 
-    const imageSource = require('../assets/settings.png')
+    const imageSource = require('../assets/towerEntrance.png')
 
         return (
             <View style={{ flex: 1, alignItems: 'center' }}>
