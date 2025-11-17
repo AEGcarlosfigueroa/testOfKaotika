@@ -58,7 +58,7 @@ export function IstvanNav() {
       <Stack.Screen name="Entrance" component={Scanner} />
       <Stack.Screen name="Lair" component={TowerEntrance}/>
       <Stack.Screen name='SpyCam' component={SpyCam}/>
-      <Stack.Screen name="OldSchool" compenent={OldSchool}/>
+      <Stack.Screen name="OldSchool" component={OldSchool}/>
     </Stack.Navigator>
   )
 }

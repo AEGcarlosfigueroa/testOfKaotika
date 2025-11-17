@@ -14,6 +14,8 @@ import { mapContext, isInTowerContext, playerContext, playerListContext } from '
 import pNotify from './pushNotification';
 import messaging from '@react-native-firebase/messaging';
 import { Player } from './interfaces/interfaces';
+import { StatusBar } from 'react-native';
+
 
 messaging().setBackgroundMessageHandler(async remoteMessage => {
   console.log('Message handled in the background!', remoteMessage);
@@ -60,7 +62,7 @@ const styles = StyleSheet.create({
     height: '100%',
     position: 'absolute',
     zIndex: -10,
-    marginTop: '10%',
+    marginTop: StatusBar.currentHeight,
     width: '100%'
   },
   fullScreen: {

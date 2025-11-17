@@ -37,7 +37,7 @@ function Navigator ()
       forceUpdate
     }
 
-  const [socketId, setSocketId] = useState('');
+  const [socketId, setSocketId] = useState<String>('');
     const navigation = useNavigation();
 
     // --- Handle socket connection ---
