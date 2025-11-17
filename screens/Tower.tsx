@@ -5,7 +5,8 @@ import socketIO from "../socketIO";
 import { signOut, getAuth } from "@react-native-firebase/auth";
 import { GoogleSignin } from "@react-native-google-signin/google-signin";
 import scrollImage from "./../assets/scroll.png";
-
+import { removeNofify } from "../pushNotification";
+import { playerContext } from "../context";
 
 type scrollProps = PropsWithChildren<{style: ViewStyle}>
 
@@ -68,6 +69,10 @@ function Tower ()
 { 
   const {height, width, scale, fontScale} = useWindowDimensions();
 
+  const contextPlayer = React.useContext(playerContext);
+
+  const {player, setPlayer} = contextPlayer;
+
   //Refractor later put in a seperate file called styles 
   const styles = StyleSheet.create({
     image: {
@@ -107,6 +112,7 @@ function Tower ()
       <View style= {buttonStyles.buttonContainer}>
        <TouchableOpacity
         onPress={() => {
+          removeNofify(player.email);
           signOut(getAuth());
           GoogleSignin.revokeAccess();
           const socket = socketIO.getSocket();

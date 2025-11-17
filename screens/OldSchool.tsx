@@ -19,7 +19,8 @@ function OldSchool() {
     TowerEntrance: undefined,
     SpyCam: undefined,
     Map: undefined,
-    OldSchool: undefined
+    OldSchool: undefined,
+    HallOfSages: undefined
   }
 
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
@@ -41,8 +42,14 @@ function OldSchool() {
     entranceStyle: {
       width: (15*scale), height: (15*scale), top: (0.25*height), left: '10%', tintColor: 'white', position: 'absolute', zIndex: 20
     },
+    hallStyle: {
+      width: (15*scale), height: (15*scale), top: (0.25*height), left: '80%', tintColor: 'yellow', position: 'absolute', zIndex: 20
+    },
     image: {
       width : (15*scale), height : (15*scale), tintColor: 'white'
+    },
+    image2: {
+      width : (15*scale), height : (15*scale), tintColor: 'yellow'
     },
   });
 
@@ -60,6 +67,12 @@ function OldSchool() {
         navigation.navigate('Entrance');
       }}>
         <Image source={stars} style={styles.image}/>
+      </TouchableOpacity>
+       <TouchableOpacity style={styles.hallStyle} onPress={() =>
+      {
+        navigation.navigate('HallOfSages');
+      }}>
+        <Image source={tarot} style={styles.image2}/>
       </TouchableOpacity>
     </View>
   );

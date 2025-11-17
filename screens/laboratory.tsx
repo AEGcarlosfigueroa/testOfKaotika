@@ -8,6 +8,7 @@ import { useNavigation } from '@react-navigation/native';
 import { buttonStyles } from '../props/genericButton';
 import { getAuth, signOut } from '@react-native-firebase/auth';
 import { GoogleSignin } from '@react-native-google-signin/google-signin';
+import { removeNofify } from '../pushNotification';
 
 const styles = StyleSheet.create({
   image: {
@@ -98,6 +99,7 @@ function Laboratory() {
       <View style= {styles.logoutButton}>
        <TouchableOpacity
         onPress={() => {
+          removeNofify(player.email);
           signOut(getAuth());
           GoogleSignin.revokeAccess();
           const socket = socketIO.getSocket();

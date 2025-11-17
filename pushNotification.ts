@@ -1,6 +1,7 @@
 import messaging from '@react-native-firebase/messaging'
 import { getAuth } from '@react-native-firebase/auth';
 import {PermissionsAndroid} from 'react-native';
+import { serverURL } from './App';
 
 
 
@@ -21,7 +22,7 @@ import {PermissionsAndroid} from 'react-native';
 
     // }
 
-    const sendTokenToServer = async (SERVER_URL: string , token: string, playerEmail: string) => {
+    const sendTokenToServer = async (SERVER_URL: string , token: string | null, playerEmail: string) => {
         try {
             const firebaseIdToken = await getAuth().currentUser?.getIdToken();
             console.log(firebaseIdToken)
@@ -57,4 +58,15 @@ export default async function pNotify (SERVER_URL: string, playerEmail: string)
         }
     
 
+}
+
+export async function removeNofify(playerEmail: string)
+{
+    const token = null;
+
+    await sendTokenToServer(serverURL ,token, playerEmail);
+    messaging().onTokenRefresh(newToken => {
+    console.log('New FCM token:', newToken);
+    sendTokenToServer(serverURL, newToken, playerEmail);
+    });
 }
