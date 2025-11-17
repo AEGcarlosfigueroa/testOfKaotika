@@ -7,6 +7,7 @@ import Map from '../screens/Map'
 import Scanner from '../screens/scanner';
 import TowerEntrance from '../screens/TowerEntrance';
 import SpyCam from '../screens/SpyCam';
+import OldSchool from '../screens/OldSchool';
 
 const Stack = createStackNavigator()
 
@@ -57,6 +58,7 @@ export function IstvanNav() {
       <Stack.Screen name="Entrance" component={Scanner} />
       <Stack.Screen name="Lair" component={TowerEntrance}/>
       <Stack.Screen name='SpyCam' component={SpyCam}/>
+      <Stack.Screen name="OldSchool" compenent={OldSchool}/>
     </Stack.Navigator>
   )
 }

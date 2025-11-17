@@ -12,3 +12,5 @@ function Villano ()
         <View></View>
     }
 }
+
+export default Villano

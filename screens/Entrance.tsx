@@ -30,7 +30,8 @@ function Entrance() {
     Tower: undefined,
     TowerEntrance: undefined,
     SpyCam: undefined,
-    Map: undefined
+    Map: undefined, 
+    OldSchool: undefined
   }
 
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
@@ -109,7 +110,12 @@ const revealQR = () => {
           <QRCode value={player?.email || 'no-email'} size={200} />
         </View>
       )}
-        <GenericButton/>
+        <TouchableOpacity
+           style={buttonStyles.button2}
+           onPress={() => navigation.navigate('OldSchool')}
+         >
+           <Text style={buttonStyles.buttonText2}>Back</Text>
+         </TouchableOpacity>
     </View>
   );
 }

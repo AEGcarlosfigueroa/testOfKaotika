@@ -10,14 +10,11 @@ import { StyleSheet } from 'react-native';
 import { mapContext } from '../context';
 import { createStackNavigator } from '@react-navigation/stack'
 import Laboratory from '../screens/laboratory';
+import OldSchool from '../screens/OldSchool';
 
 const Stack = createStackNavigator()
 
 export function AcolitoNav() {
-
-    const contextMap = React.useContext(mapContext)
-  
-    const {mapView, setMap} = contextMap;
 
   return (
 
@@ -28,6 +25,7 @@ export function AcolitoNav() {
       <Stack.Screen name="Tower" component={TowerEntrance}/>
       <Stack.Screen name='SpyCam' component={SpyCam}/>
       <Stack.Screen name="Laboratory" component={Laboratory}/>
+      <Stack.Screen name="OldSchool" component={OldSchool}/>
     </Stack.Navigator>
   )
 }

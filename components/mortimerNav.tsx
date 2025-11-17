@@ -2,7 +2,7 @@
 import React from 'react';
 import Home from '../screens/home';
 import Entrance from '../screens/Entrance';
-import { StyleSheet, Image } from 'react-native';
+import OldSchool from '../screens/OldSchool';
 import SpyCam from '../screens/SpyCam';
 import { createStackNavigator } from '@react-navigation/stack';
 import Map from '../screens/Map';
@@ -18,6 +18,7 @@ export function MortimerNav() {
       <Stack.Screen name="Entrance" component={Entrance}/>
       <Stack.Screen name="Tower" component={TowerEntrance}/>
       <Stack.Screen name='SpyCam' component={SpyCam}/>
+      <Stack.Screen name="OldSchool" compenent={OldSchool}/>
     </Stack.Navigator>
   );
 }
