@@ -91,7 +91,12 @@ const revealQR = () => {
     return(
       <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
       <Image source={require('./../assets/Entrance.webp')} style={styles.image} />
-        <GenericButton/>
+        <TouchableOpacity
+           style={buttonStyles.button2}
+           onPress={() => navigation.navigate('OldSchool')}
+         >
+           <Text style={buttonStyles.buttonText2}>Back</Text>
+         </TouchableOpacity>
     </View>
     )
   }

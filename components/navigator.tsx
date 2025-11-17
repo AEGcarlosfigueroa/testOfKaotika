@@ -66,14 +66,12 @@ function Navigator ()
           const handleEntryGranted = (updatedPlayer: any) => {
             setPlayer(updatedPlayer);
       
-            if (updatedPlayer.isInTower === true) {
-      
-              Alert.alert('Access Granted', 'You may enter the tower.');
+            if (updatedPlayer.isInTower !== true) {
+              setIsInTower(false);
             }
             else
             {
-              Alert.alert('Access Granted', 'You may exit the tower.');
-              setIsInTower(false);
+              setIsInTower(true);
             }
           };
 
