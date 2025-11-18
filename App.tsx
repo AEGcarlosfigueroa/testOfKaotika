@@ -10,14 +10,14 @@ import BootSplash from "react-native-bootsplash";
 import Navigator from './components/navigator';
 import socketIO  from "./socketIO";
 import { NavigationContainer } from '@react-navigation/native';
-import { mapContext, isInTowerContext, playerContext, playerListContext } from './context'
+import { mapContext, isInTowerContext, playerContext, playerListContext, scrollStateContext, scrollStateList } from './context'
 import pNotify from './pushNotification';
 import messaging from '@react-native-firebase/messaging';
 import { Player } from './interfaces/interfaces';
 import { StatusBar } from 'react-native';
 
-
 messaging().setBackgroundMessageHandler(async remoteMessage => {
+
   console.log('Message handled in the background!', remoteMessage);
 });
 
@@ -26,11 +26,11 @@ GoogleSignin.configure({
   webClientId: googleJSON.client[0].oauth_client[1].client_id,
 });
 
-export const serverURL = "http://10.50.0.50:6002";
+// export const serverURL = "http://10.50.0.50:6002";
 // const serverURL = "https://testofkaotika-server.onrender.com";
 // const serverURL = "http://localhost:3000";
 // export const serverURL = "http://10.70.0.22:3000"
-// const serverURL = 'http://10.70.0.154:3000'
+export const serverURL = 'http://10.70.0.24:3000'
 
 
 const styles = StyleSheet.create({
@@ -124,8 +124,16 @@ function App()
 
   const [isInTower, setIsInTower] = useState<Boolean>(false);
 
-  const [mapView, setMap] = useState<Boolean>(false)
-  
+  const [mapView, setMap] = useState<Boolean>(false);
+
+  const [scrollState, setScrollState] = useState<Number | null>(null);
+
+  async function fetchCurrentScrollState() {
+    const response = await fetch(serverURL + "/api/states/scrollstate");
+    const data = await response.json();
+    setScrollState(data.state);
+    console.log("Server response:", data);
+  }
 
   function handleAuthStateChanged(user: any) {
     setUser(user);
@@ -159,11 +167,13 @@ function App()
       <mapContext.Provider value = {{mapView, setMap}}>
       <isInTowerContext.Provider value = {{isInTower, setIsInTower}}>
       <playerListContext.Provider value = {{playerList, setPlayerList}}>
+      <scrollStateContext.Provider value = {{scrollState, setScrollState}}>
       <NavigationContainer>
 
       <Navigator/>
-
+      
       </NavigationContainer>
+      </scrollStateContext.Provider>
       </playerListContext.Provider>
       </isInTowerContext.Provider>
       </mapContext.Provider>
@@ -229,6 +239,7 @@ return (
         }
 
         await pNotify(serverURL, data.data.email);
+        await fetchCurrentScrollState();
       }
       else
       {

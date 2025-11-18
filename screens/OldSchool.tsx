@@ -3,7 +3,7 @@ import { View, Image, StyleSheet, TouchableOpacity, Text, useWindowDimensions } 
 import { buttonStyles } from "../props/genericButton";
 import map from "../assets/oldSchool.png";
 import { useNavigation, NavigationProp } from "@react-navigation/native";
-import { isInTowerContext } from "../context";
+import { scrollStateContext, scrollStateList } from "../context";
 import stars from "../assets/icons/stars.png"
 import eye from "../assets/icons/eye.png"
 import tarot from "../assets/icons/tarot.png"
@@ -11,6 +11,10 @@ import rune from "../assets/icons/rune.png"
 
 
 function OldSchool() {
+
+  const context = React.useContext(scrollStateContext);
+
+  const {scrollState, setScrollState} = context;
 
   type RootStackParamList = {
     Home: undefined,
@@ -53,6 +57,20 @@ function OldSchool() {
     },
   });
 
+  let hallSages = <></>;
+
+  if(scrollState === scrollStateList.destroyed)
+  {
+    hallSages = (
+      <TouchableOpacity style={styles.hallStyle} onPress={() =>
+      {
+        navigation.navigate('HallOfSages');
+      }}>
+        <Image source={tarot} style={styles.image2}/>
+      </TouchableOpacity>
+    )
+  }
+
   return (
     <View style={styles.container}>
       <Image source={map} style={styles.mapImage} />
@@ -68,12 +86,7 @@ function OldSchool() {
       }}>
         <Image source={stars} style={styles.image}/>
       </TouchableOpacity>
-       <TouchableOpacity style={styles.hallStyle} onPress={() =>
-      {
-        navigation.navigate('HallOfSages');
-      }}>
-        <Image source={tarot} style={styles.image2}/>
-      </TouchableOpacity>
+       {hallSages}
     </View>
   );
 }

@@ -6,11 +6,19 @@ import { signOut, getAuth } from "@react-native-firebase/auth";
 import { GoogleSignin } from "@react-native-google-signin/google-signin";
 import scrollImage from "./../assets/scroll.png";
 import { removeNofify } from "../pushNotification";
-import { playerContext } from "../context";
+import { playerContext, scrollStateContext, scrollStateList } from "../context";
 
 type scrollProps = PropsWithChildren<{style: ViewStyle}>
 
 const Scroll: React.FC<scrollProps> = props => {
+
+  const contextPlayer = React.useContext(playerContext);
+
+  const context = React.useContext(scrollStateContext);
+
+  const {scrollState, setScrollState} = context;
+
+  const {player, setPlayer} = contextPlayer;
   
   const {height, width, scale, fontScale} = useWindowDimensions();
 
@@ -58,7 +66,13 @@ const Scroll: React.FC<scrollProps> = props => {
       opacity: fadeAnim
     }}
     onPress={() => {
-      console.log("scroll pressed!");
+      const socket = socketIO.getSocket();
+      if(socket)
+      {
+        socket.emit("scrollCollected", player.email);
+        setScrollState(scrollState.collected);
+      }
+
     }}>
       {props.children}
     </ScrollButton>
@@ -67,6 +81,11 @@ const Scroll: React.FC<scrollProps> = props => {
 
 function Tower ()
 { 
+
+  const context = React.useContext(scrollStateContext);
+
+  const {scrollState, setScrollState} = context;
+
   const {height, width, scale, fontScale} = useWindowDimensions();
 
   const contextPlayer = React.useContext(playerContext);
@@ -104,6 +123,19 @@ function Tower ()
     },
   })
 
+  let scrollObj = <></>;
+
+  console.log(scrollState);
+
+  if(scrollState === scrollStateList.uncollected)
+  {
+    scrollObj = (
+      <Scroll style={styles.scrollStyle}>
+      <Image source={scrollImage} style={styles.scrollImg}/>
+      </Scroll>
+    );
+  }
+
   return (
     <>
     <Image source={require('./../assets/settings.png')} style={styles.image} />
@@ -122,9 +154,7 @@ function Tower ()
       </TouchableOpacity>
       </View>
     </View>
-    <Scroll style={styles.scrollStyle}>
-      <Image source={scrollImage} style={styles.scrollImg}/>
-    </Scroll>
+    {scrollObj}
     </>
   );
     }

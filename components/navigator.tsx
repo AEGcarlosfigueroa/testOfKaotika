@@ -4,15 +4,15 @@ import IstvanNav from './istvanNav';
 // import villanoNav from './villanoNav';
 import MortimerNav from './mortimerNav';
 import AcolitoNav from './acolitoNav';
-import { playerContext, isInTowerContext, playerListContext } from '../context';
+import { playerContext, isInTowerContext, playerListContext, scrollStateContext, scrollStateList } from '../context';
 import Laboratory from '../screens/laboratory';
 import { useNavigation } from '@react-navigation/native';
-import { Alert, BackHandler } from 'react-native';
+import { Alert, BackHandler, ToastAndroid } from 'react-native';
 import socketIO from '../socketIO';
 import Tower from '../screens/Tower';
 import pNotify from '../pushNotification';
 import { serverURL } from '../App';
-
+import ScrollAlert from '../screens/ScrollAlert';
 
 function Navigator ()
 {
@@ -22,11 +22,15 @@ function Navigator ()
 
   const listContext = React.useContext(playerListContext);
 
+  const scrollListContext = React.useContext(scrollStateContext);
+
   const {playerList, setPlayerList} = listContext;
 
   const {isInTower, setIsInTower} = towerContext;
 
   const {player, setPlayer} = context;
+
+  const {scrollState, setScrollState} = scrollListContext;
 
   const [, forceUpdate] = useReducer(x => x + 1, 0);
   
@@ -40,7 +44,7 @@ function Navigator ()
   const [socketId, setSocketId] = useState<String>('');
     const navigation = useNavigation();
 
-    // --- Handle socket connection ---
+    // --- Handle sockeimport scrollAlert from '../screens/ScrollAlert';t connection ---
       useEffect(() => {
         const socket = socketIO.getSocket();
         if (!socket) return;
@@ -79,16 +83,29 @@ function Navigator ()
             console.log(isInTower);
             socket.emit("inTower", isInTower);
           }
+
+          const handleScrollCollected = () => {
+            setScrollState(scrollStateList.collected)
+          }
+
+          const handleScrollDestroyed = (message: string) => {
+            setScrollState(scrollStateList.destroyed);
+            ToastAndroid.show(message, 5000);
+          }
           
           socket.on('isInTowerEntranceRequest', sendIsInTower);
           socket.on('authorization', handleEntryGranted);
           socket.on('update', handleNewData);
+          socket.on('scrollCollectedEvent', handleScrollCollected);
+          socket.on('scrollDestroyedEvent', handleScrollDestroyed);
           return () => {
             socket.off('authorization', handleEntryGranted);
             socket.off('isInTowerEntranceRequest', sendIsInTower);
             socket.off('update', handleNewData);
+            socket.off('scrollCollectedEvent', handleScrollCollected);
+            socket.off('scrollDestroyedEvent', handleScrollDestroyed);
           }
-        }, [navigation, isInTower]);
+        }, [navigation, isInTower, scrollState]);
 
   BackHandler.addEventListener('hardwareBackPress', () => {
     
@@ -131,7 +148,14 @@ function Navigator ()
       }
 
     case 'MORTIMER': 
+      if(scrollState === scrollStateList.collected)
+      {
+        return <ScrollAlert/>
+      }
+      else
+      {
         return <MortimerNav/>
+      }
 
     default:
       return null;

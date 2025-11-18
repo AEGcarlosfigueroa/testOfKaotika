@@ -4,7 +4,7 @@ import QRCode from 'react-native-qrcode-svg';
 import socketIO from '../socketIO';
 import { useNavigation, NavigationProp } from '@react-navigation/native';
 import {playerContext} from '../context';
-import { GenericButton, buttonStyles } from '../props/genericButton';
+import { buttonStyles } from '../props/genericButton';
 
 const styles = StyleSheet.create({
   image: {
