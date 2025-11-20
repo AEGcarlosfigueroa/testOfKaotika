@@ -13,8 +13,8 @@
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
 		90FA99CCB46749AE86B820C6 /* BootSplash.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B338AA1B6BE64654978395BF /* BootSplash.storyboard */; };
 		9DC9229F5A874E1290053FF8 /* Colors.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D7FA1E83537648DDB30C5EE4 /* Colors.xcassets */; };
-		4CA7188723E7460E91820F7C /* OptimusPrinceps.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 5A104E3A1E554959B51269C6 /* OptimusPrinceps.ttf */; };
-		5EC591D076BF4F45B87F7912 /* OptimusPrincepsSemiBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 641986C6232346F19EAC9442 /* OptimusPrincepsSemiBold.ttf */; };
+		2883A78AF4E5428D9CCA369C /* OptimusPrinceps.ttf in Resources */ = {isa = PBXBuildFile; fileRef = F926741F794240AB961908C5 /* OptimusPrinceps.ttf */; };
+		7AB0A6F8C32C46B3A345BDDC /* OptimusPrincepsSemiBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 8E3C57898EA543BF99E143B7 /* OptimusPrincepsSemiBold.ttf */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -30,8 +30,8 @@
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 		B338AA1B6BE64654978395BF /* BootSplash.storyboard */ = {isa = PBXFileReference; name = "BootSplash.storyboard"; path = "testOfKaotika/BootSplash.storyboard"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
 		D7FA1E83537648DDB30C5EE4 /* Colors.xcassets */ = {isa = PBXFileReference; name = "Colors.xcassets"; path = "testOfKaotika/Colors.xcassets"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = folder.assetcatalog; explicitFileType = undefined; includeInIndex = 0; };
-		5A104E3A1E554959B51269C6 /* OptimusPrinceps.ttf */ = {isa = PBXFileReference; name = "OptimusPrinceps.ttf"; path = "../assets/fonts/OptimusPrinceps.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
-		641986C6232346F19EAC9442 /* OptimusPrincepsSemiBold.ttf */ = {isa = PBXFileReference; name = "OptimusPrincepsSemiBold.ttf"; path = "../assets/fonts/OptimusPrincepsSemiBold.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		F926741F794240AB961908C5 /* OptimusPrinceps.ttf */ = {isa = PBXFileReference; name = "OptimusPrinceps.ttf"; path = "../assets/fonts/OptimusPrinceps.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		8E3C57898EA543BF99E143B7 /* OptimusPrincepsSemiBold.ttf */ = {isa = PBXFileReference; name = "OptimusPrincepsSemiBold.ttf"; path = "../assets/fonts/OptimusPrincepsSemiBold.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -111,8 +111,8 @@
 		1FD3C7CD935D4BF6A873ED83 /* Resources */ = {
 			isa = "PBXGroup";
 			children = (
-				5A104E3A1E554959B51269C6 /* OptimusPrinceps.ttf */,
-				641986C6232346F19EAC9442 /* OptimusPrincepsSemiBold.ttf */,
+				F926741F794240AB961908C5 /* OptimusPrinceps.ttf */,
+				8E3C57898EA543BF99E143B7 /* OptimusPrincepsSemiBold.ttf */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -182,8 +182,8 @@
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
 				90FA99CCB46749AE86B820C6 /* BootSplash.storyboard in Resources */,
 				9DC9229F5A874E1290053FF8 /* Colors.xcassets in Resources */,
-				4CA7188723E7460E91820F7C /* OptimusPrinceps.ttf in Resources */,
-				5EC591D076BF4F45B87F7912 /* OptimusPrincepsSemiBold.ttf in Resources */,
+				2883A78AF4E5428D9CCA369C /* OptimusPrinceps.ttf in Resources */,
+				7AB0A6F8C32C46B3A345BDDC /* OptimusPrincepsSemiBold.ttf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
