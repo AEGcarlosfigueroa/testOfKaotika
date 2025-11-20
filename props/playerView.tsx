@@ -1,13 +1,13 @@
 import { Image, Text, View } from "react-native";
 import { StyleSheet } from "react-native";
 import React from "react";
-import CheckBox from "@react-native-community/checkbox";
+import { AdvancedCheckbox } from 'react-native-advanced-checkbox';
 
 const styles = StyleSheet.create({
     view: {
         width: '90%',
         marginTop: '5%',
-        height: '20%',
+        height: '9%',
         backgroundColor: 'rgba(0,0,0,1)',
         borderWidth: 5,
         borderStyle: 'solid',
@@ -17,7 +17,6 @@ const styles = StyleSheet.create({
         display: 'flex'
     },
     checkBox: {
-
     },
     image: {
         width: '20%',
@@ -39,7 +38,7 @@ export default function PlayerView (player: any, index: any)
                 <Image resizeMode="contain" src={player.avatar} style={styles.image}></Image>
                 <Text style={{ fontSize: 40, color: textColor }}>{player.nickname}</Text>
                 <Text style={{ fontSize: 40, color: textColor }}>Is Inside Laboratory?</Text>
-                <CheckBox style={styles.checkBox} disabled={true} value={player.isInside} tintColors={ {true: 'yellow', false: "gray"} }/>
+                <AdvancedCheckbox size={70} checkBoxStyle={styles.checkBox} disabled={true} value={player.isInside} checkedColor="yellow"/>
             </View>
     )
 }

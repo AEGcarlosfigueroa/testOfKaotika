@@ -1,4 +1,4 @@
-import { Image, ScrollView, StyleSheet, StatusBar, TouchableOpacity, Text } from "react-native";
+import { Image, ScrollView, View, StyleSheet, StatusBar, TouchableOpacity, Text } from "react-native";
 import React from "react";
 import { useState, useContext } from "react";
 import { playerContext, playerListContext } from "../context";
@@ -8,6 +8,8 @@ import { GenericButton } from "../props/genericButton";
 import TowerPlayerView from "../props/towerPlayerView";
 import { Player } from "../interfaces/interfaces";
 import { useWindowDimensions } from "react-native";
+import labImage from './../assets/tasks.png'
+import towerImage from './../assets/settings.png'
 
 
 
@@ -39,7 +41,7 @@ function SpyCam() {
   buttonText: {
     fontFamily: 'OptimusPrincepsSemiBold',
     color: '#E2DFD2',
-    fontSize: 18,
+    fontSize: 25,
     textAlign: 'center',
     },
    title: {
@@ -57,6 +59,23 @@ function SpyCam() {
       textAlign: 'center'
       // elevation: 2
     }, 
+    title2: {
+      fontSize: 40*fontScale,
+      marginBottom: '5%',
+      marginTop: '15%',
+      color: '#E2DFD2',
+      textShadowColor: 'rgba(0, 0, 0, 0.7)',
+      textShadowOffset: { width: 2, height: 4 },
+      textShadowRadius: 4,
+      fontFamily: 'OptimusPrincepsSemiBold',
+      boxShadow: '5px 5px 5px 5px black',
+      backgroundColor: 'rgba(0, 0, 0, 0.5)',
+      padding: '5%',
+      textAlign: 'center',
+      position: 'absolute',
+      alignSelf: 'center'
+      // elevation: 2
+    },
 });
   const context = useContext(playerContext)
   const {player}= context
@@ -84,6 +103,7 @@ function SpyCam() {
      return (
       <>
       <GenericButton/>
+      <Text style={styles.title2}>{isShowingTowerList ? 'TOWER ACCESS' : 'LAB ACCESS LOG'}</Text>
       <TouchableOpacity
         style={styles.button}
         onPress={() => {
@@ -96,13 +116,14 @@ function SpyCam() {
             setIsShowingTowerList(true);
           }
         }}
+        
       >
         <Text style={styles.buttonText}>Show {isShowingTowerList ? 'Lab List' : 'Tower List'}</Text>
       </TouchableOpacity>
-      <Image source={require("./../assets/tasks.png")} style={styles.image}/>
+      <Image source={isShowingTowerList ? towerImage : labImage} style={styles.image}/>
       <SafeAreaProvider>
         <SafeAreaView>
-          <ScrollView overScrollMode="always" style={{height: '100%', marginTop: '8%'}}>
+          <ScrollView overScrollMode="auto" style={{height: '75%', marginTop: '30%'}}>
             {playerList.map( (elem: typeof Player, i: Number) =>  {
               if(!isShowingTowerList)
               {
@@ -113,6 +134,7 @@ function SpyCam() {
                 return TowerPlayerView(elem, i);
               }
             })}
+            {/* <View style={{height: 0.6*height, position: 'relative'}}></View> */}
           </ScrollView>  
         </SafeAreaView>
       </SafeAreaProvider>

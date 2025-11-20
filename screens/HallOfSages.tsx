@@ -30,9 +30,24 @@ export default function HallOfSages()
         buttonText2: {
           fontFamily: 'OptimusPrincepsSemiBold',
           color: '#E2DFD2',
-          fontSize: 18,
+          fontSize: 30,
           textAlign: 'center',
-            },
+        },
+        title: {
+        fontSize: 40,
+        marginBottom: '5%',
+        marginTop: '20%',
+        color: '#E2DFD2',
+        textShadowColor: 'rgba(0, 0, 0, 0.7)',
+        textShadowOffset: { width: 2, height: 4 },
+        textShadowRadius: 4,
+        fontFamily: 'OptimusPrincepsSemiBold',
+        boxShadow: '5px 5px 5px 5px black',
+        backgroundColor: 'rgba(0, 0, 0, 0.5)',
+        padding: '5%',
+        textAlign: 'center'
+        // elevation: 2
+    },
     })
 
     type RootStackParamList = {
@@ -53,6 +68,7 @@ export default function HallOfSages()
          >
            <Text style={styles.buttonText2}>Back</Text>
          </TouchableOpacity>
+         <Text style={styles.title}>HALL OF SAGES</Text>
         <Image style={styles.image} source={HallOfSagesImage}/>
     </>
     );

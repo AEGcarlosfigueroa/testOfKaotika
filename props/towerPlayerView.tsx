@@ -6,7 +6,7 @@ const styles = StyleSheet.create({
     view: {
         width: '90%',
         marginTop: '5%',
-        height: '100%',
+        height: '75%',
         backgroundColor: 'rgba(0,0,0,1)',
         borderWidth: 5,
         borderStyle: 'solid',
@@ -40,7 +40,7 @@ export default function TowerPlayerView (player: any, index: any)
     return (
             <View style={styles.view} key={index}>
                 <Image resizeMode="contain" src={player.avatar} style={styles.image}></Image>
-                <Text style={{ fontSize: 20, color: textColor }}>{player.nickname}</Text>
+                <Text style={{ fontSize: 50, color: textColor }}>{player.nickname}</Text>
             </View>
     )
 }
