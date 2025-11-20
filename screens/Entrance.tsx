@@ -42,7 +42,7 @@ function Entrance() {
   buttonText2: {
     fontFamily: 'OptimusPrincepsSemiBold',
     color: '#E2DFD2',
-    fontSize: 18,
+    fontSize: 30*fontScale,
     textAlign: 'center',
   },
   buttonContainer: {

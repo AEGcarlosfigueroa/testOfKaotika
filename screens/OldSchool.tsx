@@ -50,7 +50,7 @@ function OldSchool() {
       width: (15*scale), height: (15*scale), top: (0.25*height), left: '80%', tintColor: 'yellow', position: 'absolute', zIndex: 20
     },
     image: {
-      width : (60*fontScale), height : (60*fontScale), tintColor: 'black'
+      width : (60*fontScale), height : (60*fontScale), tintColor: 'white'
     },
     image2: {
       width : (15*scale), height : (15*scale), tintColor: 'yellow'

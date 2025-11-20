@@ -27,10 +27,10 @@ GoogleSignin.configure({
 });
 
 // export const serverURL = "http://10.50.0.50:6002";
-// const serverURL = "https://testofkaotika-server.onrender.com";
+export const serverURL = "https://testofkaotika-server.onrender.com";
 // const serverURL = "http://localhost:3000";
 // export const serverURL = "http://10.70.0.22:3000"
-export const serverURL = 'http://10.70.0.24:3000'
+// export const serverURL = 'http://10.70.0.24:3000'
 
 const onGoogleButtonPress = async () => {
   // Check if your device supports Google Play
@@ -105,6 +105,7 @@ function App()
       marginTop: '99%'
     }
   });
+
   setTimeout( async () => {
     await BootSplash.hide({ fade: true });
     console.log("BootSplash has been hidden successfully");
@@ -129,6 +130,8 @@ function App()
   const [mapView, setMap] = useState<Boolean>(false);
 
   const [scrollState, setScrollState] = useState<Number | null>(null);
+
+  const [hasLoggedIn, setHasLoggedIn] = useState<Boolean>(false);
 
   async function fetchCurrentScrollState() {
     const response = await fetch(serverURL + "/api/states/scrollstate");
@@ -195,23 +198,24 @@ function App()
       {
         console.log(data)
         setLoading(false);
-        signOut(getAuth());
-        setErrorMessage(<Text style={styles.errorText}>{data.message}</Text>);
-        GoogleSignin.revokeAccess();
       }
 
     } catch (error: any) {
       console.log(error);
       console.error("Error signing in or calling server: " +  error);
-      signOut(getAuth());
-      setLoading(false);
-      GoogleSignin.revokeAccess();
     }
   }
 
   useEffect(() => {
     const subscriber = onAuthStateChanged(getAuth(), handleAuthStateChanged);
     return subscriber; // unsubscribe on unmount
+  }, []);
+
+  useEffect(() => {
+    if(GoogleSignin.getCurrentUser() && !hasLoggedIn)
+    {
+      attemptLogIn()
+    }
   }, []);
 
   useEffect(() => {
@@ -255,11 +259,6 @@ function App()
     component = <View style={styles.fullScreen}>
        <ActivityIndicator size="large" style={styles.spinner}/>
     </View>
-  }
-
-  if(player)
-  {
-    attemptLogIn();
   }
 
 
@@ -312,6 +311,7 @@ return (
 
         await pNotify(serverURL, data.data.email);
         await fetchCurrentScrollState();
+        setHasLoggedIn(true);
       }
       else
       {
