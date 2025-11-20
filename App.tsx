@@ -1,5 +1,5 @@
 import { GoogleSignin, User } from '@react-native-google-signin/google-signin';
-import { Text, Image, View, Alert, ToastAndroid } from 'react-native';
+import { Text, Image, View, useWindowDimensions, ToastAndroid } from 'react-native';
 import { TouchableOpacity } from 'react-native';
 import { StyleSheet, ActivityIndicator } from 'react-native';
 import { GoogleAuthProvider, getAuth, signInWithCredential, signOut, onAuthStateChanged } from '@react-native-firebase/auth';
@@ -26,56 +26,11 @@ GoogleSignin.configure({
   webClientId: googleJSON.client[0].oauth_client[1].client_id,
 });
 
-export const serverURL = "http://10.50.0.50:6002";
+// export const serverURL = "http://10.50.0.50:6002";
 // const serverURL = "https://testofkaotika-server.onrender.com";
 // const serverURL = "http://localhost:3000";
 // export const serverURL = "http://10.70.0.22:3000"
-// export const serverURL = 'http://10.70.0.24:3000'
-
-
-const styles = StyleSheet.create({
-  button: {
-    top: '45%',
-    left: '25%',
-    width: '50%',
-    height : '5%',
-    backgroundColor: 'rgba(0,0,0,0.5)',
-    position: 'absolute',
-    borderRadius: '25%',
-    borderWidth: 2,
-    borderColor: 'grey'
-  },
-  text: {
-    color: 'yellow',
-    alignSelf: 'center',
-    margin: '5%'
-  },
-  errorText: {
-    color: 'red',
-    alignSelf: 'center',
-    margin: '5%',
-    position: 'absolute',
-    top: '48%',
-    zIndex: 0
-  },
-  image: {
-    height: '100%',
-    position: 'absolute',
-    zIndex: -10,
-    marginTop: StatusBar.currentHeight,
-    width: '100%'
-  },
-  fullScreen: {
-    height: '100%',
-    position: 'absolute',
-    zIndex: 10,
-    width: '100%',
-    backgroundColor: 'rgba(0,0,0,0.5)'
-  },
-  spinner: {
-    marginTop: '99%'
-  }
-});
+export const serverURL = 'http://10.70.0.24:3000'
 
 const onGoogleButtonPress = async () => {
   // Check if your device supports Google Play
@@ -103,6 +58,53 @@ const onGoogleButtonPress = async () => {
 
 function App()
 {
+
+  const {height, width, scale, fontScale} = useWindowDimensions();
+
+  const styles = StyleSheet.create({
+    button: {
+      top: '45%',
+      left: '25%',
+      width: '50%',
+      height : '5%',
+      backgroundColor: 'rgba(0,0,0,0.5)',
+      position: 'absolute',
+      borderRadius: '25%',
+      borderWidth: 2,
+      borderColor: 'grey'
+    },
+    text: {
+      color: 'yellow',
+      alignSelf: 'center',
+      margin: '5%',
+      fontSize: 20*fontScale
+    },
+    errorText: {
+      color: 'red',
+      alignSelf: 'center',
+      margin: '5%',
+      position: 'absolute',
+      top: '48%',
+      zIndex: 0
+    },
+    image: {
+      height: '100%',
+      position: 'absolute',
+      zIndex: -10,
+      marginTop: StatusBar.currentHeight,
+      width: '100%'
+    },
+    fullScreen: {
+      height: '100%',
+      position: 'absolute',
+      zIndex: 10,
+      width: '100%',
+      backgroundColor: 'rgba(0,0,0,0.5)'
+    },
+    spinner: {
+      marginTop: '99%'
+    }
+  });
   setTimeout( async () => {
     await BootSplash.hide({ fade: true });
     console.log("BootSplash has been hidden successfully");
@@ -141,6 +143,69 @@ function App()
     if(!user)
     {
       setSuccess(false);
+    }
+  }
+
+  async function attemptLogIn()
+  {
+    try {
+      setErrorMessage(<></>);
+      setLoading(true);
+      // Sign in the user and get the token
+      const { account, firebaseIdToken } = await onGoogleButtonPress();
+
+      console.log("User:", account.user.email);
+      console.log("Token:", firebaseIdToken);
+
+      // Send token to server
+      const response = await fetch( serverURL + "/api/players/email/" + account.user.email,
+        {
+          method: "GET",
+        headers: {
+          "Authorization": `Bearer ${firebaseIdToken}`, // important!
+          "Content-Type": "application/json"
+        },
+      });
+
+      console.log(response);
+
+      socketIO.connectSocket(firebaseIdToken, serverURL);
+
+      const data = await response.json();
+      console.log("Server response:", data);
+
+      if(!data.error && !(data.message))
+      {
+        setPlayer(data.data) //save server player
+        setLoading(false);
+        setSuccess(true);
+        if(data.data.isInTower === true)
+        {
+          setIsInTower(true);
+        }
+        else
+        {
+          setIsInTower(false);
+        }
+
+        await pNotify(serverURL, data.data.email);
+        await fetchCurrentScrollState();
+      }
+      else
+      {
+        console.log(data)
+        setLoading(false);
+        signOut(getAuth());
+        setErrorMessage(<Text style={styles.errorText}>{data.message}</Text>);
+        GoogleSignin.revokeAccess();
+      }
+
+    } catch (error: any) {
+      console.log(error);
+      console.error("Error signing in or calling server: " +  error);
+      signOut(getAuth());
+      setLoading(false);
+      GoogleSignin.revokeAccess();
     }
   }
 
@@ -191,6 +256,13 @@ function App()
        <ActivityIndicator size="large" style={styles.spinner}/>
     </View>
   }
+
+  if(player)
+  {
+    attemptLogIn();
+  }
+
+
 
 return (
   <>

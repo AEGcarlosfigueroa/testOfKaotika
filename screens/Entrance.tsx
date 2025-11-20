@@ -1,12 +1,17 @@
 import React, { useState, useEffect } from 'react';
-import { View, Image, StyleSheet, TouchableOpacity, Text, ColorValue} from 'react-native';
+import { View, Image, StyleSheet, TouchableOpacity, useWindowDimensions, Text, ColorValue, StatusBar} from 'react-native';
 import QRCode from 'react-native-qrcode-svg';
 import socketIO from '../socketIO';
 import { useNavigation, NavigationProp } from '@react-navigation/native';
 import {playerContext} from '../context';
-import { buttonStyles } from '../props/genericButton';
 
-const styles = StyleSheet.create({
+
+
+function Entrance() {
+
+  const {height, width, scale, fontScale} = useWindowDimensions();
+
+  const styles = StyleSheet.create({
   image: {
     height: '100%',
     width: '100%',
@@ -17,12 +22,59 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     position: 'absolute',
+    top: '40%',
     marginBottom: 50
   },
+  button2: {
+    position: 'absolute',
+    top: StatusBar.currentHeight,
+    left: '5%',
+    width: '25%',
+    height: '5%',
+    backgroundColor: 'rgba(0,0,0,0.5)',
+    borderRadius: 5,
+    borderWidth: 2,
+    borderColor: 'grey',
+    justifyContent: 'center',
+    alignItems: 'center',
+    zIndex: 15
+  },
+  buttonText2: {
+    fontFamily: 'OptimusPrincepsSemiBold',
+    color: '#E2DFD2',
+    fontSize: 18,
+    textAlign: 'center',
+  },
+  buttonContainer: {
+    position: 'absolute',
+    bottom: '10%',
+    left: '12.5%',
+    width: '75%',
+    height: '10%',
+    backgroundColor: 'rgba(0,0,0,0.5)',
+    borderRadius: 5,
+    borderWidth: 2,
+    borderColor: 'grey',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  title: {
+      fontSize: 30*fontScale,
+      marginBottom: '5%',
+      marginTop: '30%',
+      color: '#E2DFD2',
+      textShadowColor: 'rgba(0, 0, 0, 0.7)',
+      textShadowOffset: { width: 2, height: 4 },
+      textShadowRadius: 4,
+      fontFamily: 'OptimusPrincepsSemiBold',
+      boxShadow: '5px 5px 5px 5px black',
+      backgroundColor: 'rgba(0, 0, 0, 0.5)',
+      padding: '5%',
+      textAlign: 'center'
+      // elevation: 2
+    },
     
 });
-
-function Entrance() {
 
   type RootStackParamList = {
     Home: undefined,
@@ -89,25 +141,29 @@ const revealQR = () => {
   if(player.profile.role !== 'ACOLITO')
   {
     return(
+      <>
       <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+        <Text style={styles.title}>THE LAB ENTRANCE</Text>
       <Image source={require('./../assets/Entrance.webp')} style={styles.image} />
         <TouchableOpacity
-           style={buttonStyles.button2}
+           style={styles.button2}
            onPress={() => navigation.navigate('OldSchool')}
          >
-           <Text style={buttonStyles.buttonText2}>Back</Text>
+           <Text style={styles.buttonText2}>Back</Text>
          </TouchableOpacity>
     </View>
+    </>
     )
   }
 
   // --- Render UI ---
   return (
-    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+    <View style={{ flex: 1, alignItems: 'center' }}>
+      <Text style={styles.title}>THE LAB ENTRANCE</Text>
       <Image source={require('./../assets/Entrance.webp')} style={styles.image} />
-      <View style= {buttonStyles.buttonContainer}>
+      <View style= {styles.buttonContainer}>
       <TouchableOpacity
-        onPress={revealQR}><Text style={[buttonStyles.buttonText2, {color : buttonColor}]}>{showQR ? 'Hide Esoteric Wisdom' : 'Reveal Mystery Scroll'}</Text>
+        onPress={revealQR}><Text style={[styles.buttonText2, {color : buttonColor}]}>{showQR ? 'Hide Esoteric Wisdom' : 'Reveal Mystery Scroll'}</Text>
       </TouchableOpacity>
       </View>
       {showQR && (
@@ -116,10 +172,10 @@ const revealQR = () => {
         </View>
       )}
         <TouchableOpacity
-           style={buttonStyles.button2}
+           style={styles.button2}
            onPress={() => navigation.navigate('OldSchool')}
          >
-           <Text style={buttonStyles.buttonText2}>Back</Text>
+           <Text style={styles.buttonText2}>Back</Text>
          </TouchableOpacity>
     </View>
   );

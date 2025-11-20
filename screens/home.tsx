@@ -3,58 +3,12 @@ import { View, Image, StyleSheet, Text, TouchableOpacity, useWindowDimensions, S
 import {playerContext} from '../context';
 import { mapContext } from '../context';
 import { useNavigation, NavigationProp } from "@react-navigation/native";
-import {buttonStyles} from "../props/genericButton";
 import socketIO from '../socketIO';
 import { GoogleSignin } from '@react-native-google-signin/google-signin';
 import { getAuth, signOut } from '@react-native-firebase/auth';
 import { removeNofify } from '../pushNotification';
 
-const styles = StyleSheet.create({
-  image: {
-    height: '100%',
-    width: '100%',
-    position: 'absolute',
-    zIndex: -10,
-  },
 
-  title: {
-    fontSize: 28,
-    marginBottom: '5%',
-    marginTop: StatusBar.currentHeight,
-    color: '#E2DFD2',
-    textShadowColor: 'rgba(0, 0, 0, 0.7)',
-    textShadowOffset: { width: 2, height: 4 },
-    textShadowRadius: 4,
-    fontFamily: 'OptimusPrincepsSemiBold',
-    boxShadow: '5px 5px 5px 5px black',
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
-    padding: '5%',
-
-    // elevation: 2
-
-  },
-  buttonText: {
-    fontSize: 24,
-    color: '#fff',
-    textShadowColor: 'rgba(0, 0, 0, 0.7)',
-    textShadowOffset: { width: 2, height: 2 },
-    textShadowRadius: 4,
-    fontFamily: 'OptimusPrincepsSemiBold',
-  },
-  logoutButton: {
-    position: 'absolute',
-    bottom: '20%',
-    left: '25%',
-    width: '50%',
-    height: '8%',
-    backgroundColor: 'rgba(0,0,0,0.5)',
-    borderRadius: 5,
-    borderWidth: 2,
-    borderColor: 'grey',
-    justifyContent: 'center',
-    alignItems: 'center',
-  }
-});
 
 
 function Home() {
@@ -67,15 +21,77 @@ function Home() {
       SpyCam: undefined,
       Map: undefined
     }
+
+    const {height, width, scale, fontScale} = useWindowDimensions();
   
     const navigation = useNavigation<NavigationProp<RootStackParamList>>();
 
-  const context = useContext(playerContext)
-  const {player} = context;
+    const context = useContext(playerContext)
+    const {player} = context;
 
-  const contextMap = useContext(mapContext)
+    const contextMap = useContext(mapContext)
 
-  const {mapView, setMap} = contextMap
+    const {mapView, setMap} = contextMap
+
+    const styles = StyleSheet.create({
+    image: {
+      height: '100%',
+      width: '100%',
+      position: 'absolute',
+      zIndex: -10,
+    },
+
+    title: {
+      fontSize: 50*fontScale,
+      marginBottom: '5%',
+      marginTop: StatusBar.currentHeight,
+      color: '#E2DFD2',
+      textShadowColor: 'rgba(0, 0, 0, 0.7)',
+      textShadowOffset: { width: 2, height: 4 },
+      textShadowRadius: 4,
+      fontFamily: 'OptimusPrincepsSemiBold',
+      boxShadow: '5px 5px 5px 5px black',
+      backgroundColor: 'rgba(0, 0, 0, 0.5)',
+      padding: '5%',
+      textAlign: 'center'
+      // elevation: 2
+
+    },
+    buttonText: {
+      fontSize: 35*fontScale,
+      color: '#fff',
+      textShadowColor: 'rgba(0, 0, 0, 0.7)',
+      textShadowOffset: { width: 2, height: 2 },
+      textShadowRadius: 4,
+      fontFamily: 'OptimusPrincepsSemiBold',
+    },
+    logoutButton: {
+      position: 'absolute',
+      bottom: '20%',
+      left: '12.5%',
+      width: '75%',
+      height: '10%',
+      backgroundColor: 'rgba(0,0,0,0.5)',
+      borderRadius: 5,
+      borderWidth: 2,
+      borderColor: 'grey',
+      justifyContent: 'center',
+      alignItems: 'center',
+    },
+    buttonContainer: {
+      position: 'absolute',
+      bottom: '10%',
+      left: '12.5%',
+      width: '75%',
+      height: '10%',
+      backgroundColor: 'rgba(0,0,0,0.5)',
+      borderRadius: 5,
+      borderWidth: 2,
+      borderColor: 'grey',
+      justifyContent: 'center',
+      alignItems: 'center',
+    },
+  });
   
 
 
@@ -109,15 +125,15 @@ function Home() {
           const socket = socketIO.getSocket();
           socket?.disconnect();
         }}>
-        <Text style= {buttonStyles.buttonText}>SIGN OUT</Text>
+        <Text style= {styles.buttonText}>SIGN OUT</Text>
       </TouchableOpacity>
       </View>
-      <View style={buttonStyles.buttonContainer}>
+      <View style={styles.buttonContainer}>
         <TouchableOpacity
         onPress={() => {setMap(true);
           navigation.navigate('Map')
         }}>
-        <Text style= {buttonStyles.buttonText}>OPEN MAP</Text>
+        <Text style= {styles.buttonText}>OPEN MAP</Text>
       </TouchableOpacity>
       </View>
     </View>

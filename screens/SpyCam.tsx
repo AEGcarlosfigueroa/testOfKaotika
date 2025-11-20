@@ -7,8 +7,15 @@ import {SafeAreaView, SafeAreaProvider} from 'react-native-safe-area-context';
 import { GenericButton } from "../props/genericButton";
 import TowerPlayerView from "../props/towerPlayerView";
 import { Player } from "../interfaces/interfaces";
+import { useWindowDimensions } from "react-native";
 
-const styles = StyleSheet.create({
+
+
+function SpyCam() {
+
+   const {height, width, scale, fontScale} = useWindowDimensions();
+
+  const styles = StyleSheet.create({
     image: {
     height: '100%',
     position: 'absolute',
@@ -35,9 +42,22 @@ const styles = StyleSheet.create({
     fontSize: 18,
     textAlign: 'center',
     },
+   title: {
+      fontSize: 30*fontScale,
+      marginBottom: '5%',
+      marginTop: '25%',
+      color: '#E2DFD2',
+      textShadowColor: 'rgba(0, 0, 0, 0.7)',
+      textShadowOffset: { width: 2, height: 4 },
+      textShadowRadius: 4,
+      fontFamily: 'OptimusPrincepsSemiBold',
+      boxShadow: '5px 5px 5px 5px black',
+      backgroundColor: 'rgba(0, 0, 0, 0.5)',
+      padding: '5%',
+      textAlign: 'center'
+      // elevation: 2
+    }, 
 });
-
-function SpyCam() {
   const context = useContext(playerContext)
   const {player}= context
 
@@ -53,7 +73,7 @@ function SpyCam() {
       <>
       <Image source={require('../assets/evilEye.jpg')} style={[styles.image, {width: '100%', height: '100%'}]}/>
       <GenericButton/>
-
+      <Text style={styles.title}>SPYCAM</Text>
       </>
 
       

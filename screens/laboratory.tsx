@@ -5,13 +5,37 @@ import QRCode from 'react-native-qrcode-svg';
 import {playerContext} from '../context';
 import socketIO from '../socketIO';
 import { useNavigation } from '@react-navigation/native';
-import { buttonStyles } from '../props/genericButton';
 import { getAuth, signOut } from '@react-native-firebase/auth';
 import { GoogleSignin } from '@react-native-google-signin/google-signin';
 import { removeNofify } from '../pushNotification';
+import { StatusBar } from 'react-native';
 
-const styles = StyleSheet.create({
-  image: {
+function Laboratory() {
+
+  const styles = StyleSheet.create({
+    button2: {
+      position: 'absolute',
+      top: StatusBar.currentHeight,
+      left: '5%',
+      width: '25%',
+      height: '5%',
+      backgroundColor: 'rgba(0,0,0,0.5)',
+      borderRadius: 5,
+      borderWidth: 2,
+      borderColor: 'grey',
+      justifyContent: 'center',
+      alignItems: 'center',
+      zIndex: 15
+
+    },
+      buttonText2: {
+      fontFamily: 'OptimusPrincepsSemiBold',
+      color: '#E2DFD2',
+      fontSize: 18,
+      textAlign: 'center',
+      },
+
+     image: {
     height: '100%',
     position: 'absolute',
     zIndex: -10,
@@ -35,12 +59,21 @@ const styles = StyleSheet.create({
     borderColor: 'grey',
     justifyContent: 'center',
     alignItems: 'center',
-  }
-});
-
-
-
-function Laboratory() {
+  },
+  buttonContainer: {
+      position: 'absolute',
+      bottom: '10%',
+      left: '12.5%',
+      width: '75%',
+      height: '10%',
+      backgroundColor: 'rgba(0,0,0,0.5)',
+      borderRadius: 5,
+      borderWidth: 2,
+      borderColor: 'grey',
+      justifyContent: 'center',
+      alignItems: 'center',
+    },
+  })
 
   const [showQR, setShowQR] = useState<Boolean>(false);
   const [socketId, setSocketId] = useState<String>('');
@@ -105,12 +138,12 @@ function Laboratory() {
           const socket = socketIO.getSocket();
           socket?.disconnect();
         }}>
-      <Text style={[buttonStyles.buttonText2, {color : buttonColor}]}>LOG OUT</Text>
+      <Text style={[styles.buttonText2, {color : buttonColor}]}>LOG OUT</Text>
       </TouchableOpacity>
       </View>
-      <View style= {buttonStyles.buttonContainer}>
+      <View style= {styles.buttonContainer}>
        <TouchableOpacity
-        onPress={revealQR}><Text style={[buttonStyles.buttonText2, {color : buttonColor}]}>{showQR ? 'Hide Esoteric Wisdom' : 'Reveal Mystery Scroll'}</Text>
+        onPress={revealQR}><Text style={[styles.buttonText2, {color : buttonColor}]}>{showQR ? 'Hide Esoteric Wisdom' : 'Reveal Mystery Scroll'}</Text>
       </TouchableOpacity>
       </View>
     </View>

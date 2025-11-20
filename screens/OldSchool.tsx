@@ -1,6 +1,6 @@
 import React from "react";
 import { View, Image, StyleSheet, TouchableOpacity, Text, useWindowDimensions } from "react-native";
-import { buttonStyles } from "../props/genericButton";
+import { StatusBar } from "react-native";
 import map from "../assets/oldSchool.png";
 import { useNavigation, NavigationProp } from "@react-navigation/native";
 import { scrollStateContext, scrollStateList } from "../context";
@@ -44,17 +44,53 @@ function OldSchool() {
       position: 'absolute'
     },
     entranceStyle: {
-      width: (15*scale), height: (15*scale), top: (0.25*height), left: '10%', tintColor: 'white', position: 'absolute', zIndex: 20
+      width: (15*scale), height: (15*scale), top: (0.25*height), left: (0.15*width), tintColor: 'black', position: 'absolute', zIndex: 20
     },
     hallStyle: {
       width: (15*scale), height: (15*scale), top: (0.25*height), left: '80%', tintColor: 'yellow', position: 'absolute', zIndex: 20
     },
     image: {
-      width : (15*scale), height : (15*scale), tintColor: 'white'
+      width : (60*fontScale), height : (60*fontScale), tintColor: 'black'
     },
     image2: {
       width : (15*scale), height : (15*scale), tintColor: 'yellow'
     },
+    title: {
+      fontSize: 30*fontScale,
+      marginBottom: '5%',
+      marginTop: '20%',
+      color: '#E2DFD2',
+      textShadowColor: 'rgba(0, 0, 0, 0.7)',
+      textShadowOffset: { width: 2, height: 4 },
+      textShadowRadius: 4,
+      fontFamily: 'OptimusPrincepsSemiBold',
+      boxShadow: '5px 5px 5px 5px black',
+      backgroundColor: 'rgba(0, 0, 0, 0.5)',
+      padding: '5%',
+      textAlign: 'center'
+      // elevation: 2
+    },
+    button2: {
+          position: 'absolute',
+          top: StatusBar.currentHeight,
+          left: '5%',
+          width: '25%',
+          height: '5%',
+          backgroundColor: 'rgba(0,0,0,0.5)',
+          borderRadius: 5,
+          borderWidth: 2,
+          borderColor: 'grey',
+          justifyContent: 'center',
+          alignItems: 'center',
+          zIndex: 15
+    
+        },
+          buttonText2: {
+          fontFamily: 'OptimusPrincepsSemiBold',
+          color: '#E2DFD2',
+          fontSize: 30*fontScale,
+          textAlign: 'center',
+          },
   });
 
   let hallSages = <></>;
@@ -73,12 +109,13 @@ function OldSchool() {
 
   return (
     <View style={styles.container}>
+      <Text style={styles.title}>THE OLD SCHOOL</Text>
       <Image source={map} style={styles.mapImage} />
       <TouchableOpacity
-      style={buttonStyles.button2}
+      style={styles.button2}
       onPress={() => navigation.navigate('Map')}
     >
-      <Text style={buttonStyles.buttonText2}>Back</Text>
+      <Text style={styles.buttonText2}>Back</Text>
     </TouchableOpacity>
       <TouchableOpacity style={styles.entranceStyle} onPress={() =>
       {

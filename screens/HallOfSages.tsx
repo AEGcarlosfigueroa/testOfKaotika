@@ -1,7 +1,6 @@
-import { TouchableOpacity, Text, Image, StyleSheet } from "react-native";
-import { buttonStyles } from "../props/genericButton";
+import { TouchableOpacity, Text, Image, StyleSheet, StatusBar } from "react-native";
 import { useNavigation, NavigationProp } from "@react-navigation/native";
-import HallOfSagesImage from "./../assets/hallOfSages.png"
+import HallOfSagesImage from "./../assets/hallOfSages.png";
 
 
 export default function HallOfSages()
@@ -12,7 +11,28 @@ export default function HallOfSages()
             width: '100%',
             position: 'absolute',
             zIndex: -10,
-        }
+        },
+        button2: {
+          position: 'absolute',
+          top: StatusBar.currentHeight,
+          left: '5%',
+          width: '25%',
+          height: '5%',
+          backgroundColor: 'rgba(0,0,0,0.5)',
+          borderRadius: 5,
+          borderWidth: 2,
+          borderColor: 'grey',
+          justifyContent: 'center',
+          alignItems: 'center',
+          zIndex: 15
+    
+        },
+        buttonText2: {
+          fontFamily: 'OptimusPrincepsSemiBold',
+          color: '#E2DFD2',
+          fontSize: 18,
+          textAlign: 'center',
+            },
     })
 
     type RootStackParamList = {
@@ -28,10 +48,10 @@ export default function HallOfSages()
     return(
     <>
         <TouchableOpacity
-           style={buttonStyles.button2}
+           style={styles.button2}
            onPress={() => navigation.navigate('OldSchool')}
          >
-           <Text style={buttonStyles.buttonText2}>Back</Text>
+           <Text style={styles.buttonText2}>Back</Text>
          </TouchableOpacity>
         <Image style={styles.image} source={HallOfSagesImage}/>
     </>

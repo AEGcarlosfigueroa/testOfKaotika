@@ -1,6 +1,5 @@
 import { View, Text, Image, StyleSheet, TouchableOpacity, useWindowDimensions, Animated, type ViewStyle } from "react-native"
 import React, { useEffect, useRef, type PropsWithChildren } from "react";
-import { buttonStyles } from "../props/genericButton";
 import socketIO from "../socketIO";
 import { signOut, getAuth } from "@react-native-firebase/auth";
 import { GoogleSignin } from "@react-native-google-signin/google-signin";
@@ -101,7 +100,7 @@ function Tower ()
       zIndex: -10,
     },
     title: {
-      fontSize: 28,
+      fontSize: 48*fontScale,
       marginBottom: 20,
       marginTop: 20,
       color: '#E2DFD2',
@@ -116,10 +115,29 @@ function Tower ()
 
     },
     scrollStyle: {
-      width : (30*scale), height : (30*scale), position: 'absolute', zIndex: 20
+      width : (100*fontScale), height : (100*fontScale), position: 'absolute', zIndex: 20
     },
     scrollImg: {
-      width : (30*scale), height : (30*scale)
+      width : (120*fontScale), height : (120*fontScale)
+    },
+    buttonText2: {
+      fontFamily: 'OptimusPrincepsSemiBold',
+      color: '#E2DFD2',
+      fontSize: 36*fontScale,
+      textAlign: 'center',
+    },
+    buttonContainer: {
+      position: 'absolute',
+      bottom: '10%',
+      left: '12.5%',
+      width: '75%',
+      height: '10%',
+      backgroundColor: 'rgba(0,0,0,0.5)',
+      borderRadius: 5,
+      borderWidth: 2,
+      borderColor: 'grey',
+      justifyContent: 'center',
+      alignItems: 'center',
     },
   })
 
@@ -140,8 +158,8 @@ function Tower ()
     <>
     <Image source={require('./../assets/settings.png')} style={styles.image} />
     <View style={{ flex: 1, backgroundColor: 'transparent', alignItems: 'center' }}>
-      <Text style={{ color: 'black', fontSize: 24, marginTop: '10%', position: 'relative' }}>Welcome to the Tower!</Text>
-      <View style= {buttonStyles.buttonContainer}>
+      <Text style={{ color: 'black', fontSize: 48*fontScale, marginTop: '10%', position: 'relative', textAlign: 'center' }}>Welcome to the Tower!</Text>
+      <View style= {styles.buttonContainer}>
        <TouchableOpacity
         onPress={() => {
           removeNofify(player.email);
@@ -150,7 +168,7 @@ function Tower ()
           const socket = socketIO.getSocket();
           socket?.disconnect();
         }}>
-      <Text style={[buttonStyles.buttonText2, {color : 'white'}]}>LOG OUT</Text>
+      <Text style={[styles.buttonText2, {color : 'white'}]}>LOG OUT</Text>
       </TouchableOpacity>
       </View>
     </View>

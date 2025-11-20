@@ -1,13 +1,12 @@
 import React from "react";
 import { View, Image, StyleSheet, TouchableOpacity, Text, useWindowDimensions } from "react-native";
-import { buttonStyles } from "../props/genericButton";
 import map from "../assets/map.png";
 import { useNavigation, NavigationProp } from "@react-navigation/native";
 import { isInTowerContext } from "../context";
-import stars from "../assets/icons/stars.png"
 import eye from "../assets/icons/eye.png"
 import moon from "../assets/icons/moon.png"
 import rune from "../assets/icons/rune.png"
+import { StatusBar } from "react-native";
 
 
 function Map() {
@@ -47,21 +46,58 @@ function Map() {
       width : (15*scale), height : (15*scale), top: (0.3*height), left: '50%', position: 'absolute', zIndex: 20
     },
     image: {
-      width : (15*scale), height : (15*scale), tintColor: 'white'
+      width : (50*fontScale), height : (50*fontScale), tintColor: 'white'
     },
     spycamStyle: {
       width : (15*scale), height : (15*scale), top: (0.6*height), left: '85%', tintColor: 'white', position: 'absolute', zIndex: 20
-    }
+    },
+    title: {
+      fontSize: 30*fontScale,
+      marginBottom: '5%',
+      marginTop: '25%',
+      color: '#E2DFD2',
+      textShadowColor: 'rgba(0, 0, 0, 0.7)',
+      textShadowOffset: { width: 2, height: 4 },
+      textShadowRadius: 4,
+      fontFamily: 'OptimusPrincepsSemiBold',
+      boxShadow: '5px 5px 5px 5px black',
+      backgroundColor: 'rgba(0, 0, 0, 0.5)',
+      padding: '5%',
+      textAlign: 'center'
+      // elevation: 2
+    },
+  button2: {
+    position: 'absolute',
+    top: StatusBar.currentHeight,
+    left: '5%',
+    width: '25%',
+    height: '5%',
+    backgroundColor: 'rgba(0,0,0,0.5)',
+    borderRadius: 5,
+    borderWidth: 2,
+    borderColor: 'grey',
+    justifyContent: 'center',
+    alignItems: 'center',
+    zIndex: 15
+  },
+    buttonText2: {
+    fontFamily: 'OptimusPrincepsSemiBold',
+    color: '#E2DFD2',
+    fontSize: 30*fontScale,
+    textAlign: 'center',
+    },
+  
   });
 
   return (
     <View style={styles.container}>
+       <Text style={styles.title}>THE MAP</Text>
       <Image source={map} style={styles.mapImage} />
       <TouchableOpacity
-      style={buttonStyles.button2}
+      style={styles.button2}
       onPress={() => navigation.navigate('Home')}
     >
-    <Text style={buttonStyles.buttonText2}>Back</Text>
+    <Text style={styles.buttonText2}>Back</Text>
     </TouchableOpacity>
 
       <TouchableOpacity style={styles.oldschoolStyle} onPress={() =>
