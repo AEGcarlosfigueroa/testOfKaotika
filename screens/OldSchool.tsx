@@ -53,7 +53,7 @@ function OldSchool() {
       width : (60*fontScale), height : (60*fontScale), tintColor: 'white'
     },
     image2: {
-      width : (15*scale), height : (15*scale), tintColor: 'yellow'
+      width : (60*fontScale), height : (60*fontScale), tintColor: 'yellow'
     },
     title: {
       fontSize: 30*fontScale,
