@@ -18,10 +18,7 @@ import { serverURL } from './App';
 
     //     //send token via socket
     //     socket?.emit('register FCM Token', {token, playerEmail})
-
-
     // }
-
     const sendTokenToServer = async (SERVER_URL: string , token: string | null, playerEmail: string) => {
         try {
             const firebaseIdToken = await getAuth().currentUser?.getIdToken();

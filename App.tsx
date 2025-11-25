@@ -15,6 +15,7 @@ import pNotify from './pushNotification';
 import messaging from '@react-native-firebase/messaging';
 import { Player } from './interfaces/interfaces';
 import { StatusBar } from 'react-native';
+import { usePlayerStore } from './gameStore'
 
 messaging().setBackgroundMessageHandler(async remoteMessage => {
 
@@ -26,11 +27,11 @@ GoogleSignin.configure({
   webClientId: googleJSON.client[0].oauth_client[1].client_id,
 });
 
-export const serverURL = "http://10.50.0.50:6002";
+// export const serverURL = "http://10.50.0.50:6002";
 // export const serverURL = "https://testofkaotika-server.onrender.com";
 // const serverURL = "http://localhost:3000";
 // export const serverURL = "http://10.70.0.22:3000"
-// export const serverURL = 'http://10.70.0.24:3000'
+export const serverURL = 'http://10.70.0.154:3000'
 
 const onGoogleButtonPress = async () => {
   // Check if your device supports Google Play
@@ -123,7 +124,11 @@ function App()
 
   const [errorMessage, setErrorMessage] = useState<Element>(<></>);
 
-  const [player, setPlayer] = useState<typeof Player | null>(null);
+  const player = usePlayerStore(state => state.player);
+  
+
+  const setPlayer = usePlayerStore(state => state.setPlayer);
+  
 
   const [isInTower, setIsInTower] = useState<Boolean>(false);
 
@@ -180,6 +185,7 @@ function App()
       if(!data.error && !(data.message))
       {
         setPlayer(data.data) //save server player
+        console.log("player", player)
         setLoading(false);
         setSuccess(true);
         if(data.data.isInTower === true)
@@ -232,7 +238,6 @@ function App()
   if(user && success)
   {
     return(
-      <playerContext.Provider value = {{player, setPlayer}}>
       <mapContext.Provider value = {{mapView, setMap}}>
       <isInTowerContext.Provider value = {{isInTower, setIsInTower}}>
       <playerListContext.Provider value = {{playerList, setPlayerList}}>
@@ -246,7 +251,6 @@ function App()
       </playerListContext.Provider>
       </isInTowerContext.Provider>
       </mapContext.Provider>
-      </playerContext.Provider>
       
     )
 

@@ -13,10 +13,14 @@ import Tower from '../screens/Tower';
 import pNotify from '../pushNotification';
 import { serverURL } from '../App';
 import ScrollAlert from '../screens/ScrollAlert';
+import { usePlayerStore } from '../gameStore'
 
 function Navigator ()
 {
-  const context = React.useContext(playerContext);
+
+  const player = usePlayerStore(state => state.player)
+
+  const setPlayer = usePlayerStore(state => state.setPlayer)
 
   const towerContext = React.useContext(isInTowerContext);
 
@@ -27,8 +31,6 @@ function Navigator ()
   const {playerList, setPlayerList} = listContext;
 
   const {isInTower, setIsInTower} = towerContext;
-
-  const {player, setPlayer} = context;
 
   const {scrollState, setScrollState} = scrollListContext;
 
@@ -117,12 +119,6 @@ function Navigator ()
     return false;
   });
  
-
-
-  if(!context)
-  {
-    throw new Error ("Navigator must be inside the provider")
-  }
   if(!player)
   {
     return null;

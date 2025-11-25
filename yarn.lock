@@ -2808,7 +2808,7 @@
   dependencies:
     "@types/react" "*"
 
-"@types/react@*", "@types/react@^19.1.0", "@types/react@^19.1.1", "@types/react@^19.2.5":
+"@types/react@*", "@types/react@^19.1.0", "@types/react@^19.1.1", "@types/react@^19.2.5", "@types/react@>=18.0.0":
   version "19.2.5"
   resolved "https://registry.npmjs.org/@types/react/-/react-19.2.5.tgz"
   integrity sha512-keKxkZMqnDicuvFoJbzrhbtdLSPhj/rZThDlKWCDbgXmUg0rEUFtRssDXKYmtXluZlIqiC5VqkCgRwzuyLHKHw==
@@ -7294,12 +7294,12 @@ react-devtools-core@^6.1.5:
     shell-quote "^1.6.1"
     ws "^7"
 
-react-dom@^19.2.0, "react-dom@>= 16.8.0":
-  version "19.2.0"
-  resolved "https://registry.npmjs.org/react-dom/-/react-dom-19.2.0.tgz"
-  integrity sha512-UlbRu4cAiGaIewkPyiRGJk0imDN2T3JjieT6spoL2UeSf5od4n5LB/mQ4ejmxhCFT1tYe8IvaFulzynWovsEFQ==
+react-dom@^19.1.1, "react-dom@>= 16.8.0":
+  version "19.1.1"
+  resolved "https://registry.npmjs.org/react-dom/-/react-dom-19.1.1.tgz"
+  integrity sha512-Dlq/5LAZgF0Gaz6yiqZCf6VCcZs1ghAJyrsu84Q/GT0gV+mCxbfmKNoGRKBYMJ8IEdGPqu49YWXD02GCknEDkw==
   dependencies:
-    scheduler "^0.27.0"
+    scheduler "^0.26.0"
 
 react-freeze@^1.0.0:
   version "1.0.4"
@@ -7516,7 +7516,7 @@ react-test-renderer@19.1.1:
     react-is "^19.1.1"
     scheduler "^0.26.0"
 
-react@*, "react@^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0", react@^19.1.1, react@^19.2.0, "react@>= 16.8.0", "react@>= 18.2.0", react@>=16.13.1, react@>=16.8, react@>=16.8.6, react@>=17.0.0, react@>=18.1.0, react@>=18.2.0:
+react@*, "react@^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0.0", react@^19.1.1, "react@>= 16.8.0", "react@>= 18.2.0", react@>=16.13.1, react@>=16.8, react@>=16.8.6, react@>=17.0.0, react@>=18.0.0, react@>=18.1.0, react@>=18.2.0:
   version "19.1.1"
   resolved "https://registry.npmjs.org/react/-/react-19.1.1.tgz"
   integrity sha512-w8nqGImo45dmMIfljjMwOGtbmC/mk4CMYhWIicdSflH91J9TyCyczcPFXJzrZ/ZXcgGRFeP6BU0BEJTw6tZdfQ==
@@ -7712,17 +7712,7 @@ sax@>=0.6.0:
   resolved "https://registry.npmjs.org/sax/-/sax-1.4.3.tgz"
   integrity sha512-yqYn1JhPczigF94DMS+shiDMjDowYO6y9+wB/4WgO0Y19jWYk0lQ4tuG5KI7kj4FTp1wxPj5IFfcrz/s1c3jjQ==
 
-scheduler@^0.26.0:
-  version "0.26.0"
-  resolved "https://registry.npmjs.org/scheduler/-/scheduler-0.26.0.tgz"
-  integrity sha512-NlHwttCI/l5gCPR3D1nNXtWABUmBwvZpEQiD4IXSbIDq8BzLIK/7Ir5gTFSGZDUu37K5cMNp0hFtzO38sC7gWA==
-
-scheduler@^0.27.0:
-  version "0.27.0"
-  resolved "https://registry.npmjs.org/scheduler/-/scheduler-0.27.0.tgz"
-  integrity sha512-eNv+WrVbKu1f3vbYJT/xtiF5syA5HPIMtf9IgY/nKg0sWqzAUEvqY/xm7OcZc/qafLx/iO9FgOmeSAp4v5ti/Q==
-
-scheduler@0.26.0:
+scheduler@^0.26.0, scheduler@0.26.0:
   version "0.26.0"
   resolved "https://registry.npmjs.org/scheduler/-/scheduler-0.26.0.tgz"
   integrity sha512-NlHwttCI/l5gCPR3D1nNXtWABUmBwvZpEQiD4IXSbIDq8BzLIK/7Ir5gTFSGZDUu37K5cMNp0hFtzO38sC7gWA==
@@ -8647,7 +8637,7 @@ use-latest-callback@^0.2.4:
   resolved "https://registry.npmjs.org/use-latest-callback/-/use-latest-callback-0.2.6.tgz"
   integrity sha512-FvRG9i1HSo0wagmX63Vrm8SnlUU3LMM3WyZkQ76RnslpBrX694AdG4A0zQBx2B3ZifFA0yv/BaEHGBnEax5rZg==
 
-use-sync-external-store@^1.5.0:
+use-sync-external-store@^1.5.0, use-sync-external-store@>=1.2.0:
   version "1.6.0"
   resolved "https://registry.npmjs.org/use-sync-external-store/-/use-sync-external-store-1.6.0.tgz"
   integrity sha512-Pp6GSwGP/NrPIrxVFAIkOQeyw8lFenOHijQWkUTrDvrF4ALqylP2C/KCkeS9dpUM3KvYRQhna5vt7IL95+ZQ9w==
@@ -9028,3 +9018,8 @@ yocto-queue@^1.0.0:
   version "1.2.2"
   resolved "https://registry.npmjs.org/yocto-queue/-/yocto-queue-1.2.2.tgz"
   integrity sha512-4LCcse/U2MHZ63HAJVE+v71o7yOdIe4cZ70Wpf8D/IyjDKYQLV5GD46B+hSTjJsvV5PztjvHoU580EftxjDZFQ==
+
+zustand@^5.0.8:
+  version "5.0.8"
+  resolved "https://registry.npmjs.org/zustand/-/zustand-5.0.8.tgz"
+  integrity sha512-gyPKpIaxY9XcO2vSMrLbiER7QMAMGOQZVRdJ6Zi782jkbzZygq5GI9nG8g+sMgitRtndwaBSl7uiqC49o1SSiw==

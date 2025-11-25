@@ -57,8 +57,10 @@ export default function ScrollAlert()
             <Text style={[styles.title, { top: '40%', fontSize: 20}]}>AN ACOLYTE HAS FOUND THE SCROLL</Text>
         </View>
         <TouchableOpacity
+        
           style={styles.button}
           onPress={() => {
+
             const socket = socketIO.getSocket();
 
             if(socket)

@@ -28,7 +28,7 @@
     "firebase": "^12.6.0",
     "qr-scanner": "^1.4.2",
     "react": "^19.1.1",
-    "react-dom": "^19.2.0",
+    "react-dom": "^19.1.1",
     "react-native": "^0.82.1",
     "react-native-advanced-checkbox": "^2.0.6",
     "react-native-bootsplash": "^6.3.11",
@@ -46,7 +46,8 @@
     "react-native-vector-icons": "^10.3.0",
     "react-navigation": "^5.0.0",
     "socket.io-client": "^4.8.1",
-    "styled-components": "^6.1.19"
+    "styled-components": "^6.1.19",
+    "zustand": "^5.0.8"
   },
   "devDependencies": {
     "@babel/core": "^7.28.5",

@@ -1,27 +1,26 @@
 // Basic attribute fields
-const attributeField = {
-  intelligence: Number,
-  dexterity: Number,
-  charisma: Number,
-  constitution: Number,
-  strength: Number,
-  insanity: Number,
+interface attributeField {
+  intelligence: number,
+  dexterity: number,
+  charisma: number,
+  constitution: number,
+  strength: number,
+  insanity: number,
 };
 
 // Basic item fields
-const itemFields = {
-  name: String,
-  description: String,
-  type: String,
-  image: String,
-  value: Number,
-  min_lvl: Number,
+interface itemFields {
+  name: string,
+  description: string,
+  type: string,
+  image: string,
+  value: number,
+  min_lvl: number,
 };
 
 // Weapon Schema
-const weaponsSchema = {
+interface weapon extends itemFields {
   modifiers: attributeField,
-  ...itemFields,
   base_percentage: Number,
   die_faces: Number,
   die_modifier: Number,
@@ -31,25 +30,22 @@ const weaponsSchema = {
 };
 
 // Artifact Schema
-const artifactsSchema = {
+interface artifacts extends itemFields {
   modifiers: attributeField,
-  ...itemFields,
 };
 
 // Armor Schema
-const armorsSchema = {
+interface armor extends itemFields {
   modifiers: attributeField,
-  ...itemFields,
   defense: Number,
 };
 
 // Potion Schemas
-const healingPotSchema = {
+interface potion extends itemFields {
   modifiers: attributeField,
-  ...itemFields,
 };
 
-const recoveryEffectsSchema = {
+interface recoveryEffects {
   modifiers: attributeField,
   name: String,
   description: String,
@@ -58,46 +54,40 @@ const recoveryEffectsSchema = {
   poison_effects: [String],
 };
 
-const antidoteSchema = {
-  ...itemFields,
-  recover_effect: recoveryEffectsSchema,
+interface antidoteSchema {
+  recover_effect: recoveryEffects,
 };
 
-const enhancerPotSchema = {
+interface enhancerPotSchema {
   modifiers: attributeField,
-  ...itemFields,
   duration: Number,
 };
 
 // Equipment pieces
-const helmetSchema = {
+interface helmetSchema {
   modifiers: attributeField,
-  ...itemFields,
   defense: Number,
 };
 
-const shieldSchema = {
+interface shieldSchema {
   modifiers: attributeField,
-  ...itemFields,
   defense: Number,
   isUnique: Boolean,
   isActive: Boolean,
 };
 
-const bootSchema = {
+interface bootSchema {
   modifiers: attributeField,
-  ...itemFields,
   isUnique: Boolean,
   isActive: Boolean,
 };
 
-const ringSchema = {
+interface ringSchema {
   modifiers: attributeField,
-  ...itemFields,
 };
 
 // Equipment Schema (equipped items)
-const equipmentSchema = {
+interface equipmentSchema {
   weapon: weaponsSchema,
   armor: armorsSchema,
   artifact: artifactsSchema,
@@ -187,3 +177,4 @@ export const Player = {
   inventory: [inventorySchema],
   ...playerInfoSchema, // spread fields from playerInfoSchema
 };
+

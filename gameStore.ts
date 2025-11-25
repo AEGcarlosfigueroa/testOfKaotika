@@ -1,0 +1,23 @@
+import { create } from 'zustand'
+import { PlayerStore } from './interfaces/gameStoreInterface'
+
+export const usePlayerStore = create<PlayerStore>((set)=> ({
+    player: null,
+    setPlayer: (player) => set({ player }),
+
+    mapView: null,
+    setMap: (mapView) => set({mapView}),
+
+    isInTower: false,
+    setIsInTower: (isInTower) => set({isInTower}),
+
+    playerList: [],
+    setPlayerList: (playerList) => set({playerList}),
+
+    scrollState: null,
+    setScrollState: (scrollState) => set({scrollState})
+
+
+
+    
+}))
