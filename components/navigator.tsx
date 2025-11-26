@@ -22,24 +22,27 @@ function Navigator ()
 
   const setPlayer = usePlayerStore(state => state.setPlayer)
 
-  const towerContext = React.useContext(isInTowerContext);
+  const playerList = usePlayerStore(state => state.playerList);
 
-  const listContext = React.useContext(playerListContext);
+  const setPlayerList = usePlayerStore(state => state.setPlayerList);
 
-  const scrollListContext = React.useContext(scrollStateContext);
+  const isInTower = usePlayerStore(state => state.isInTower)
 
-  const {playerList, setPlayerList} = listContext;
+  const setIsInTower = usePlayerStore(state => state.setIsInTower)
 
-  const {isInTower, setIsInTower} = towerContext;
+  const scrollState = usePlayerStore(state => state.scrollState)
 
-  const {scrollState, setScrollState} = scrollListContext;
+  const setScrollState = usePlayerStore(state => state.setScrollState)
 
   const [, forceUpdate] = useReducer(x => x + 1, 0);
   
     const handleNewData = (newData: any) => {
       setPlayerList(newData);
       console.log(newData);
-      pNotify(serverURL, player.email)
+      if(player)
+      {
+        pNotify(serverURL, player.email)
+      }
       forceUpdate
     }
 
@@ -111,7 +114,7 @@ function Navigator ()
 
   BackHandler.addEventListener('hardwareBackPress', () => {
     
-    if(!player.isInTower)
+    if(!player?.isInTower)
     {
       setIsInTower(false);
     }

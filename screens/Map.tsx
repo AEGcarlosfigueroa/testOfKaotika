@@ -2,7 +2,6 @@ import React from "react";
 import { View, Image, StyleSheet, TouchableOpacity, Text, useWindowDimensions } from "react-native";
 import map from "../assets/map.png";
 import { useNavigation, NavigationProp } from "@react-navigation/native";
-import { isInTowerContext } from "../context";
 import eye from "../assets/icons/eye.png"
 import moon from "../assets/icons/moon.png"
 import rune from "../assets/icons/rune.png"
@@ -25,7 +24,7 @@ function Map() {
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
 
   const isInTower = usePlayerStore(state => state.isInTower)
-  
+
   const setIsInTower = usePlayerStore(state => state.setIsInTower)
 
   const {height, width, scale, fontScale} = useWindowDimensions();
