@@ -1,180 +1,177 @@
 // Basic attribute fields
-interface attributeField {
-  intelligence: number,
-  dexterity: number,
-  charisma: number,
-  constitution: number,
-  strength: number,
-  insanity: number,
-};
+export interface AttributeField {
+  intelligence: number;
+  dexterity: number;
+  charisma: number;
+  constitution: number;
+  strength: number;
+  insanity: number;
+}
 
 // Basic item fields
-interface itemFields {
-  name: string,
-  description: string,
-  type: string,
-  image: string,
-  value: number,
-  min_lvl: number,
-};
+export interface ItemFields {
+  name: string;
+  description: string;
+  type: string;
+  image: string;
+  value: number;
+  min_lvl: number;
+}
 
-// Weapon Schema
-interface weapon extends itemFields {
-  modifiers: attributeField,
-  base_percentage: Number,
-  die_faces: Number,
-  die_modifier: Number,
-  die_num: Number,
-  isUnique: Boolean,
-  isActive: Boolean,
-};
+// Weapon
+export interface Weapon extends ItemFields {
+  modifiers: AttributeField;
+  base_percentage: number;
+  die_faces: number;
+  die_modifier: number;
+  die_num: number;
+  isUnique: boolean;
+  isActive: boolean;
+}
 
-// Artifact Schema
-interface artifacts extends itemFields {
-  modifiers: attributeField,
-};
+// Artifact
+export interface Artifact extends ItemFields {
+  modifiers: AttributeField;
+}
 
-// Armor Schema
-interface armor extends itemFields {
-  modifiers: attributeField,
-  defense: Number,
-};
+// Armor
+export interface Armor extends ItemFields {
+  modifiers: AttributeField;
+  defense: number;
+}
 
-// Potion Schemas
-interface potion extends itemFields {
-  modifiers: attributeField,
-};
+// Potions
+export interface HealingPotion extends ItemFields {
+  modifiers: AttributeField;
+  duration: number;
+}
 
-interface recoveryEffects {
-  modifiers: attributeField,
-  name: String,
-  description: String,
-  type: String,
-  antidote_effects: [String],
-  poison_effects: [String],
-};
+export interface RecoveryEffects {
+  modifiers: AttributeField;
+  name: string;
+  description: string;
+  type: string;
+  antidote_effects: string[];
+  poison_effects: string[];
+}
 
-interface antidoteSchema {
-  recover_effect: recoveryEffects,
-};
+export interface Antidote extends ItemFields {
+  recover_effect: RecoveryEffects;
+}
 
-interface enhancerPotSchema {
-  modifiers: attributeField,
-  duration: Number,
-};
+export interface EnhancerPotion extends ItemFields {
+  modifiers: AttributeField;
+  duration: number;
+}
 
 // Equipment pieces
-interface helmetSchema {
-  modifiers: attributeField,
-  defense: Number,
-};
+export interface Helmet {
+  modifiers: AttributeField;
+  defense: number;
+}
 
-interface shieldSchema {
-  modifiers: attributeField,
-  defense: Number,
-  isUnique: Boolean,
-  isActive: Boolean,
-};
+export interface Shield {
+  modifiers: AttributeField;
+  defense: number;
+  isUnique: boolean;
+  isActive: boolean;
+}
 
-interface bootSchema {
-  modifiers: attributeField,
-  isUnique: Boolean,
-  isActive: Boolean,
-};
+export interface Boot {
+  modifiers: AttributeField;
+  isUnique: boolean;
+  isActive: boolean;
+}
 
-interface ringSchema {
-  modifiers: attributeField,
-};
+export interface Ring {
+  modifiers: AttributeField;
+}
 
-// Equipment Schema (equipped items)
-interface equipmentSchema {
-  weapon: weaponsSchema,
-  armor: armorsSchema,
-  artifact: artifactsSchema,
-  antidote_potion: antidoteSchema,
-  healing_potion: healingPotSchema,
-  enhancer_potion: enhancerPotSchema,
-  helmet: helmetSchema,
-  shield: shieldSchema,
-  boot: bootSchema,
-  ring: ringSchema,
-};
+// Equipment
+export interface EquipmentSchema {
+  weapon: Weapon;
+  armor: Armor;
+  artifact: Artifact;
+  antidote_potion: Antidote;
+  healing_potion: HealingPotion;
+  enhancer_potion: EnhancerPotion;
+  helmet: Helmet;
+  shield: Shield;
+  boot: Boot;
+  ring: Ring;
+}
 
-// Inventory Schema (multiple items)
-const inventorySchema = {
-  helmets: [helmetSchema],
-  weapons: [weaponsSchema],
-  shields: [shieldSchema],
-  artifacts: [artifactsSchema],
-  boots: [bootSchema],
-  rings: [ringSchema],
-  antidote_potions: [antidoteSchema],
-  healing_potions: [healingPotSchema],
-  enhancer_potions: [enhancerPotSchema],
-  ingredients: [String],
-};
+// Inventory
+export interface InventorySchema {
+  helmets: Helmet[];
+  weapons: Weapon[];
+  shields: Shield[];
+  artifacts: Artifact[];
+  boots: Boot[];
+  rings: Ring[];
+  antidote_potions: Antidote[];
+  healing_potions: HealingPotion[];
+  enhancer_potions: EnhancerPotion[];
+  ingredients: string[];
+}
 
 // Player Profile & Attributes
-const playerAttributesSchema = {
-  name: String,
-  description: String,
-  value: Number,
-  
-};
+export interface PlayerAttribute {
+  name: string;
+  description: string;
+  value: number;
+}
 
-const playerProfileSchema = {
-  name: String,
-  description: String,
-  image: String,
-  attributes: [playerAttributesSchema],
-  role: {type: String, enum: ["ISTVAN", "VILLANO", "MORTIMER", "ACOLITO"]}
-};
+export interface PlayerProfile {
+  name: string;
+  description: string;
+  image: string;
+  attributes: PlayerAttribute[];
+  role: "ISTVAN" | "VILLANO" | "MORTIMER" | "ACOLITO";
+}
 
-// Tasks Schema
-const tasksSchema = {
-  classroom_Id: String,
-  courseWorkName: String,
-  grade: Number,
-  selectedAssignment: String,
-  maxPoints: Number,
-};
+// Tasks
+export interface Task {
+  classroom_Id: string;
+  courseWorkName: string;
+  grade: number;
+  selectedAssignment: string;
+  maxPoints: number;
+}
 
-// Skills Schema
-const skillsSchema = {
-  skill: String,
-  activeLevels: [Number],
-};
+// Skills
+export interface Skill {
+  skill: string;
+  activeLevels: number[];
+}
 
-// Player Info Schema
-const playerInfoSchema = {
-  name: String,
-  nickname: String,
-  email: String,
-  avatar: String,
-  classroom_Id: String,
-  level: Number,
-  experience: Number,
-  is_active: Boolean,
-  fcmToken: String || null,
-  socketId: String || null, //gets assigned automatically when it gets connected via socket, changes every time you get it
-  isInside: Boolean, // determines whether the user is inside the laboratory or not.
-  isInTower: Boolean, // determines whether the player is in the tower or not
-  cardID: String || null, //cardID assigned to player
-  profile: playerProfileSchema,
-  gold: Number,
-  tasks: [tasksSchema],
-  created_date: {
-    type: Date
-  },
-  isBetrayer: Boolean,
-  skills: [skillsSchema],
-};
+// Player Info
+export interface PlayerInfo {
+  name: string;
+  nickname: string;
+  email: string;
+  avatar: string;
+  classroom_Id: string;
+  level: number;
+  experience: number;
+  is_active: boolean;
+  fcmToken: string | null;
+  socketId: string | null;
+  isInside: boolean;
+  isInTower: boolean;
+  cardID: string | null;
+  profile: PlayerProfile;
+  gold: number;
+  tasks: Task[];
+  created_date: Date;
+  isBetrayer: boolean;
+  skills: Skill[];
+}
 
 // Main Player Schema
-export const Player = {
-  attributes: [attributeField],
-  equipment: [equipmentSchema],
-  inventory: [inventorySchema],
-  ...playerInfoSchema, // spread fields from playerInfoSchema
-};
+export interface Player extends PlayerInfo {
+  attributes: AttributeField[];
+  equipment: EquipmentSchema;
+  inventory: InventorySchema;
+}
 

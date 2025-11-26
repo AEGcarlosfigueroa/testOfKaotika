@@ -1,12 +1,11 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { View, Image, StyleSheet, Text, TouchableOpacity, useWindowDimensions, StatusBar } from 'react-native';
-import {playerContext} from '../context';
-import { mapContext } from '../context';
 import { useNavigation, NavigationProp } from "@react-navigation/native";
 import socketIO from '../socketIO';
 import { GoogleSignin } from '@react-native-google-signin/google-signin';
 import { getAuth, signOut } from '@react-native-firebase/auth';
 import { removeNofify } from '../pushNotification';
+import { usePlayerStore } from '../gameStore';
 
 
 
@@ -26,12 +25,16 @@ function Home() {
   
     const navigation = useNavigation<NavigationProp<RootStackParamList>>();
 
-    const context = useContext(playerContext)
-    const {player} = context;
+    const mapView = usePlayerStore(state => state.mapView)
 
-    const contextMap = useContext(mapContext)
+    const setMap = usePlayerStore(state => state.setMap)
 
-    const {mapView, setMap} = contextMap
+    const player = usePlayerStore(state => state.player);
+
+    if (player) {
+  console.log(player.level); // ✅ safe, TypeScript knows player is not null here
+}
+
 
     const styles = StyleSheet.create({
     image: {
@@ -97,7 +100,7 @@ function Home() {
 
   let imageSource;
 
-  switch(player.profile.role) {
+  switch(player?.profile.role) {
     case "ACOLITO":
       imageSource = require("./../assets/Acolytes.webp");
       break;
@@ -114,12 +117,16 @@ function Home() {
 
   return (
     <View style={{ flex: 1, alignItems: 'center' }}>
-      <Text style={styles.title}>Welcome {player.profile.role}</Text>
+      <Text style={styles.title}>Welcome {player?.profile.role}</Text>
       <Image source={imageSource} style={styles.image} />
        <View style={styles.logoutButton}>
         <TouchableOpacity
         onPress={() => {
-          removeNofify(player.email);
+          if(player)
+          {
+            removeNofify(player.email);
+
+          }
           signOut(getAuth());
           GoogleSignin.revokeAccess();
           const socket = socketIO.getSocket();

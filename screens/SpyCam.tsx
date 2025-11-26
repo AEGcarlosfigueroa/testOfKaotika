@@ -1,7 +1,7 @@
 import { Image, ScrollView, View, StyleSheet, StatusBar, TouchableOpacity, Text } from "react-native";
 import React from "react";
-import { useState, useContext } from "react";
-import { playerContext, playerListContext } from "../context";
+import { useState } from "react";
+import { usePlayerStore } from "../gameStore";
 import PlayerView from "../props/playerView";
 import {SafeAreaView, SafeAreaProvider} from 'react-native-safe-area-context';
 import { GenericButton } from "../props/genericButton";
@@ -77,16 +77,17 @@ function SpyCam() {
       // elevation: 2
     },
 });
-  const context = useContext(playerContext)
-  const {player}= context
 
-  const listContext = useContext(playerListContext);
+  const player = usePlayerStore(state => state.player)
 
-  const {playerList, setPlayerList} = listContext;
+  const playerList = usePlayerStore(state => state.playerList)
+  
+  const setPlayerList = usePlayerStore(state => state.setPlayerList)
+
 
   const [isShowingTowerList, setIsShowingTowerList] = useState(false);
 
-  if(player.profile.role !== 'MORTIMER')
+  if(player?.profile.role !== 'MORTIMER')
   {
     return (
       <>
@@ -124,7 +125,7 @@ function SpyCam() {
       <SafeAreaProvider>
         <SafeAreaView>
           <ScrollView overScrollMode="auto" style={{height: '75%', marginTop: '30%'}}>
-            {playerList.map( (elem: typeof Player, i: Number) =>  {
+            {playerList.map( (elem: Player, i: Number) =>  {
               if(!isShowingTowerList)
               {
                 return PlayerView(elem, i)

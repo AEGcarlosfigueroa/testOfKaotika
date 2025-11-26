@@ -2,41 +2,19 @@ import { Player } from './interfaces';
 
 
 export interface PlayerStore {
+    player: Player | null;
+    setPlayer: (player: Player | null) => void;
 
-    player: typeof Player;
+    mapView: boolean | null;
+    setMap: (mapView: boolean | null) => void;
 
-    setPlayer: (player: typeof Player) => void;
+    isInTower: boolean | null;
+    setIsInTower: (isInTower: boolean | null) => void;
 
-    mapView: Boolean | null;
-    setMap: (mapView: Boolean | null) => void;
+    playerList: Player[];
+    setPlayerList: (playerList: Player[]) => void;
 
-    isInTower: Boolean | null;
-    setIsInTower: (isInTower: Boolean | null) => void;
-
-    playerList: [];
-    setPlayerList: (playerList: []) => void;
-
-    scrollState: null;
-    setScrollState: (scrollState: null) => void;
-
+    scrollState: number | null;
+    setScrollState: (scrollState: number | null) => void;
 }
 
-export interface mapViewStorage {
-}
-
-
-// export const usePlayerStore = create<PlayerStore | null>((set)=> ({
-//     player: null,
-//     setPlayer: (player) => set({ player }),
-
-//     mapView: null,
-//     setMap: (mapView) => set({mapView}),
-
-//     isInTower: false,
-//     setIsInTower: (isInTower) => set({isInTower}),
-
-//     playerList: [],
-//     setPlayerList: (playerList) => set({playerList}),
-
-//     scrollState: null,
-//     setScrollState: (scrollState) => set({scrollState})

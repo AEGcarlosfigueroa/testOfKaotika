@@ -1,7 +1,7 @@
 import { View, Text, Image, StyleSheet, useWindowDimensions} from "react-native"
 import React from "react";
-import { playerContext } from "../context";
 import { GenericButton } from "../props/genericButton";
+import { usePlayerStore } from "../gameStore";
 
 //Refractor later put in a seperate file called styles 
 
@@ -50,8 +50,10 @@ function TowerEntrance ()
 })
   
     const warning = "Turn back, traveler. The gate ahead does not open to the world of men."
-    const context = React.useContext(playerContext);
-    const {player, setPlayer} = context;
+
+    const player = usePlayerStore(state => state.player)
+  
+    const setPlayer = usePlayerStore(state => state.setPlayer)
 
     const imageSource = require('../assets/towerEntrance.png')
 
@@ -59,7 +61,7 @@ function TowerEntrance ()
             <View style={{ flex: 1, alignItems: 'center' }}>
               <Text style={styles.title2}>THE TOWER ENTRANCE</Text>
                 <Image source={imageSource} style={styles.image}/>
-                {player.profile.role === "ACOLITO" && <Text style={[styles.title, { top: '40%', fontSize: 30*fontScale}]}>{warning}</Text>}
+                {player?.profile.role === "ACOLITO" && <Text style={[styles.title, { top: '40%', fontSize: 30*fontScale}]}>{warning}</Text>}
                 <GenericButton/>
             </View>
         )

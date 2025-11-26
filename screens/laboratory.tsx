@@ -2,13 +2,13 @@ import React from 'react';
 import { Image, StyleSheet, View, Text, TouchableOpacity, ColorValue } from 'react-native';
 import { useState, useEffect } from 'react';
 import QRCode from 'react-native-qrcode-svg';
-import {playerContext} from '../context';
 import socketIO from '../socketIO';
 import { useNavigation } from '@react-navigation/native';
 import { getAuth, signOut } from '@react-native-firebase/auth';
 import { GoogleSignin } from '@react-native-google-signin/google-signin';
 import { removeNofify } from '../pushNotification';
 import { StatusBar } from 'react-native';
+import { usePlayerStore } from '../gameStore';
 
 function Laboratory() {
 
@@ -80,8 +80,10 @@ function Laboratory() {
 
   const [buttonColor, setColor] = useState<ColorValue>('#E2DFD2');
 
-  const context = React.useContext(playerContext);
-  const {player, setPlayer} = context;
+  const player = usePlayerStore(state => state.player);
+
+  const setPlayer = usePlayerStore(state => state.setPlayer)
+
   const navigation = useNavigation(); // this is needed for navigation
 
   const revealQR = () => setShowQR(prev => !prev);
@@ -132,7 +134,11 @@ function Laboratory() {
       <View style= {styles.logoutButton}>
        <TouchableOpacity
         onPress={() => {
-          removeNofify(player.email);
+          if(player)
+          {
+            removeNofify(player.email);
+
+          }
           signOut(getAuth());
           GoogleSignin.revokeAccess();
           const socket = socketIO.getSocket();

@@ -5,19 +5,22 @@ import { signOut, getAuth } from "@react-native-firebase/auth";
 import { GoogleSignin } from "@react-native-google-signin/google-signin";
 import scrollImage from "./../assets/scroll.png";
 import { removeNofify } from "../pushNotification";
-import { playerContext, scrollStateContext, scrollStateList } from "../context";
+import { scrollStateContext, scrollStateList } from "../context";
+import { usePlayerStore } from "../gameStore";
+import { State } from "react-native-gesture-handler";
 
 type scrollProps = PropsWithChildren<{style: ViewStyle}>
 
 const Scroll: React.FC<scrollProps> = props => {
 
-  const contextPlayer = React.useContext(playerContext);
 
-  const context = React.useContext(scrollStateContext);
+  const player = usePlayerStore(state => state.player)
 
-  const {scrollState, setScrollState} = context;
+  const setPlayer = usePlayerStore(state => state.setPlayer)
 
-  const {player, setPlayer} = contextPlayer;
+  const scrollState = usePlayerStore(state => state.scrollState)
+
+  const setScrollState = usePlayerStore(state => state.setScrollState)
   
   const {height, width, scale, fontScale} = useWindowDimensions();
 
@@ -68,8 +71,13 @@ const Scroll: React.FC<scrollProps> = props => {
       const socket = socketIO.getSocket();
       if(socket)
       {
-        socket.emit("scrollCollected", player.email);
-        setScrollState(scrollState.collected);
+        if(player)
+        {
+          socket.emit("scrollCollected", player.email);
+
+        }
+        setScrollState(scrollStateList.collected);
+
       }
 
     }}>
@@ -80,16 +88,13 @@ const Scroll: React.FC<scrollProps> = props => {
 
 function Tower ()
 { 
+  const player = usePlayerStore(state => state.player)
 
   const context = React.useContext(scrollStateContext);
 
   const {scrollState, setScrollState} = context;
 
   const {height, width, scale, fontScale} = useWindowDimensions();
-
-  const contextPlayer = React.useContext(playerContext);
-
-  const {player, setPlayer} = contextPlayer;
 
   //Refractor later put in a seperate file called styles 
   const styles = StyleSheet.create({
@@ -162,7 +167,10 @@ function Tower ()
       <View style= {styles.buttonContainer}>
        <TouchableOpacity
         onPress={() => {
-          removeNofify(player.email);
+          if (player)
+          {
+            removeNofify(player.email);
+          }
           signOut(getAuth());
           GoogleSignin.revokeAccess();
           const socket = socketIO.getSocket();

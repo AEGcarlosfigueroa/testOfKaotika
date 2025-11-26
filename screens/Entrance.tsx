@@ -3,8 +3,7 @@ import { View, Image, StyleSheet, TouchableOpacity, useWindowDimensions, Text, C
 import QRCode from 'react-native-qrcode-svg';
 import socketIO from '../socketIO';
 import { useNavigation, NavigationProp } from '@react-navigation/native';
-import {playerContext} from '../context';
-
+import { usePlayerStore } from '../gameStore';
 
 
 function Entrance() {
@@ -88,8 +87,10 @@ function Entrance() {
 
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
 
-  const context = React.useContext(playerContext);
-  const {player, setPlayer} = context;
+  const player = usePlayerStore(state => state.player);
+
+  const setPlayer = usePlayerStore(state => state.setPlayer)
+
   const [showQR, setShowQR] = useState<Boolean>(false);
   const [socketId, setSocketId] = useState<String>('');
   const [buttonColor, setColor] = useState<ColorValue>('#E2DFD2')
@@ -138,7 +139,7 @@ const revealQR = () => {
     }
   }, [navigation]);
 
-  if(player.profile.role !== 'ACOLITO')
+  if(player?.profile.role !== 'ACOLITO')
   {
     return(
       <>

@@ -10,7 +10,6 @@ import BootSplash from "react-native-bootsplash";
 import Navigator from './components/navigator';
 import socketIO  from "./socketIO";
 import { NavigationContainer } from '@react-navigation/native';
-import { mapContext, isInTowerContext, playerContext, playerListContext, scrollStateContext, scrollStateList } from './context'
 import pNotify from './pushNotification';
 import messaging from '@react-native-firebase/messaging';
 import { Player } from './interfaces/interfaces';
@@ -114,7 +113,9 @@ function App()
 
   const [initializing, setInitializing] = useState<Boolean>(true);
 
-  const [playerList, setPlayerList] = useState<typeof Player[]>([]);
+  const playerList = usePlayerStore(state => state.playerList)
+
+  const setPlayerList = usePlayerStore(state => state.setPlayerList)
 
   const [user, setUser] = useState<User | null>(null);
 
@@ -125,16 +126,20 @@ function App()
   const [errorMessage, setErrorMessage] = useState<Element>(<></>);
 
   const player = usePlayerStore(state => state.player);
-  
 
   const setPlayer = usePlayerStore(state => state.setPlayer);
   
+  const isInTower = usePlayerStore(state => state.isInTower)
 
-  const [isInTower, setIsInTower] = useState<Boolean>(false);
+  const setIsInTower = usePlayerStore(state => state.setIsInTower)
 
-  const [mapView, setMap] = useState<Boolean>(false);
+  const mapView = usePlayerStore(state => state.mapView);
 
-  const [scrollState, setScrollState] = useState<Number | null>(null);
+  const setMap = usePlayerStore(state => state.setMap)
+
+  const scrollState = usePlayerStore(state => state.scrollState)
+
+  const setScrollState = usePlayerStore(state => state.setScrollState)
 
   const [hasLoggedIn, setHasLoggedIn] = useState<Boolean>(false);
 
@@ -185,7 +190,6 @@ function App()
       if(!data.error && !(data.message))
       {
         setPlayer(data.data) //save server player
-        console.log("player", player)
         setLoading(false);
         setSuccess(true);
         if(data.data.isInTower === true)
@@ -200,6 +204,7 @@ function App()
         await pNotify(serverURL, data.data.email);
         await fetchCurrentScrollState();
       }
+      
       else
       {
         console.log(data)
@@ -211,6 +216,7 @@ function App()
       console.error("Error signing in or calling server: " +  error);
     }
   }
+          console.log("player", player)
 
   useEffect(() => {
     const subscriber = onAuthStateChanged(getAuth(), handleAuthStateChanged);
@@ -238,19 +244,12 @@ function App()
   if(user && success)
   {
     return(
-      <mapContext.Provider value = {{mapView, setMap}}>
-      <isInTowerContext.Provider value = {{isInTower, setIsInTower}}>
-      <playerListContext.Provider value = {{playerList, setPlayerList}}>
-      <scrollStateContext.Provider value = {{scrollState, setScrollState}}>
       <NavigationContainer>
 
       <Navigator/>
       
       </NavigationContainer>
-      </scrollStateContext.Provider>
-      </playerListContext.Provider>
-      </isInTowerContext.Provider>
-      </mapContext.Provider>
+
       
     )
 

@@ -7,6 +7,7 @@ import eye from "../assets/icons/eye.png"
 import moon from "../assets/icons/moon.png"
 import rune from "../assets/icons/rune.png"
 import { StatusBar } from "react-native";
+import { usePlayerStore } from "../gameStore";
 
 
 function Map() {
@@ -22,8 +23,10 @@ function Map() {
   }
 
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
-  const towerContext = React.useContext(isInTowerContext);
-  const {isInTower, setIsInTower} = towerContext;
+
+  const isInTower = usePlayerStore(state => state.isInTower)
+  
+  const setIsInTower = usePlayerStore(state => state.setIsInTower)
 
   const {height, width, scale, fontScale} = useWindowDimensions();
 

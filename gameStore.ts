@@ -1,8 +1,11 @@
 import { create } from 'zustand'
 import { PlayerStore } from './interfaces/gameStoreInterface'
+import { Player } from './interfaces/interfaces'
 
 export const usePlayerStore = create<PlayerStore>((set)=> ({
-    player: null,
+
+    player : null,
+
     setPlayer: (player) => set({ player }),
 
     mapView: null,

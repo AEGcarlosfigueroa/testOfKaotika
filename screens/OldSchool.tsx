@@ -8,13 +8,12 @@ import stars from "../assets/icons/stars.png"
 import eye from "../assets/icons/eye.png"
 import tarot from "../assets/icons/tarot.png"
 import rune from "../assets/icons/rune.png"
+import { usePlayerStore } from "../gameStore";
 
 
 function OldSchool() {
 
-  const context = React.useContext(scrollStateContext);
-
-  const {scrollState, setScrollState} = context;
+  const scrollState = usePlayerStore(state => state.scrollState)
 
   type RootStackParamList = {
     Home: undefined,
