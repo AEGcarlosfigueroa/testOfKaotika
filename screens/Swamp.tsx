@@ -21,7 +21,11 @@ export default function Swamp()
     }, [])
 
     useEffect(() => {
-        Geolocation.watchPosition(info => setPosition(info));
+        const interval = setInterval(() => {
+            Geolocation.watchPosition(info => setPosition(info));
+        }, 200)
+        console.log("position updated!");
+        return () => clearInterval(interval);
     }, []);
 
     const styles = StyleSheet.create({
