@@ -3,10 +3,12 @@ import { StyleSheet, View, Image } from 'react-native';
 import Geolocation, { GeolocationResponse } from '@react-native-community/geolocation';
 import React, { useEffect, useState } from 'react';
 import { usePlayerStore } from "../gameStore";
+import mapStyle from './../mapStyle.json'
 
 export default function Swamp()
 {
     const [position, setPosition] = useState<GeolocationResponse | null>(null);
+    
 
     const player = usePlayerStore(state => state.player);
 
@@ -14,7 +16,7 @@ export default function Swamp()
 
     useEffect(() => {
         Geolocation.watchPosition(info => setPosition(info));
-    }, [])
+    })
 
     const styles = StyleSheet.create({
     container: {
@@ -35,7 +37,8 @@ export default function Swamp()
                      <MapView
                 provider={PROVIDER_GOOGLE} // remove if not using Google Maps
                 style={styles.map}
-                region={{
+                customMapStyle={mapStyle}
+                initialRegion={{
                   latitude: position?.coords.latitude,
                   longitude: position?.coords.longitude,
                   latitudeDelta: 0.015,
