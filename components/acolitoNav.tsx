@@ -9,6 +9,7 @@ import { createStackNavigator } from '@react-navigation/stack'
 import Laboratory from '../screens/laboratory';
 import OldSchool from '../screens/OldSchool';
 import HallOfSages from '../screens/HallOfSages';
+import Swamp from '../screens/Swamp';
 
 const Stack = createStackNavigator()
 
@@ -25,6 +26,7 @@ export function AcolitoNav() {
       <Stack.Screen name="Laboratory" component={Laboratory}/>
       <Stack.Screen name="OldSchool" component={OldSchool}/>
       <Stack.Screen name="HallOfSages" component={HallOfSages}/>
+      <Stack.Screen name="Swamp" component={Swamp}/>
     </Stack.Navigator>
   )
 }
