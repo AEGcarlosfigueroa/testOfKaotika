@@ -1,26 +1,13 @@
 // IstvanNavigator.tsx
 import React from 'react';
-import { StyleSheet, Image } from 'react-native';
+import { StyleSheet } from 'react-native';
 import { createStackNavigator } from '@react-navigation/stack'
-import Home from '../screens/home';
-import Map from '../screens/Map'
-import Scanner from '../screens/scanner';
-import TowerEntrance from '../screens/TowerEntrance';
-import SpyCam from '../screens/SpyCam';
-import OldSchool from '../screens/OldSchool';
-import HallOfSages from '../screens/HallOfSages';
-
-const Stack = createStackNavigator()
+import { MainTabNav } from './myTabs';
 
 const styles = StyleSheet.create({
   topOffset: {
     marginTop: '10%'
-  }
-})
-
-export function IstvanNav() {
-  return (
-  //   <Tab.Navigator
+  }  //   <Tab.Navigator
   //     style={styles.topOffset}
   //     screenOptions={({ route }) => ({
   //       tabBarIcon: ({ color }) => {
@@ -53,15 +40,13 @@ export function IstvanNav() {
   //     <Tab.Screen name="Settings">{() => <Settings/>}</Tab.Screen>
   //   </Tab.Navigator>
   // );
-      <Stack.Navigator screenOptions={{ headerShown: false }}>
-      <Stack.Screen name="Home" component={Home} />
-      <Stack.Screen name="Map" component={Map} />
-      <Stack.Screen name="Entrance" component={Scanner} />
-      <Stack.Screen name="Lair" component={TowerEntrance}/>
-      <Stack.Screen name='SpyCam' component={SpyCam}/>
-      <Stack.Screen name="OldSchool" component={OldSchool}/>
-      <Stack.Screen name="HallOfSages" component={HallOfSages}/>
-    </Stack.Navigator>
+})
+
+export function IstvanNav() {
+  return (
+
+    <MainTabNav/>
+
   )
 }
 

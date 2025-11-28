@@ -26,19 +26,25 @@ const styles = StyleSheet.create({
     }
 })
 
-export default function PlayerView (player: any, index: any)
-{
+export default function PlayerView({ player, index }: { player: any, index: number }) {
     let textColor = 'grey';
-    if(player.isInside)
-    {
-        textColor = 'yellow'
+
+    if (player.isInside) {
+        textColor = 'yellow';
     }
+
     return (
-            <View style={styles.view} key={index}>
-                <Image resizeMode="contain" src={player.avatar} style={styles.image}></Image>
-                <Text style={{ fontSize: 40, color: textColor }}>{player.nickname}</Text>
-                <Text style={{ fontSize: 40, color: textColor }}>Is Inside Laboratory?</Text>
-                <AdvancedCheckbox size={70} checkBoxStyle={styles.checkBox} disabled={true} value={player.isInside} checkedColor="yellow"/>
-            </View>
-    )
+        <View style={styles.view} key={index}>
+            <Image resizeMode="contain" src={player.avatar} style={styles.image} />
+            <Text style={{ fontSize: 40, color: textColor }}>{player.nickname}</Text>
+            <Text style={{ fontSize: 40, color: textColor }}>Is Inside Laboratory?</Text>
+            <AdvancedCheckbox
+                size={70}
+                checkBoxStyle={styles.checkBox}
+                disabled={true}
+                value={player.isInside}
+                checkedColor="yellow"
+            />
+        </View>
+    );
 }

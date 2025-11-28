@@ -1,9 +1,16 @@
 import React, { useState, useEffect } from 'react';
-import { View, Image, StyleSheet, TouchableOpacity, useWindowDimensions, Text, ColorValue, StatusBar} from 'react-native';
+import { View, Image, StyleSheet, TouchableOpacity, useWindowDimensions, Text, ColorValue, StatusBar, ScrollView} from 'react-native';
 import QRCode from 'react-native-qrcode-svg';
 import socketIO from '../socketIO';
 import { useNavigation, NavigationProp } from '@react-navigation/native';
 import { usePlayerStore } from '../gameStore';
+import PlayerView  from '../props/playerView'
+import {SafeAreaView, SafeAreaProvider} from 'react-native-safe-area-context';
+import { Player } from "../interfaces/interfaces";
+import labImage from './../assets/tasks.png'
+
+
+
 
 
 function Entrance() {
@@ -91,6 +98,11 @@ function Entrance() {
 
   const setPlayer = usePlayerStore(state => state.setPlayer)
 
+   const playerList = usePlayerStore(state => state.playerList)
+    
+    const setPlayerList = usePlayerStore(state => state.setPlayerList)
+  
+
   const [showQR, setShowQR] = useState<Boolean>(false);
   const [socketId, setSocketId] = useState<String>('');
   const [buttonColor, setColor] = useState<ColorValue>('#E2DFD2')
@@ -144,14 +156,25 @@ const revealQR = () => {
     return(
       <>
       <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-        <Text style={styles.title}>THE LAB ENTRANCE</Text>
-      <Image source={require('./../assets/Entrance.webp')} style={styles.image} />
+        <Text style={styles.title}>THE LAB LOGS</Text>
+      <Image source={labImage} style={styles.image} />
         <TouchableOpacity
            style={styles.button2}
            onPress={() => navigation.navigate('OldSchool')}
          >
            <Text style={styles.buttonText2}>Back</Text>
          </TouchableOpacity>
+         <SafeAreaProvider>
+        <SafeAreaView>
+          <ScrollView overScrollMode="auto" style={{height: '75%', marginTop: '30%'}}>
+            {playerList.map( (elem: Player, i: number) =>  {
+              
+              return <PlayerView player={elem} index={i} />              
+            })}
+            {/* <View style={{height: 0.6*height, position: 'relative'}}></View> */}
+          </ScrollView>  
+        </SafeAreaView>
+      </SafeAreaProvider>
     </View>
     </>
     )
@@ -159,7 +182,7 @@ const revealQR = () => {
 
   // --- Render UI ---
   return (
-    <View style={{ flex: 1, alignItems: 'center' }}>
+      <View style={{ flex: 1, alignItems: 'center' }}>
       <Text style={styles.title}>THE LAB ENTRANCE</Text>
       <Image source={require('./../assets/Entrance.webp')} style={styles.image} />
       <View style= {styles.buttonContainer}>

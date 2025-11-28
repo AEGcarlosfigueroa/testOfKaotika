@@ -10,7 +10,8 @@ import { Player } from "../interfaces/interfaces";
 import { useWindowDimensions } from "react-native";
 import labImage from './../assets/tasks.png'
 import towerImage from './../assets/settings.png'
-
+import evilEye from './../assets/evilEye.jpg'
+import orb from './../assets/orb.png'
 
 
 function SpyCam() {
@@ -104,41 +105,8 @@ function SpyCam() {
      return (
       <>
       <GenericButton/>
-      <Text style={styles.title2}>{isShowingTowerList ? 'TOWER ACCESS' : 'LAB ACCESS LOG'}</Text>
-      <TouchableOpacity
-        style={styles.button}
-        onPress={() => {
-          if(isShowingTowerList)
-          {
-            setIsShowingTowerList(false);
-          }
-          else
-          {
-            setIsShowingTowerList(true);
-          }
-        }}
-        
-      >
-        <Text style={styles.buttonText}>Show {isShowingTowerList ? 'Lab List' : 'Tower List'}</Text>
-      </TouchableOpacity>
-      <Image source={isShowingTowerList ? towerImage : labImage} style={styles.image}/>
-      <SafeAreaProvider>
-        <SafeAreaView>
-          <ScrollView overScrollMode="auto" style={{height: '75%', marginTop: '30%'}}>
-            {playerList.map( (elem: Player, i: Number) =>  {
-              if(!isShowingTowerList)
-              {
-                return PlayerView(elem, i)
-              }
-              else
-              {
-                return TowerPlayerView(elem, i);
-              }
-            })}
-            {/* <View style={{height: 0.6*height, position: 'relative'}}></View> */}
-          </ScrollView>  
-        </SafeAreaView>
-      </SafeAreaProvider>
+      <Text style={styles.title2}>Spy Cam</Text>
+      <Image source={orb} style={styles.image}/>
       </>
   );
   }

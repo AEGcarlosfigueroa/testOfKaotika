@@ -14,32 +14,38 @@ import pNotify from '../pushNotification';
 import { serverURL } from '../App';
 import ScrollAlert from '../screens/ScrollAlert';
 import { usePlayerStore } from '../gameStore'
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
 function Navigator ()
 {
+  
+  const Tab = createBottomTabNavigator();
 
   const player = usePlayerStore(state => state.player)
 
   const setPlayer = usePlayerStore(state => state.setPlayer)
 
-  const towerContext = React.useContext(isInTowerContext);
+  const isInTower = usePlayerStore(state => state.isInTower)
 
-  const listContext = React.useContext(playerListContext);
+  const setIsInTower = usePlayerStore(state => state.setIsInTower)
 
-  const scrollListContext = React.useContext(scrollStateContext);
+  const playerList = usePlayerStore(state => state.playerList)
 
-  const {playerList, setPlayerList} = listContext;
+  const setPlayerList = usePlayerStore(state => state.setPlayerList)
 
-  const {isInTower, setIsInTower} = towerContext;
+  const scrollState = usePlayerStore(state => state.scrollState)
 
-  const {scrollState, setScrollState} = scrollListContext;
+  const setScrollState = usePlayerStore(state => state.setScrollState)
 
   const [, forceUpdate] = useReducer(x => x + 1, 0);
   
     const handleNewData = (newData: any) => {
       setPlayerList(newData);
       console.log(newData);
-      pNotify(serverURL, player.email)
+      if(player)
+      {
+        pNotify(serverURL, player.email)
+      }
       forceUpdate
     }
 
@@ -111,7 +117,7 @@ function Navigator ()
 
   BackHandler.addEventListener('hardwareBackPress', () => {
     
-    if(!player.isInTower)
+    if(!player?.isInTower)
     {
       setIsInTower(false);
     }
@@ -128,6 +134,7 @@ function Navigator ()
   {
     case 'ISTVAN':
       return <IstvanNav/>
+      
 
     case 'ACOLITO':
       if(player.isInside)
@@ -152,11 +159,45 @@ function Navigator ()
       {
         return <MortimerNav/>
       }
+          //   <Tab.Navigator
+  //     style={styles.topOffset}
+  //     screenOptions={({ route }) => ({
+  //       tabBarIcon: ({ color }) => {
+  //         if(route.name === "Home")
+  //         {
+  //           return (<Image source={rune} style={{width : 30, height : 30}}/>)
+  //         }
+  //         else if(route.name === "Entrance")
+  //         {
+  //           return (<Image source={pluto} style={{width : 30, height : 30}}/>)
+  //         }
+  //         else {
+  //           return (<Image source={tarot} style={{width : 30, height : 30}}/>)
+
+  //         }
+  //       },
+  //       tabBarIndicatorStyle: { backgroundColor: 'black' },
+  //       tabBarActiveTintColor: 'black',
+  //       tabBarInactiveTintColor: 'rgba(0,0,0,0.5)',
+  //       tabBarShowIcon: true,
+  //       tabBarShowLabel: true,
+  //       tabBarLabelStyle: { fontSize: 18, fontFamily: 'OptimusPrincepsSemiBold' },
+  //       // tabBarItemStyle: { width: 100 },
+  //       tabBarStyle: { backgroundColor: '#E2DFD2' },
+  //         tabBarPressOpacity: 0.9, // Tab will fade to 50% opacity when pressed
+  //     })}
+  //   >
+  //     <Tab.Screen name="Home">{() => <Home/>}</Tab.Screen>
+  //     <Tab.Screen name="Entrance">{() => <Scanner/>}</Tab.Screen>
+  //     <Tab.Screen name="Settings">{() => <Settings/>}</Tab.Screen>
+  //   </Tab.Navigator>
+  // );
 
     default:
       return null;
 
   }
+
 }
 
 export default Navigator;

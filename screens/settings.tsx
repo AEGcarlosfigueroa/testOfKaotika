@@ -44,7 +44,7 @@ function Settings() {
   
   let imageSource;
 
-    switch(player.profile.role) {
+    switch(player?.profile.role) {
 
     case "ACOLITO":
       imageSource = require("./../assets/settings.png");
