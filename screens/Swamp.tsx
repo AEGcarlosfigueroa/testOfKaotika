@@ -7,16 +7,22 @@ import mapStyle from './../mapStyle.json'
 
 export default function Swamp()
 {
-    const [position, setPosition] = useState<GeolocationResponse | null>(null);
-    
-
     const player = usePlayerStore(state => state.player);
 
-    Geolocation.getCurrentPosition(info => setPosition(info));
+    const position = usePlayerStore(state => state.position);
+    const setPosition = usePlayerStore(state => state.setPosition);
+
+    const tryLowAccuracy = () => {
+        Geolocation.getCurrentPosition(info => setPosition(info), undefined, { enableHighAccuracy: false, timeout: 20000, maximumAge: 10000 });
+    }
+
+    useEffect(() => {
+        Geolocation.getCurrentPosition(info => setPosition(info), tryLowAccuracy, { enableHighAccuracy: true, timeout: 20000, maximumAge: 10000 });
+    }, [])
 
     useEffect(() => {
         Geolocation.watchPosition(info => setPosition(info));
-    })
+    }, []);
 
     const styles = StyleSheet.create({
     container: {
@@ -54,6 +60,7 @@ export default function Swamp()
     }
     else
     {
+        console.log("map not loaded");
         return (<></>)
     }
     

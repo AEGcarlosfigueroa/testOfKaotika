@@ -18,9 +18,8 @@ export const usePlayerStore = create<PlayerStore>((set)=> ({
     setPlayerList: (playerList) => set({playerList}),
 
     scrollState: null,
-    setScrollState: (scrollState) => set({scrollState})
+    setScrollState: (scrollState) => set({scrollState}),
 
-
-
-    
+    position: null,
+    setPosition: (position) => set({position}),
 }))
