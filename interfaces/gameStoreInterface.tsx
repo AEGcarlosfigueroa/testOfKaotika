@@ -1,5 +1,5 @@
-import { Player } from './interfaces';
-
+import { Player, ArtifactsDB } from './interfaces';
+import { GeolocationResponse } from '@react-native-community/geolocation';
 
 export interface PlayerStore {
     player: Player | null;
@@ -16,5 +16,12 @@ export interface PlayerStore {
 
     scrollState: number | null;
     setScrollState: (scrollState: number | null) => void;
+
+    position: GeolocationResponse | null;
+    setPosition: (position: GeolocationResponse | null) => void;
+
+    artifactsDB: ArtifactsDB | null;
+    setArtifacts: (artifactsDB: ArtifactsDB | null) => void;
+
 }
 

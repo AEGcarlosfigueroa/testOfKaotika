@@ -3,7 +3,7 @@ import { View, Image, StyleSheet, TouchableOpacity, Text, useWindowDimensions } 
 import { StatusBar } from "react-native";
 import map from "../assets/oldSchool.png";
 import { useNavigation, NavigationProp } from "@react-navigation/native";
-import { scrollStateContext, scrollStateList } from "../context";
+import { scrollStateList } from "../context";
 import stars from "../assets/icons/stars.png"
 import eye from "../assets/icons/eye.png"
 import tarot from "../assets/icons/tarot.png"

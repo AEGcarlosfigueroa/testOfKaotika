@@ -12,6 +12,7 @@ import TowerEntrance from '../screens/TowerEntrance';
 import HallOfSages from '../screens/HallOfSages';
 import Laboratory from '../screens/laboratory';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import Swamp from '../screens/Swamp';
 
 const Tab = createBottomTabNavigator();
 
@@ -43,6 +44,7 @@ function mapNav()
       <Stack.Screen name="Entrance" component={Entrance}/>
       <Stack.Screen name="Tower" component={TowerEntrance}/>
       <Stack.Screen name='SpyCam' component={SpyCam}/>
+      <Stack.Screen name='Swamp' component={Swamp}/>
       <Stack.Screen name="Laboratory" component={Laboratory}/>
       <Stack.Screen name="OldSchool" component={OldSchool}/>
       <Stack.Screen name="HallOfSages" component={HallOfSages}/>
@@ -76,7 +78,6 @@ export function MainTabNav() {
         },
         tabBarBackground: () => (
           <BlurView
-            style={{ position: 'absolute', width: '100%', height: '100%' }}
             blurType="dark"
             blurAmount={10}
           />

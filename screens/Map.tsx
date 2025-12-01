@@ -2,12 +2,12 @@ import React from "react";
 import { View, Image, StyleSheet, TouchableOpacity, Text, useWindowDimensions } from "react-native";
 import map from "../assets/map.png";
 import { useNavigation, NavigationProp } from "@react-navigation/native";
-import { isInTowerContext } from "../context";
 import eye from "../assets/icons/eye.png"
 import moon from "../assets/icons/moon.png"
 import rune from "../assets/icons/rune.png"
 import { StatusBar } from "react-native";
 import { usePlayerStore } from "../gameStore";
+import book from "../assets/icons/book.png";
 
 
 function Map() {
@@ -19,13 +19,14 @@ function Map() {
     TowerEntrance: undefined,
     SpyCam: undefined,
     Map: undefined,
-    OldSchool: undefined
+    OldSchool: undefined,
+    Swamp: undefined
   }
 
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
 
   const isInTower = usePlayerStore(state => state.isInTower)
-  
+
   const setIsInTower = usePlayerStore(state => state.setIsInTower)
 
   const {height, width, scale, fontScale} = useWindowDimensions();
@@ -53,6 +54,9 @@ function Map() {
     },
     spycamStyle: {
       width : (15*scale), height : (15*scale), top: (0.6*height), left: '85%', tintColor: 'white', position: 'absolute', zIndex: 20
+    },
+    swampStyle: {
+       width : (15*scale), height : (15*scale), top: (0.35*height), left: '30%', position: 'absolute', zIndex: 20
     },
     title: {
       fontSize: 30*fontScale,
@@ -120,6 +124,11 @@ function Map() {
         navigation.navigate('SpyCam')
       }}>
         <Image source={eye} style={styles.image}/>
+      </TouchableOpacity>
+      <TouchableOpacity style={styles.swampStyle} onPress={() => {
+        navigation.navigate('Swamp')
+      }}>
+        <Image source={book} style={styles.image}/>
       </TouchableOpacity>
 
     </View>

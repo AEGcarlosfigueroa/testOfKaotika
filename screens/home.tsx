@@ -60,40 +60,6 @@ function Home() {
       // elevation: 2
 
     },
-    buttonText: {
-      fontSize: 35*fontScale,
-      color: '#fff',
-      textShadowColor: 'rgba(0, 0, 0, 0.7)',
-      textShadowOffset: { width: 2, height: 2 },
-      textShadowRadius: 4,
-      fontFamily: 'OptimusPrincepsSemiBold',
-    },
-    logoutButton: {
-      position: 'absolute',
-      bottom: '20%',
-      left: '12.5%',
-      width: '75%',
-      height: '10%',
-      backgroundColor: 'rgba(0,0,0,0.5)',
-      borderRadius: 5,
-      borderWidth: 2,
-      borderColor: 'grey',
-      justifyContent: 'center',
-      alignItems: 'center',
-    },
-    buttonContainer: {
-      position: 'absolute',
-      bottom: '10%',
-      left: '12.5%',
-      width: '75%',
-      height: '10%',
-      backgroundColor: 'rgba(0,0,0,0.5)',
-      borderRadius: 5,
-      borderWidth: 2,
-      borderColor: 'grey',
-      justifyContent: 'center',
-      alignItems: 'center',
-    },
   });
   
 
@@ -119,30 +85,6 @@ function Home() {
     <View style={{ flex: 1, alignItems: 'center' }}>
       <Text style={styles.title}>Welcome {player?.profile.role}</Text>
       <Image source={imageSource} style={styles.image} />
-       <View style={styles.logoutButton}>
-        <TouchableOpacity
-        onPress={() => {
-          if(player)
-          {
-            removeNofify(player.email);
-
-          }
-          signOut(getAuth());
-          GoogleSignin.revokeAccess();
-          const socket = socketIO.getSocket();
-          socket?.disconnect();
-        }}>
-        <Text style= {styles.buttonText}>SIGN OUT</Text>
-      </TouchableOpacity>
-      </View>
-      <View style={styles.buttonContainer}>
-        <TouchableOpacity
-        onPress={() => {setMap(true);
-          navigation.navigate('Map')
-        }}>
-        <Text style= {styles.buttonText}>OPEN MAP</Text>
-      </TouchableOpacity>
-      </View>
     </View>
   );
 }

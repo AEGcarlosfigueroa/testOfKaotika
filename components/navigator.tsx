@@ -25,13 +25,13 @@ function Navigator ()
 
   const setPlayer = usePlayerStore(state => state.setPlayer)
 
+  const playerList = usePlayerStore(state => state.playerList);
+
+  const setPlayerList = usePlayerStore(state => state.setPlayerList);
+
   const isInTower = usePlayerStore(state => state.isInTower)
 
   const setIsInTower = usePlayerStore(state => state.setIsInTower)
-
-  const playerList = usePlayerStore(state => state.playerList)
-
-  const setPlayerList = usePlayerStore(state => state.setPlayerList)
 
   const scrollState = usePlayerStore(state => state.scrollState)
 
