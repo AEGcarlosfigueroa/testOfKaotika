@@ -22,6 +22,10 @@ export const usePlayerStore = create<PlayerStore>((set)=> ({
     position: null,
     setPosition: (position) => set({position}),
 
+    artifactsDB: null,
+    setArtifacts: (artifactsDB) =>set({artifactsDB}),
+
+
     positionList: [],
     setPositionList: (positionList) => set({positionList})
 }))

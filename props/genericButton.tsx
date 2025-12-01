@@ -1,8 +1,8 @@
 import { StyleSheet, Text, TouchableOpacity, StatusBar } from 'react-native';
 import { useNavigation, NavigationProp } from "@react-navigation/native";
 import React from 'react';
-import { isInTowerContext } from "../context";
 import { useWindowDimensions } from 'react-native';
+import { usePlayerStore } from '../gameStore';
 
 function GenericButton() {
 
@@ -67,8 +67,10 @@ function GenericButton() {
     
       const navigation = useNavigation<NavigationProp<RootStackParamList>>();
 
-  const towerContext = React.useContext(isInTowerContext);
-  const {isInTower, setIsInTower} = towerContext;
+
+
+  const isInTower = usePlayerStore(state => state.isInTower)
+  const setIsInTower = usePlayerStore(state => state.setIsInTower)
 
   return (
     <TouchableOpacity

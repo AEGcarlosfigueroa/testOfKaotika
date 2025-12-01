@@ -1,28 +1,42 @@
 import React from "react";
-import { StyleSheet, TouchableOpacity, Text, Image } from "react-native";
+import { StyleSheet, TouchableOpacity, Text, Image, useWindowDimensions, View } from "react-native";
 import { getAuth, signOut } from "@react-native-firebase/auth";
 import { GoogleSignin } from "@react-native-google-signin/google-signin";
 import socketIO from "../socketIO";
 import { usePlayerStore } from "../gameStore";
+import { removeNofify } from '../pushNotification';
+
+
+function Settings() {
+
+  const player = usePlayerStore(state => state.player);
+
+
+  const {height, width, scale, fontScale} = useWindowDimensions();
+
 
 const styles = StyleSheet.create({
-    button: {
-    top: '45%',
-    left: '25%',
-    width: '50%',
-    height : '10%',
-    backgroundColor: 'rgba(0,0,0,0.5)',
-    position: 'absolute',
-    borderRadius: 5,
-    borderColor: 'grey',
-    justifyContent: 'center'
+  button: {
+      position: 'absolute',
+      bottom: '50%',
+      left: '12.5%',
+      width: '75%',
+      height: '10%',
+      backgroundColor: 'rgba(0,0,0,0.5)',
+      borderRadius: 5,
+      borderWidth: 2,
+      borderColor: 'grey',
+      justifyContent: 'center',
+      alignItems: 'center',
 
   },
   text: {
-    color: '#E2DFD2',
-    alignSelf: 'center',
-    fontSize: 18,
-    fontFamily: 'OptimusPrincepsSemiBold',
+      fontSize: 35*fontScale,
+      color: '#fff',
+      textShadowColor: 'rgba(0, 0, 0, 0.7)',
+      textShadowOffset: { width: 2, height: 2 },
+      textShadowRadius: 4,
+      fontFamily: 'OptimusPrincepsSemiBold',
   },
   view: {
     backgroundColor: 'grey',
@@ -37,14 +51,11 @@ const styles = StyleSheet.create({
   }
 });
 
-function Settings() {
-
-  const player = usePlayerStore(state => state.player);
 
   
   let imageSource;
 
-    switch(player.profile.role) {
+    switch(player?.profile.role) {
 
     case "ACOLITO":
       imageSource = require("./../assets/settings.png");
@@ -63,16 +74,22 @@ function Settings() {
     return (
           <>
         <Image source={imageSource} style={styles.image}/>
-        <TouchableOpacity style={styles.button}
-          onPress={() => {
-            signOut(getAuth());
-            GoogleSignin.revokeAccess();
-            const socket = socketIO.getSocket();
-            socket?.disconnect();
-          }}
-        >
-          <Text style={styles.text}>SIGN OUT</Text>
-        </TouchableOpacity>
+               <View style={styles.button}>
+               <TouchableOpacity
+               onPress={() => {
+                 if(player)
+                 {
+                   removeNofify(player.email);
+       
+                 }
+                 signOut(getAuth());
+                 GoogleSignin.revokeAccess();
+                 const socket = socketIO.getSocket();
+                 socket?.disconnect();
+               }}>
+               <Text style= {styles.text}>SIGN OUT</Text>
+             </TouchableOpacity>
+             </View>
         </>
     );
 }

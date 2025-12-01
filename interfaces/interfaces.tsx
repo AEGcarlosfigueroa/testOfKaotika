@@ -175,3 +175,12 @@ export interface Player extends PlayerInfo {
   inventory: InventorySchema;
 }
 
+export interface ArtifactsDB
+{
+  artifactID: string,
+  artifactName: string,
+  isCollected: false,
+  xPos: 45,
+  yPos: 25
+}
+

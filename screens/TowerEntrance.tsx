@@ -2,6 +2,8 @@ import { View, Text, Image, StyleSheet, useWindowDimensions} from "react-native"
 import React from "react";
 import { GenericButton } from "../props/genericButton";
 import { usePlayerStore } from "../gameStore";
+import TowerPlayerView from "../props/towerPlayerView";
+import pergamino from "../assets/pergamino.png"
 
 //Refractor later put in a seperate file called styles 
 
@@ -19,19 +21,20 @@ function TowerEntrance ()
     zIndex: -10,
   },
   title: {
-    marginBottom: 20,
-    marginTop: 20,
-    color: '#E2DFD2',
-    textShadowColor: 'rgba(0, 0, 0, 0.7)',
-    textShadowOffset: { width: 2, height: 4 },
-    textShadowRadius: 4,
-    fontFamily: 'OptimusPrincepsSemiBold',
-    boxShadow: '5px 5px 5px 5px black',
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
-    padding: 15,
-    // elevation: 2
-    
-  },
+      fontSize: 30*fontScale,
+      marginBottom: '150%',
+      marginTop: '5%',
+      color: '#E2DFD2',
+      textShadowColor: 'rgba(0, 0, 0, 0.7)',
+      textShadowOffset: { width: 2, height: 4 },
+      textShadowRadius: 4,
+      fontFamily: 'OptimusPrincepsSemiBold',
+      boxShadow: '5px 5px 5px 5px black',
+      backgroundColor: 'rgba(0, 0, 0, 0.5)',
+      padding: '5%',
+      textAlign: 'center'
+      // elevation: 2
+    },
   title2: {
       fontSize: 30*fontScale,
       marginBottom: '5%',
@@ -57,14 +60,27 @@ function TowerEntrance ()
 
     const imageSource = require('../assets/towerEntrance.png')
 
-        return (
-            <View style={{ flex: 1, alignItems: 'center' }}>
-              <Text style={styles.title2}>THE TOWER ENTRANCE</Text>
-                <Image source={imageSource} style={styles.image}/>
-                {player?.profile.role === "ACOLITO" && <Text style={[styles.title, { top: '40%', fontSize: 30*fontScale}]}>{warning}</Text>}
-                <GenericButton/>
-            </View>
-        )
+    if(player?.profile.role !== 'ACOLITO')
+    {
+      return (
+              <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+                <Text style={styles.title}>Tower Logs</Text>
+              <Image source={pergamino} style={styles.image} />
+              <GenericButton/>
+              </View>
+      )
+    }
+    else{
+      return (
+      <View style={{ flex: 1, alignItems: 'center' }}>
+        <Text style={styles.title2}>THE TOWER ENTRANCE</Text>
+          <Image source={imageSource} style={styles.image}/>
+          {player?.profile.role === "ACOLITO" && <Text style={[styles.title, { top: '40%', fontSize: 30*fontScale}]}>{warning}</Text>}
+          <GenericButton/>
+      </View>
+    )
+    }
+
     }
     
 

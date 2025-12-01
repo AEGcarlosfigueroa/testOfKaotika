@@ -247,8 +247,11 @@ function App()
       <NavigationContainer>
 
       <Navigator/>
-      
+
       </NavigationContainer>
+      
+
+      
 
       
     )

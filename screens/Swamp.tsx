@@ -5,6 +5,7 @@ import React, { useEffect, useState } from 'react';
 import { usePlayerStore } from "../gameStore";
 import mapStyle from './../mapStyle.json'
 import socketIO from '../socketIO';
+import { serverURL } from '../App';
 
 export default function Swamp()
 {
@@ -30,9 +31,29 @@ export default function Swamp()
 
     }
 
+    const artifacts = usePlayerStore(state => state.player)
+
+    const setArtifacts = usePlayerStore(state => state.setArtifacts)
+
     const tryLowAccuracy = () => {
         Geolocation.getCurrentPosition(info => setPosition(info), undefined, { enableHighAccuracy: false, timeout: 20000, maximumAge: 10000 });
     }
+
+    useEffect(() => {
+    const fetchArtifactsDB = async () => {
+      try {
+        const response = await fetch(`${serverURL}/api/artifacts/all`);
+        const data = await response.json();
+        setArtifacts(data);
+        console.log("all artifacts acquired:", data);
+      } catch (error) {
+        console.log("Error fetching artifacts:", error);
+      }
+    };
+
+    fetchArtifactsDB();
+    }, []);
+
 
     useEffect(() => {
         Geolocation.getCurrentPosition(info => setPosition(info), tryLowAccuracy, { enableHighAccuracy: true, timeout: 20000, maximumAge: 10000 });
@@ -65,7 +86,7 @@ export default function Swamp()
     {
             return (
                  <View style={styles.container}>
-                     <MapView
+                  <MapView
                 provider={PROVIDER_GOOGLE} // remove if not using Google Maps
                 style={styles.map}
                 customMapStyle={mapStyle}
