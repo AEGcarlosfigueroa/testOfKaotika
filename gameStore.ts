@@ -5,7 +5,6 @@ import { Player } from './interfaces/interfaces'
 export const usePlayerStore = create<PlayerStore>((set)=> ({
 
     player : null,
-
     setPlayer: (player) => set({ player }),
 
     mapView: null,
@@ -22,4 +21,7 @@ export const usePlayerStore = create<PlayerStore>((set)=> ({
 
     position: null,
     setPosition: (position) => set({position}),
+
+    positionList: [],
+    setPositionList: (positionList) => set({positionList})
 }))

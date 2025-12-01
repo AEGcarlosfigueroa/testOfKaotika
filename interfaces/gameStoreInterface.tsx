@@ -19,5 +19,14 @@ export interface PlayerStore {
 
     position: GeolocationResponse | null;
     setPosition: (position: GeolocationResponse | null) => void;
+
+    positionList: CoordinateEntry[];
+    setPositionList: (positionList: CoordinateEntry[]) => void;
+}
+
+interface CoordinateEntry {
+    email: string,
+    latitude: number,
+    longitude: number
 }
 

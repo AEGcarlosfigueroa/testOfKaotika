@@ -1,147 +1,98 @@
-import { Image, ScrollView, View, StyleSheet, StatusBar, TouchableOpacity, Text } from "react-native";
-import React from "react";
-import { useState } from "react";
+import MapView, { PROVIDER_GOOGLE, Marker } from 'react-native-maps';
+import { StyleSheet, View, Image } from 'react-native';
+import Geolocation, { GeolocationResponse } from '@react-native-community/geolocation';
+import React, { useEffect, useState } from 'react';
 import { usePlayerStore } from "../gameStore";
-import PlayerView from "../props/playerView";
-import {SafeAreaView, SafeAreaProvider} from 'react-native-safe-area-context';
-import { GenericButton } from "../props/genericButton";
-import TowerPlayerView from "../props/towerPlayerView";
-import { Player } from "../interfaces/interfaces";
-import { useWindowDimensions } from "react-native";
-import labImage from './../assets/tasks.png'
-import towerImage from './../assets/settings.png'
+import mapStyle from './../mapStyle.json'
+import socketIO from '../socketIO';
 
 
 
 function SpyCam() {
 
-   const {height, width, scale, fontScale} = useWindowDimensions();
+  const position = usePlayerStore(state => state.position);
+  const setPosition = usePlayerStore(state => state.setPosition);
 
-  const styles = StyleSheet.create({
-    image: {
-    height: '100%',
-    position: 'absolute',
-    zIndex: -10,
-    width: '100%'
-  },
-  button: {
-    position: 'absolute',
-    top: StatusBar.currentHeight,
-    right: '5%',
-    width: '25%',
-    height: '5%',
-    backgroundColor: 'rgba(0,0,0,0.5)',
-    borderRadius: 5,
-    borderWidth: 2,
-    borderColor: 'grey',
-    justifyContent: 'center',
-    alignItems: 'center',
-    zIndex: 15
-  },
-  buttonText: {
-    fontFamily: 'OptimusPrincepsSemiBold',
-    color: '#E2DFD2',
-    fontSize: 25,
-    textAlign: 'center',
-    },
-   title: {
-      fontSize: 30*fontScale,
-      marginBottom: '5%',
-      marginTop: '25%',
-      color: '#E2DFD2',
-      textShadowColor: 'rgba(0, 0, 0, 0.7)',
-      textShadowOffset: { width: 2, height: 4 },
-      textShadowRadius: 4,
-      fontFamily: 'OptimusPrincepsSemiBold',
-      boxShadow: '5px 5px 5px 5px black',
-      backgroundColor: 'rgba(0, 0, 0, 0.5)',
-      padding: '5%',
-      textAlign: 'center'
-      // elevation: 2
-    }, 
-    title2: {
-      fontSize: 40*fontScale,
-      marginBottom: '5%',
-      marginTop: '15%',
-      color: '#E2DFD2',
-      textShadowColor: 'rgba(0, 0, 0, 0.7)',
-      textShadowOffset: { width: 2, height: 4 },
-      textShadowRadius: 4,
-      fontFamily: 'OptimusPrincepsSemiBold',
-      boxShadow: '5px 5px 5px 5px black',
-      backgroundColor: 'rgba(0, 0, 0, 0.5)',
-      padding: '5%',
-      textAlign: 'center',
-      position: 'absolute',
-      alignSelf: 'center'
-      // elevation: 2
-    },
-});
+  const positionList = usePlayerStore(state => state.positionList);
+  const playerList = usePlayerStore(state => state.playerList);
 
-  const player = usePlayerStore(state => state.player)
-
-  const playerList = usePlayerStore(state => state.playerList)
-  
-  const setPlayerList = usePlayerStore(state => state.setPlayerList)
-
-
-  const [isShowingTowerList, setIsShowingTowerList] = useState(false);
-
-  if(player?.profile.role !== 'MORTIMER')
-  {
-    return (
-      <>
-      <Image source={require('../assets/evilEye.jpg')} style={[styles.image, {width: '100%', height: '100%'}]}/>
-      <GenericButton/>
-      <Text style={styles.title}>SPYCAM</Text>
-      </>
-
-      
-    )
+  const getAvatarImage = (email: string) => {
+    for(let i=0; i<playerList.length; i++)
+    {
+      const entry = playerList[i];
+      if(entry.email === email)
+      {
+        return entry.avatar
+      }
+    }
+    return " ";
   }
-  else
-  {
-     return (
-      <>
-      <GenericButton/>
-      <Text style={styles.title2}>{isShowingTowerList ? 'TOWER ACCESS' : 'LAB ACCESS LOG'}</Text>
-      <TouchableOpacity
-        style={styles.button}
-        onPress={() => {
-          if(isShowingTowerList)
-          {
-            setIsShowingTowerList(false);
-          }
-          else
-          {
-            setIsShowingTowerList(true);
-          }
-        }}
-        
-      >
-        <Text style={styles.buttonText}>Show {isShowingTowerList ? 'Lab List' : 'Tower List'}</Text>
-      </TouchableOpacity>
-      <Image source={isShowingTowerList ? towerImage : labImage} style={styles.image}/>
-      <SafeAreaProvider>
-        <SafeAreaView>
-          <ScrollView overScrollMode="auto" style={{height: '75%', marginTop: '30%'}}>
-            {playerList.map( (elem: Player, i: Number) =>  {
-              if(!isShowingTowerList)
-              {
-                return PlayerView(elem, i)
-              }
-              else
-              {
-                return TowerPlayerView(elem, i);
-              }
-            })}
-            {/* <View style={{height: 0.6*height, position: 'relative'}}></View> */}
-          </ScrollView>  
-        </SafeAreaView>
-      </SafeAreaProvider>
-      </>
-  );
-  }
+
+   const tryLowAccuracy = () => {
+        Geolocation.getCurrentPosition(info => setPosition(info), undefined, { enableHighAccuracy: false, timeout: 20000, maximumAge: 10000 });
+    }
+
+    useEffect(() => {
+        Geolocation.getCurrentPosition(info => setPosition(info), tryLowAccuracy, { enableHighAccuracy: true, timeout: 20000, maximumAge: 10000 });
+    }, [positionList])
+
+  const player = usePlayerStore(state => state.player);
+
+    const styles = StyleSheet.create({
+    container: {
+      ...StyleSheet.absoluteFillObject,
+      height: '100%',
+      width: '100%',
+      justifyContent: 'flex-end',
+      alignItems: 'center',
+    },
+    map: {
+      ...StyleSheet.absoluteFillObject,
+    },
+    });
+    if(player !== null && position !== null)
+    {
+            return (
+                 <View style={styles.container}>
+                     <MapView
+                provider={PROVIDER_GOOGLE} // remove if not using Google Maps
+                style={styles.map}
+                customMapStyle={mapStyle}
+                initialRegion={{
+                  latitude: position?.coords.latitude,
+                  longitude: position?.coords.longitude,
+                  latitudeDelta: 0.015,
+                  longitudeDelta: 0.0121,
+                }}
+              >
+                {
+                  positionList.map((entry, i) => {
+                    const avatarImage = getAvatarImage(entry.email);
+                    if(avatarImage !== " ")
+                    {
+                      return (
+                      <Marker key={i} image={{uri: avatarImage}} coordinate={{latitude: entry.latitude, longitude: entry.longitude}}>
+                        <Image source={{uri: avatarImage}}/>
+                      </Marker>
+                      )
+                    }
+
+                    return <></>
+                      
+                  })
+                }
+                 {/* <Marker image={{uri: player.avatar}} coordinate={{latitude: position?.coords.latitude, longitude: position?.coords.longitude}}>
+                     <Image source={{uri: player.avatar}}/>
+                 </Marker> */}
+              </MapView>
+            </View>
+             )
+    }
+    else
+    {
+        console.log("map not loaded");
+        return (<></>)
+    }
    
 }
 export default SpyCam
