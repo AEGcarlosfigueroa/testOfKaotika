@@ -37,6 +37,10 @@ function Navigator ()
 
   const setScrollState = usePlayerStore(state => state.setScrollState)
 
+  const positionList = usePlayerStore(state => state.positionList)
+
+  const setPositionList = usePlayerStore(state => state.setPositionList);
+
   const [, forceUpdate] = useReducer(x => x + 1, 0);
   
     const handleNewData = (newData: any) => {
@@ -100,20 +104,27 @@ function Navigator ()
             setScrollState(scrollStateList.destroyed);
             ToastAndroid.show(message, 5000);
           }
+
+          const handleLocationUpdated = (message: any) => {
+            setPositionList(message);
+            console.log("New coords received");
+          }
           
           socket.on('isInTowerEntranceRequest', sendIsInTower);
           socket.on('authorization', handleEntryGranted);
           socket.on('update', handleNewData);
           socket.on('scrollCollectedEvent', handleScrollCollected);
           socket.on('scrollDestroyedEvent', handleScrollDestroyed);
+          socket.on("locationUpdated", handleLocationUpdated);
           return () => {
             socket.off('authorization', handleEntryGranted);
             socket.off('isInTowerEntranceRequest', sendIsInTower);
             socket.off('update', handleNewData);
             socket.off('scrollCollectedEvent', handleScrollCollected);
             socket.off('scrollDestroyedEvent', handleScrollDestroyed);
+            socket.off("locationUpdated", handleLocationUpdated);
           }
-        }, [navigation, isInTower, scrollState]);
+        }, [navigation, isInTower, scrollState, positionList]);
 
   BackHandler.addEventListener('hardwareBackPress', () => {
     

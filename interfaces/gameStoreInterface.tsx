@@ -23,5 +23,14 @@ export interface PlayerStore {
     artifactsDB: ArtifactsDB | null;
     setArtifacts: (artifactsDB: ArtifactsDB | null) => void;
 
+
+    positionList: CoordinateEntry[];
+    setPositionList: (positionList: CoordinateEntry[]) => void;
+}
+
+interface CoordinateEntry {
+    email: string,
+    latitude: number,
+    longitude: number
 }
 

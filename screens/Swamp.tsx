@@ -4,6 +4,7 @@ import Geolocation, { GeolocationResponse } from '@react-native-community/geoloc
 import React, { useEffect, useState } from 'react';
 import { usePlayerStore } from "../gameStore";
 import mapStyle from './../mapStyle.json'
+import socketIO from '../socketIO';
 import { serverURL } from '../App';
 import { Text } from 'react-native-gesture-handler';
 import { StatusBar } from 'react-native';
@@ -16,6 +17,23 @@ export default function Swamp()
     const position = usePlayerStore(state => state.position);
 
     const setPosition = usePlayerStore(state => state.setPosition);
+
+    const uploadCoordinates = () => {
+      const socket = socketIO.getSocket();
+
+      if(!socket || !position)
+      {
+        return;
+      }
+
+      console.log("sending message...");
+
+      const messageToUpload = { playerEmail: player?.email, latitude: position?.coords.latitude, longitude: position?.coords.longitude };
+      socket.emit("sendCoordinates", messageToUpload);
+
+      console.log("Message sent");
+
+    }
 
     const artifacts = usePlayerStore(state => state.player)
 
@@ -44,15 +62,18 @@ export default function Swamp()
 
     useEffect(() => {
         Geolocation.getCurrentPosition(info => setPosition(info), tryLowAccuracy, { enableHighAccuracy: true, timeout: 20000, maximumAge: 10000 });
+        uploadCoordinates();
     }, [])
 
     useEffect(() => {
         const interval = setInterval(() => {
-            Geolocation.watchPosition(info => setPosition(info));
-        }, 200)
-        console.log("position updated!");
+            Geolocation.getCurrentPosition(info => setPosition(info), tryLowAccuracy, { enableHighAccuracy: true, timeout: 20000, maximumAge: 10000 });
+            console.log("position updated!");
+            uploadCoordinates();
+        }, 2000);
+        
         return () => clearInterval(interval);
-    }, []);
+    }, [position]);
 
     const styles = StyleSheet.create({
     container: {
