@@ -32,10 +32,8 @@ export default function Swamp()
         console.log("Error fetching artifacts:", error);
       }
     };
-
     fetchArtifactsDB();
     }, []);
-
 
     useEffect(() => {
         Geolocation.getCurrentPosition(info => setPosition(info), tryLowAccuracy, { enableHighAccuracy: true, timeout: 20000, maximumAge: 10000 });
