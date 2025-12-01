@@ -67,11 +67,11 @@ export function MainTabNav() {
           return <Ionicons name={iconName} size={size} color={color} />;
         },
         tabBarActiveTintColor: 'white',
-        tabBarInactiveTintColor: 'gray',
+        tabBarInactiveTintColor: 'grey',
         tabBarShowLabel: false,
         tabBarStyle: {
           position: 'absolute',
-          backgroundColor: 'transparent',
+          backgroundColor: 'rgba(0,0,0,0.5)', // semi-transparent
           borderTopWidth: 0,
           elevation: 0,
           shadowOpacity: 0,
@@ -80,6 +80,8 @@ export function MainTabNav() {
           <BlurView
             blurType="dark"
             blurAmount={10}
+            style={{ flex: 0 }}
+            
           />
         ),
       })}

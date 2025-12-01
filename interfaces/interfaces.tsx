@@ -180,7 +180,7 @@ export interface ArtifactsDB
   artifactID: string,
   artifactName: string,
   isCollected: false,
-  xPos: 45,
-  yPos: 25
+  latitude: 45,
+  longitude: 25
 }
 
