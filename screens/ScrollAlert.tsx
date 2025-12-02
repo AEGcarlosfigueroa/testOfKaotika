@@ -5,7 +5,6 @@ import React from "react";
 
 export default function ScrollAlert()
 {
-
     const styles = StyleSheet.create({
         image: {
             height: '100%',

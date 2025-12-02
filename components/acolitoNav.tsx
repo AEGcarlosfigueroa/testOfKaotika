@@ -1,14 +1,9 @@
-// acolitoNav.tsx
 import React from 'react';
 import { MainTabNav } from './myTabs';
 
 export function AcolitoNav() {
-
   return (
-
-    <MainTabNav/>
-
+    <MainTabNav />
   )
 }
-
 export default AcolitoNav;

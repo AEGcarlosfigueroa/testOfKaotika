@@ -1,24 +1,11 @@
 import React from 'react';
-import { Image, StyleSheet, View, Text } from 'react-native';
-import {playerContext} from '../context';
+import { StyleSheet } from 'react-native';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 import Ionicons from '@react-native-vector-icons/ionicons';
 import Laboratory from '../screens/laboratory';
 import Settings from '../screens/settings';
 
 const Tab = createMaterialTopTabNavigator();
-
-const styles = StyleSheet.create({
-  image: {
-    height: '100%',
-    position: 'absolute',
-    zIndex: -10,
-    width: '100%',
-  },
-  topOffset: {
-    marginTop: '10%'
-  }
-});
 
 function LabNav() {
 
@@ -32,8 +19,8 @@ function LabNav() {
               route.name === 'Home'
                 ? 'home'
                 : route.name === 'Entrance'
-                ? 'log-in'
-                : 'settings-sharp'
+                  ? 'log-in'
+                  : 'settings-sharp'
             }
             size={24}
             color={color}
@@ -47,10 +34,22 @@ function LabNav() {
         tabBarStyle: { backgroundColor: 'black' }
       })}
     >
-      <Tab.Screen name="Laboratory">{() => <Laboratory/>}</Tab.Screen>
-      <Tab.Screen name="Settings">{() => <Settings/>}</Tab.Screen>
+      <Tab.Screen name="Laboratory">{() => <Laboratory />}</Tab.Screen>
+      <Tab.Screen name="Settings">{() => <Settings />}</Tab.Screen>
     </Tab.Navigator>
   );
 }
 
 export default LabNav;
+
+const styles = StyleSheet.create({
+  image: {
+    height: '100%',
+    position: 'absolute',
+    zIndex: -10,
+    width: '100%',
+  },
+  topOffset: {
+    marginTop: '10%'
+  }
+});

@@ -5,96 +5,85 @@ import { signOut, getAuth } from "@react-native-firebase/auth";
 import { GoogleSignin } from "@react-native-google-signin/google-signin";
 import scrollImage from "./../assets/scroll.png";
 import { removeNofify } from "../pushNotification";
-import { scrollStateContext, scrollStateList } from "../context";
-import { usePlayerStore } from "../gameStore";
-import { State } from "react-native-gesture-handler";
+import { usePlayerStore, scrollStateList } from "../gameStore";
 
-type scrollProps = PropsWithChildren<{style: ViewStyle}>
+type scrollProps = PropsWithChildren<{ style: ViewStyle }>
 
 const Scroll: React.FC<scrollProps> = props => {
 
 
   const player = usePlayerStore(state => state.player)
 
-  const setPlayer = usePlayerStore(state => state.setPlayer)
-
-  const scrollState = usePlayerStore(state => state.scrollState)
-
   const setScrollState = usePlayerStore(state => state.setScrollState)
-  
-  const {height, width, scale, fontScale} = useWindowDimensions();
+
+  const { height, width } = useWindowDimensions();
 
   const ScrollButton = Animated.createAnimatedComponent(TouchableOpacity);
 
-  const moveAnim = useRef(new Animated.ValueXY({x: 0.5*width, y: 0.5*height})).current;
+  const moveAnim = useRef(new Animated.ValueXY({ x: 0.5 * width, y: 0.5 * height })).current;
 
   const fadeAnim = useRef(new Animated.Value(1)).current;
 
   useEffect(() => {
     Animated.loop(
       Animated.sequence([
-      Animated.parallel([
-        Animated.timing(moveAnim, {
-          toValue: {y: 0.6*height, x: 0.5*width},
-          duration: 3000,
-          useNativeDriver: true
+        Animated.parallel([
+          Animated.timing(moveAnim, {
+            toValue: { y: 0.6 * height, x: 0.5 * width },
+            duration: 3000,
+            useNativeDriver: true
           }),
-        Animated.timing(fadeAnim, {
-          toValue: 0.5,
-          duration: 3000,
-          useNativeDriver: true
+          Animated.timing(fadeAnim, {
+            toValue: 0.5,
+            duration: 3000,
+            useNativeDriver: true
           }),
-      ]),
-      Animated.parallel([
-        Animated.timing(moveAnim, {
-          toValue: {y: 0.5*height, x: 0.5*width},
-          duration: 3000,
-          useNativeDriver: true
+        ]),
+        Animated.parallel([
+          Animated.timing(moveAnim, {
+            toValue: { y: 0.5 * height, x: 0.5 * width },
+            duration: 3000,
+            useNativeDriver: true
           }),
-        Animated.timing(fadeAnim, {
-          toValue: 1,
-          duration: 3000,
-          useNativeDriver: true
+          Animated.timing(fadeAnim, {
+            toValue: 1,
+            duration: 3000,
+            useNativeDriver: true
           }),
+        ])
       ])
-    ])
     ).start()
   }, [moveAnim, fadeAnim])
 
-  return(
+  return (
     <ScrollButton style={{
       ...props.style,
-      transform: [{translateX: moveAnim.x}, {translateY: moveAnim.y}], 
+      transform: [{ translateX: moveAnim.x }, { translateY: moveAnim.y }],
       opacity: fadeAnim
     }}
-    onPress={() => {
-      const socket = socketIO.getSocket();
-      if(socket)
-      {
-        if(player)
-        {
-          socket.emit("scrollCollected", player.email);
+      onPress={() => {
+        const socket = socketIO.getSocket();
+        if (socket) {
+          if (player) {
+            socket.emit("scrollCollected", player.email);
+
+          }
+          setScrollState(scrollStateList.collected);
 
         }
-        setScrollState(scrollStateList.collected);
 
-      }
-
-    }}>
+      }}>
       {props.children}
     </ScrollButton>
   );
 }
 
-function Tower ()
-{ 
+function Tower() {
   const player = usePlayerStore(state => state.player)
 
-  const context = React.useContext(scrollStateContext);
+  const scrollState = usePlayerStore(state => state.scrollState)
 
-  const {scrollState, setScrollState} = context;
-
-  const {height, width, scale, fontScale} = useWindowDimensions();
+  const { fontScale } = useWindowDimensions();
 
   //Refractor later put in a seperate file called styles 
   const styles = StyleSheet.create({
@@ -105,7 +94,7 @@ function Tower ()
       zIndex: -10,
     },
     title: {
-      fontSize: 48*fontScale,
+      fontSize: 48 * fontScale,
       marginBottom: 20,
       marginTop: 20,
       color: '#E2DFD2',
@@ -116,19 +105,18 @@ function Tower ()
       boxShadow: '5px 5px 5px 5px black',
       backgroundColor: 'rgba(0, 0, 0, 0.5)',
       padding: 15,
-      // elevation: 2
 
     },
     scrollStyle: {
-      width : (100*fontScale), height : (100*fontScale), position: 'absolute', zIndex: 20
+      width: (100 * fontScale), height: (100 * fontScale), position: 'absolute', zIndex: 20
     },
     scrollImg: {
-      width : (120*fontScale), height : (120*fontScale)
+      width: (120 * fontScale), height: (120 * fontScale)
     },
     buttonText2: {
       fontFamily: 'OptimusPrincepsSemiBold',
       color: '#E2DFD2',
-      fontSize: 36*fontScale,
+      fontSize: 36 * fontScale,
       textAlign: 'center',
     },
     buttonContainer: {
@@ -150,40 +138,38 @@ function Tower ()
 
   console.log(scrollState);
 
-  if(scrollState === scrollStateList.uncollected)
-  {
+  if (scrollState === scrollStateList.uncollected) {
     scrollObj = (
       <Scroll style={styles.scrollStyle}>
-      <Image source={scrollImage} style={styles.scrollImg}/>
+        <Image source={scrollImage} style={styles.scrollImg} />
       </Scroll>
     );
   }
 
   return (
     <>
-    <Image source={require('./../assets/settings.png')} style={styles.image} />
-    <View style={{ flex: 1, backgroundColor: 'transparent', alignItems: 'center' }}>
-      <Text style={{ color: 'black', fontSize: 48*fontScale, marginTop: '10%', position: 'relative', textAlign: 'center' }}>Welcome to the Tower!</Text>
-      <View style= {styles.buttonContainer}>
-       <TouchableOpacity
-        onPress={() => {
-          if (player)
-          {
-            removeNofify(player.email);
-          }
-          signOut(getAuth());
-          GoogleSignin.revokeAccess();
-          const socket = socketIO.getSocket();
-          socket?.disconnect();
-        }}>
-      <Text style={[styles.buttonText2, {color : 'white'}]}>LOG OUT</Text>
-      </TouchableOpacity>
+      <Image source={require('./../assets/settings.png')} style={styles.image} />
+      <View style={{ flex: 1, backgroundColor: 'transparent', alignItems: 'center' }}>
+        <Text style={{ color: 'black', fontSize: 48 * fontScale, marginTop: '10%', position: 'relative', textAlign: 'center' }}>Welcome to the Tower!</Text>
+        <View style={styles.buttonContainer}>
+          <TouchableOpacity
+            onPress={() => {
+              if (player) {
+                removeNofify(player.email);
+              }
+              signOut(getAuth());
+              GoogleSignin.revokeAccess();
+              const socket = socketIO.getSocket();
+              socket?.disconnect();
+            }}>
+            <Text style={[styles.buttonText2, { color: 'white' }]}>LOG OUT</Text>
+          </TouchableOpacity>
+        </View>
       </View>
-    </View>
-    {scrollObj}
+      {scrollObj}
     </>
   );
-    }
-    
+}
+
 
 export default Tower

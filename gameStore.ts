@@ -1,31 +1,37 @@
 import { create } from 'zustand'
 import { PlayerStore } from './interfaces/gameStoreInterface'
-import { Player } from './interfaces/interfaces'
+import { Player } from './interfaces/PlayerInterface'
 
-export const usePlayerStore = create<PlayerStore>((set)=> ({
+export const usePlayerStore = create<PlayerStore>((set) => ({
 
-    player : null,
+    player: null,
     setPlayer: (player) => set({ player }),
 
     mapView: null,
-    setMap: (mapView) => set({mapView}),
+    setMap: (mapView) => set({ mapView }),
 
     isInTower: false,
-    setIsInTower: (isInTower) => set({isInTower}),
+    setIsInTower: (isInTower) => set({ isInTower }),
 
     playerList: [],
-    setPlayerList: (playerList) => set({playerList}),
+    setPlayerList: (playerList) => set({ playerList }),
 
     scrollState: null,
-    setScrollState: (scrollState) => set({scrollState}),
+    setScrollState: (scrollState) => set({ scrollState }),
 
     position: null,
-    setPosition: (position) => set({position}),
+    setPosition: (position) => set({ position }),
 
     artifactsDB: null,
-    setArtifacts: (artifactsDB) =>set({artifactsDB}),
+    setArtifacts: (artifactsDB) => set({ artifactsDB }),
 
 
     positionList: [],
-    setPositionList: (positionList) => set({positionList})
+    setPositionList: (positionList) => set({ positionList })
 }))
+
+export const scrollStateList = {
+    uncollected: 0,
+    collected: 1,
+    destroyed: 2
+}

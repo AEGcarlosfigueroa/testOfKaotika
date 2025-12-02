@@ -1,4 +1,4 @@
-import { Player, ArtifactsDB } from './interfaces';
+import { Player, ArtifactsDB } from './PlayerInterface';
 import { GeolocationResponse } from '@react-native-community/geolocation';
 
 export interface PlayerStore {

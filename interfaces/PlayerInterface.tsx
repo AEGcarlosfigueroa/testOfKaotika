@@ -166,7 +166,7 @@ export interface PlayerInfo {
   created_date: Date;
   isBetrayer: boolean;
   skills: Skill[];
-  isInHallOfSages: Boolean, 
+  isInHallOfSages: Boolean,
   artifactInventory: [String]
 }
 
@@ -177,8 +177,7 @@ export interface Player extends PlayerInfo {
   inventory: InventorySchema;
 }
 
-export interface ArtifactsDB
-{
+export interface ArtifactsDB {
   artifactID: string,
   artifactName: string,
   isCollected: false,

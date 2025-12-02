@@ -9,7 +9,6 @@ import { StatusBar } from "react-native";
 import { usePlayerStore } from "../gameStore";
 import book from "../assets/icons/book.png";
 
-
 function Map() {
 
   type RootStackParamList = {
@@ -25,11 +24,9 @@ function Map() {
 
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
 
-  const isInTower = usePlayerStore(state => state.isInTower)
-
   const setIsInTower = usePlayerStore(state => state.setIsInTower)
 
-  const {height, width, scale, fontScale} = useWindowDimensions();
+  const {height, scale, fontScale} = useWindowDimensions();
 
   const styles = StyleSheet.create({
     container: {

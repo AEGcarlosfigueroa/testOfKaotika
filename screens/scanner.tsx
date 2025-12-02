@@ -4,51 +4,6 @@ import { Camera, CameraType } from 'react-native-camera-kit';
 import socketIO from '../socketIO';
 import { GenericButton } from '../props/genericButton';
 
-const styles = StyleSheet.create({
-  image: {
-    height: '100%',
-    width: '100%',
-    position: 'absolute',
-    zIndex: -10,
-  },
-  title: {
-    fontSize: 24,
-    color: '#E2DFD2',
-    textShadowColor: 'rgba(0, 0, 0, 0.7)',
-    textShadowOffset: { width: 2, height: 2 },
-    textShadowRadius: 4,
-    fontFamily: 'OptimusPrincepsSemiBold',
-    position: 'absolute',
-    alignSelf: 'center',
-  },
-  overlay: {
-    position: 'absolute',
-    top: '15%',
-    alignSelf: 'center',
-  },
-  buttonContainer: {
-    position: 'absolute',
-    bottom: 50,
-    left: '25%',
-    width: '50%',
-    height: 80,
-    backgroundColor: 'rgba(0,0,0,0.5)',
-    borderRadius: 5,
-    borderWidth: 2,
-    borderColor: 'grey',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  buttonText: {
-    fontSize: 24,
-    color: '#fff',
-    textShadowColor: 'rgba(0, 0, 0, 0.7)',
-    textShadowOffset: { width: 2, height: 2 },
-    textShadowRadius: 4,
-    fontFamily: 'OptimusPrincepsSemiBold',
-  },
-});
-
 export default function Scanner() {
   const [cameraPermission, setCameraPermission] = useState(false);
   const [scanned, setScanned] = useState(false);
@@ -103,8 +58,7 @@ export default function Scanner() {
       }
     };
 
-    if (!socket)
-    {
+    if (!socket) {
       return;
     }
 
@@ -115,7 +69,7 @@ export default function Scanner() {
 
   return (
     <View style={{ flex: 1 }}>
-      <GenericButton/>
+      <GenericButton />
       <Image source={require('./../assets/orb.png')} style={styles.image} />
       {camera && (
         <Camera
@@ -141,3 +95,47 @@ export default function Scanner() {
     </View>
   );
 }
+const styles = StyleSheet.create({
+  image: {
+    height: '100%',
+    width: '100%',
+    position: 'absolute',
+    zIndex: -10,
+  },
+  title: {
+    fontSize: 24,
+    color: '#E2DFD2',
+    textShadowColor: 'rgba(0, 0, 0, 0.7)',
+    textShadowOffset: { width: 2, height: 2 },
+    textShadowRadius: 4,
+    fontFamily: 'OptimusPrincepsSemiBold',
+    position: 'absolute',
+    alignSelf: 'center',
+  },
+  overlay: {
+    position: 'absolute',
+    top: '15%',
+    alignSelf: 'center',
+  },
+  buttonContainer: {
+    position: 'absolute',
+    bottom: 50,
+    left: '25%',
+    width: '50%',
+    height: 80,
+    backgroundColor: 'rgba(0,0,0,0.5)',
+    borderRadius: 5,
+    borderWidth: 2,
+    borderColor: 'grey',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  buttonText: {
+    fontSize: 24,
+    color: '#fff',
+    textShadowColor: 'rgba(0, 0, 0, 0.7)',
+    textShadowOffset: { width: 2, height: 2 },
+    textShadowRadius: 4,
+    fontFamily: 'OptimusPrincepsSemiBold',
+  },
+});

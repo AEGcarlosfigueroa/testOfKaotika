@@ -8,11 +8,11 @@ import { useState, useEffect } from 'react';
 import googleJSON from './android/app/google-services.json';
 import BootSplash from "react-native-bootsplash";
 import Navigator from './components/navigator';
-import socketIO  from "./socketIO";
+import socketIO from "./socketIO";
 import { NavigationContainer } from '@react-navigation/native';
 import pNotify from './pushNotification';
 import messaging from '@react-native-firebase/messaging';
-import { Player } from './interfaces/interfaces';
+import { Player } from './interfaces/PlayerInterface';
 import { StatusBar } from 'react-native';
 import { usePlayerStore } from './gameStore'
 
@@ -56,17 +56,16 @@ const onGoogleButtonPress = async () => {
   return { account, firebaseIdToken };
 };
 
-function App()
-{
+function App() {
 
-  const {height, width, scale, fontScale} = useWindowDimensions();
+  const { height, width, scale, fontScale } = useWindowDimensions();
 
   const styles = StyleSheet.create({
     button: {
       top: '45%',
       left: '25%',
       width: '50%',
-      height : '5%',
+      height: '5%',
       backgroundColor: 'rgba(0,0,0,0.5)',
       position: 'absolute',
       borderRadius: '25%',
@@ -77,7 +76,7 @@ function App()
       color: 'yellow',
       alignSelf: 'center',
       margin: '5%',
-      fontSize: 20*fontScale
+      fontSize: 20 * fontScale
     },
     errorText: {
       color: 'red',
@@ -106,7 +105,7 @@ function App()
     }
   });
 
-  setTimeout( async () => {
+  setTimeout(async () => {
     await BootSplash.hide({ fade: true });
     console.log("BootSplash has been hidden successfully");
   }, 1000)
@@ -128,7 +127,7 @@ function App()
   const player = usePlayerStore(state => state.player);
 
   const setPlayer = usePlayerStore(state => state.setPlayer);
-  
+
   const isInTower = usePlayerStore(state => state.isInTower)
 
   const setIsInTower = usePlayerStore(state => state.setIsInTower)
@@ -153,14 +152,12 @@ function App()
   function handleAuthStateChanged(user: any) {
     setUser(user);
     if (initializing) setInitializing(false);
-    if(!user)
-    {
+    if (!user) {
       setSuccess(false);
     }
   }
 
-  async function attemptLogIn()
-  {
+  async function attemptLogIn() {
     try {
       setErrorMessage(<></>);
       setLoading(true);
@@ -171,14 +168,14 @@ function App()
       console.log("Token:", firebaseIdToken);
 
       // Send token to server
-      const response = await fetch( serverURL + "/api/players/email/" + account.user.email,
+      const response = await fetch(serverURL + "/api/players/email/" + account.user.email,
         {
           method: "GET",
-        headers: {
-          "Authorization": `Bearer ${firebaseIdToken}`, // important!
-          "Content-Type": "application/json"
-        },
-      });
+          headers: {
+            "Authorization": `Bearer ${firebaseIdToken}`, // important!
+            "Content-Type": "application/json"
+          },
+        });
 
       console.log(response);
 
@@ -187,36 +184,32 @@ function App()
       const data = await response.json();
       console.log("Server response:", data);
 
-      if(!data.error && !(data.message))
-      {
+      if (!data.error && !(data.message)) {
         setPlayer(data.data) //save server player
         setLoading(false);
         setSuccess(true);
-        if(data.data.isInTower === true)
-        {
+        if (data.data.isInTower === true) {
           setIsInTower(true);
         }
-        else
-        {
+        else {
           setIsInTower(false);
         }
 
         await pNotify(serverURL, data.data.email);
         await fetchCurrentScrollState();
       }
-      
-      else
-      {
+
+      else {
         console.log(data)
         setLoading(false);
       }
 
     } catch (error: any) {
       console.log(error);
-      console.error("Error signing in or calling server: " +  error);
+      console.error("Error signing in or calling server: " + error);
     }
   }
-          console.log("player", player)
+  console.log("player", player)
 
   useEffect(() => {
     const subscriber = onAuthStateChanged(getAuth(), handleAuthStateChanged);
@@ -224,16 +217,15 @@ function App()
   }, []);
 
   useEffect(() => {
-    if(GoogleSignin.getCurrentUser() && !hasLoggedIn)
-    {
+    if (GoogleSignin.getCurrentUser() && !hasLoggedIn) {
       attemptLogIn()
     }
   }, []);
 
   useEffect(() => {
     const unsubscribe = messaging().onMessage(async (remoteMessage) => {
-      if(remoteMessage.notification?.body)
-      ToastAndroid.show(remoteMessage.notification?.body, 5);
+      if (remoteMessage.notification?.body)
+        ToastAndroid.show(remoteMessage.notification?.body, 5);
     });
 
     return unsubscribe;
@@ -241,107 +233,101 @@ function App()
 
   if (initializing) return null;
 
-  if(user && success)
-  {
-    return(
+  if (user && success) {
+    return (
       <NavigationContainer>
 
-      <Navigator/>
+        <Navigator />
 
       </NavigationContainer>
-      
 
-      
 
-      
+
+
+
     )
 
   }
 
   let component = <></>
 
-  if(loading)
-  {
+  if (loading) {
     component = <View style={styles.fullScreen}>
-       <ActivityIndicator size="large" style={styles.spinner}/>
+      <ActivityIndicator size="large" style={styles.spinner} />
     </View>
   }
 
 
 
-return (
-  <>
-   {component}
-  <Image style={styles.image} source={require("./assets/castleDoor.png")}/>
-   <TouchableOpacity style={styles.button}
-  onPress={async () => {
-    try {
-      setErrorMessage(<></>);
-      setLoading(true);
-      // Sign in the user and get the token
-      const { account, firebaseIdToken } = await onGoogleButtonPress();
+  return (
+    <>
+      {component}
+      <Image style={styles.image} source={require("./assets/castleDoor.png")} />
+      <TouchableOpacity style={styles.button}
+        onPress={async () => {
+          try {
+            setErrorMessage(<></>);
+            setLoading(true);
+            // Sign in the user and get the token
+            const { account, firebaseIdToken } = await onGoogleButtonPress();
 
-      console.log("User:", account.user.email);
-      console.log("Token:", firebaseIdToken);
+            console.log("User:", account.user.email);
+            console.log("Token:", firebaseIdToken);
 
-      // Send token to server
-      const response = await fetch( serverURL + "/api/players/email/" + account.user.email,
-        {
-          method: "GET",
-        headers: {
-          "Authorization": `Bearer ${firebaseIdToken}`, // important!
-          "Content-Type": "application/json"
-        },
-      });
+            // Send token to server
+            const response = await fetch(serverURL + "/api/players/email/" + account.user.email,
+              {
+                method: "GET",
+                headers: {
+                  "Authorization": `Bearer ${firebaseIdToken}`, // important!
+                  "Content-Type": "application/json"
+                },
+              });
 
-      console.log(response);
+            console.log(response);
 
-      socketIO.connectSocket(firebaseIdToken, serverURL);
+            socketIO.connectSocket(firebaseIdToken, serverURL);
 
-      const data = await response.json();
-      console.log("Server response:", data);
+            const data = await response.json();
+            console.log("Server response:", data);
 
-      if(!data.error && !(data.message))
-      {
-        setPlayer(data.data) //save server player
-        setLoading(false);
-        setSuccess(true);
-        if(data.data.isInTower === true)
-        {
-          setIsInTower(true);
-        }
-        else
-        {
-          setIsInTower(false);
-        }
+            if (!data.error && !(data.message)) {
+              setPlayer(data.data) //save server player
+              setLoading(false);
+              setSuccess(true);
+              if (data.data.isInTower === true) {
+                setIsInTower(true);
+              }
+              else {
+                setIsInTower(false);
+              }
 
-        await pNotify(serverURL, data.data.email);
-        await fetchCurrentScrollState();
-        setHasLoggedIn(true);
-      }
-      else
-      {
-        console.log(data)
-        setLoading(false);
-        signOut(getAuth());
-        setErrorMessage(<Text style={styles.errorText}>{data.message}</Text>);
-        GoogleSignin.revokeAccess();
-      }
+              await pNotify(serverURL, data.data.email);
+              await fetchCurrentScrollState();
+              setHasLoggedIn(true);
+            }
+            else {
+              console.log(data)
+              setLoading(false);
+              signOut(getAuth());
+              setErrorMessage(<Text style={styles.errorText}>{data.message}</Text>);
+              GoogleSignin.revokeAccess();
+            }
 
-    } catch (error: any) {
-      console.log(error);
-      console.error("Error signing in or calling server: " +  error);
-      signOut(getAuth());
-      setLoading(false);
-      GoogleSignin.revokeAccess();
-    }
-  }}
->
-  <Text style={styles.text}>GOOGLE SIGN-IN</Text>
-</TouchableOpacity>
-  {errorMessage}
-  </>
-)
+          } catch (error: any) {
+            console.log(error);
+            console.error("Error signing in or calling server: " + error);
+            signOut(getAuth());
+            setLoading(false);
+            GoogleSignin.revokeAccess();
+          }
+        }}
+      >
+        <Text style={styles.text}>GOOGLE SIGN-IN</Text>
+      </TouchableOpacity>
+      {errorMessage}
+    </>
+  )
 
 
 }

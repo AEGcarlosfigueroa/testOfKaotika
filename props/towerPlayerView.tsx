@@ -2,6 +2,21 @@ import { Image, Text, View } from "react-native";
 import { StyleSheet } from "react-native";
 import React from "react";
 
+export default function TowerPlayerView(player: any, index: any) {
+    let textColor = 'grey';
+    if (player.isInside) {
+        textColor = 'yellow'
+    }
+    if (!player.isInTower) {
+        return (<View key={index}></View>);
+    }
+    return (
+        <View style={styles.view} key={index}>
+            <Image resizeMode="contain" src={player.avatar} style={styles.image}></Image>
+            <Text style={{ fontSize: 50, color: textColor }}>{player.nickname}</Text>
+        </View>
+    )
+};
 const styles = StyleSheet.create({
     view: {
         width: '90%',
@@ -15,9 +30,6 @@ const styles = StyleSheet.create({
         position: 'relative',
         display: 'flex'
     },
-    checkBox: {
-
-    },
     image: {
         width: '20%',
         height: '100%',
@@ -25,22 +37,3 @@ const styles = StyleSheet.create({
         position: 'absolute'
     }
 })
-
-export default function TowerPlayerView (player: any, index: any)
-{
-    let textColor = 'grey';
-    if(player.isInside)
-    {
-        textColor = 'yellow'
-    }
-    if(!player.isInTower)
-    {
-        return (<View key={index}></View>);
-    }
-    return (
-            <View style={styles.view} key={index}>
-                <Image resizeMode="contain" src={player.avatar} style={styles.image}></Image>
-                <Text style={{ fontSize: 50, color: textColor }}>{player.nickname}</Text>
-            </View>
-    )
-}
