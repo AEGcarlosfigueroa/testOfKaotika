@@ -31,7 +31,7 @@ function Entrance() {
 
   const [showQR, setShowQR] = useState<Boolean>(false);
   const [socketId, setSocketId] = useState<String>('');
-  const [buttonColor, setColor] = useState<ColorValue>('#E2DFD2')
+  const [buttonColor, setColor] = useState<ColorValue>('#ffce00')
 
   // --- Handle socket connection ---
   useEffect(() => {
@@ -66,7 +66,6 @@ function Entrance() {
 
     const handleEntryGranted = (updatedPlayer: any) => {
       setPlayer(updatedPlayer);
-
     };
 
     socket.on('authorization', handleEntryGranted);
@@ -89,9 +88,8 @@ function Entrance() {
           </TouchableOpacity>
           <SafeAreaProvider>
             <SafeAreaView>
-              <ScrollView overScrollMode="auto" style={{ height: '75%', marginTop: '30%' }}>
+              <ScrollView overScrollMode="auto" style={{ height: '75%'}}>
                 {playerList.map((elem: Player, i: number) => {
-
                   return <PlayerView player={elem} index={i} />
                 })}
               </ScrollView>

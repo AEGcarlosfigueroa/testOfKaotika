@@ -1,10 +1,13 @@
-import { Image, Text, View } from "react-native";
+import { Image, Text, useWindowDimensions, View } from "react-native";
 import { StyleSheet } from "react-native";
 import React from "react";
 import { AdvancedCheckbox } from 'react-native-advanced-checkbox';
 
 export default function PlayerView({ player, index }: { player: any, index: number }) {
+
     let textColor = 'grey';
+
+    const styles = getStyle();
 
     if (player.isInside) {
         textColor = 'yellow';
@@ -13,10 +16,10 @@ export default function PlayerView({ player, index }: { player: any, index: numb
     return (
         <View style={styles.view} key={index}>
             <Image resizeMode="contain" src={player.avatar} style={styles.image} />
-            <Text style={{ fontSize: 40, color: textColor }}>{player.nickname}</Text>
-            <Text style={{ fontSize: 40, color: textColor }}>Is Inside Laboratory?</Text>
+            <Text style={{ fontSize: 20, color: textColor, position: 'relative' }}>{player.nickname}</Text>
+            <Text style={{ fontSize: 20, color: textColor, position: 'relative' }}>Is Inside Laboratory?</Text>
             <AdvancedCheckbox
-                size={70}
+                size={35}
                 checkBoxStyle={styles.checkBox}
                 disabled={true}
                 value={player.isInside}
@@ -26,25 +29,31 @@ export default function PlayerView({ player, index }: { player: any, index: numb
     );
 }
 
-const styles = StyleSheet.create({
-    view: {
-        width: '90%',
-        marginTop: '5%',
-        height: '9%',
-        backgroundColor: 'rgba(0,0,0,1)',
-        borderWidth: 5,
-        borderStyle: 'solid',
-        borderColor: 'gray',
-        marginLeft: '5%',
-        position: 'relative',
-        display: 'flex'
-    },
-    checkBox: {
-    },
-    image: {
-        width: '20%',
-        height: '100%',
-        marginLeft: '70%',
-        position: 'absolute'
-    }
-})
+function getStyle()
+{
+    const {width, height} = useWindowDimensions();
+    const styles = StyleSheet.create({
+        view: {
+            width: 0.90*width,
+            marginTop: '5%',
+            height: 0.12*height,
+            backgroundColor: 'rgba(0,0,0,1)',
+            borderWidth: 5,
+            borderStyle: 'solid',
+            borderColor: 'gray',
+            marginLeft: '5%',
+            position: 'relative',
+        },
+        checkBox: {
+        },
+        image: {
+            width: 0.15*width,
+            height: 0.15*width,
+            marginTop: '5%',
+            marginLeft: '70%',
+            position: 'absolute',
+            borderRadius: 0.15*width
+        }
+    })
+    return styles;
+}

@@ -71,7 +71,6 @@ function Laboratory() {
             onPress={() => {
               if (player) {
                 removeNofify(player.email);
-
               }
               signOut(getAuth());
               GoogleSignin.revokeAccess();
