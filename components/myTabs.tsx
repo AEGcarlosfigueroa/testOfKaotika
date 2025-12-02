@@ -68,12 +68,12 @@ export function MainTabNav() {
 
           return <Ionicons name={iconName} size={size} color={color} />;
         },
-        tabBarActiveTintColor: 'yellow',
+        tabBarActiveTintColor: 'white',
         tabBarInactiveTintColor: 'gray',
         tabBarShowLabel: false,
         tabBarStyle: {
           position: 'absolute',
-          backgroundColor: 'black',
+          backgroundColor:  'rgba(0, 0, 0, 0.8)',
           borderBlockColor: 'black',
           borderTopWidth: 0.005*height,
           elevation: 0,
