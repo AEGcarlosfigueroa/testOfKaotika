@@ -83,6 +83,8 @@ export function MainTabNav() {
           <BlurView
             blurType="dark"
             blurAmount={10}
+            style={{ flex: 0 }}
+            
           />
         ),
       })}

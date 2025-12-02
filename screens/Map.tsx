@@ -56,7 +56,7 @@ function Map() {
       width : (15*scale), height : (15*scale), top: (0.6*height), left: '85%', tintColor: 'white', position: 'absolute', zIndex: 20
     },
     swampStyle: {
-       width : (15*scale), height : (15*scale), top: (0.35*height), left: '30%', position: 'absolute', zIndex: 20
+       width : (15*scale), height : (15*scale), top: (0.5*height), left: '70%', position: 'absolute', zIndex: 20
     },
     title: {
       fontSize: 30*fontScale,
