@@ -1,10 +1,14 @@
-import { TouchableOpacity, Text, Image, StyleSheet, StatusBar } from "react-native";
+import { TouchableOpacity, Text, Image, StyleSheet, StatusBar, View, useWindowDimensions } from "react-native";
 import { useNavigation, NavigationProp } from "@react-navigation/native";
 import HallOfSagesImage from "./../assets/hallOfSages.png";
-
+import { usePlayerStore } from "../gameStore";
+import socketIO from "../socketIO";
+import { Player } from "../interfaces/interfaces";
 
 export default function HallOfSages()
 {
+
+  const {height, width, scale, fontScale} = useWindowDimensions();
     const styles = StyleSheet.create({
         image: {
             height: '100%',
@@ -33,6 +37,16 @@ export default function HallOfSages()
           fontSize: 30,
           textAlign: 'center',
         },
+        entryImage: {
+          height: 0.1*height,
+          width: 0.1*height,
+          position: 'relative',
+          padding: '1%',
+          borderRadius: 0.1*height,
+          borderColor: 'lightblue',
+          borderStyle: 'solid',
+          borderWidth: 0.005*height
+        },
         title: {
         fontSize: 40,
         marginBottom: '5%',
@@ -58,18 +72,40 @@ export default function HallOfSages()
           SpyCam: undefined,
           OldSchool: undefined
         }
+
+    const playerList = usePlayerStore(state => state.playerList);
       
     const navigation = useNavigation<NavigationProp<RootStackParamList>>();
     return(
     <>
         <TouchableOpacity
            style={styles.button2}
-           onPress={() => navigation.navigate('OldSchool')}
+           onPress={() => {
+            const socket = socketIO.getSocket();
+
+            if(socket)
+            {
+              socket.emit("hallOfSages", "exit");
+            }
+            navigation.navigate('OldSchool')
+          }}
          >
            <Text style={styles.buttonText2}>Back</Text>
          </TouchableOpacity>
          <Text style={styles.title}>HALL OF SAGES</Text>
         <Image style={styles.image} source={HallOfSagesImage}/>
+        <View style={{height: '85%', marginTop: '20%', flex: 1, flexDirection: 'row', position: 'relative', width: '90%', marginLeft: '5%'}}>
+          {playerList.map((elem: Player, i: any) => {
+            if(elem.isInHallOfSages)
+            {
+              console.log(elem);
+              return <Image key={i} src={elem.avatar} style={styles.entryImage}/>;
+            }
+            
+            return <View key={i}></View>
+          })}
+        </View>
     </>
     );
 }
+

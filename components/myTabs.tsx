@@ -13,6 +13,7 @@ import HallOfSages from '../screens/HallOfSages';
 import Laboratory from '../screens/laboratory';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import Swamp from '../screens/Swamp';
+import { useWindowDimensions } from 'react-native';
 
 const Tab = createBottomTabNavigator();
 
@@ -53,6 +54,7 @@ function mapNav()
     
 }
 export function MainTabNav() {
+  const {height, width, scale, fontScale} = useWindowDimensions();
   return (
     <Tab.Navigator
       screenOptions={({ route }) => ({
@@ -66,13 +68,14 @@ export function MainTabNav() {
 
           return <Ionicons name={iconName} size={size} color={color} />;
         },
-        tabBarActiveTintColor: 'white',
+        tabBarActiveTintColor: 'yellow',
         tabBarInactiveTintColor: 'gray',
         tabBarShowLabel: false,
         tabBarStyle: {
           position: 'absolute',
-          backgroundColor: 'transparent',
-          borderTopWidth: 0,
+          backgroundColor: 'black',
+          borderBlockColor: 'black',
+          borderTopWidth: 0.005*height,
           elevation: 0,
           shadowOpacity: 0,
         },

@@ -9,6 +9,7 @@ import eye from "../assets/icons/eye.png"
 import tarot from "../assets/icons/tarot.png"
 import rune from "../assets/icons/rune.png"
 import { usePlayerStore } from "../gameStore";
+import socketIO from "../socketIO";
 
 
 function OldSchool() {
@@ -99,6 +100,12 @@ function OldSchool() {
     hallSages = (
       <TouchableOpacity style={styles.hallStyle} onPress={() =>
       {
+        const socket = socketIO.getSocket();
+        if(socket)
+        {
+          socket.emit("hallOfSages", "enter");
+          console.log("hallOfSages message emitted");
+        }
         navigation.navigate('HallOfSages');
       }}>
         <Image source={tarot} style={styles.image2}/>

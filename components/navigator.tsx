@@ -124,13 +124,20 @@ function Navigator ()
             socket.off('scrollDestroyedEvent', handleScrollDestroyed);
             socket.off("locationUpdated", handleLocationUpdated);
           }
-        }, [navigation, isInTower, scrollState, positionList]);
+        }, [navigation, isInTower, scrollState, positionList, playerList]);
 
   BackHandler.addEventListener('hardwareBackPress', () => {
     
     if(!player?.isInTower)
     {
       setIsInTower(false);
+    }
+
+    const socket = socketIO.getSocket();
+
+    if(socket && player?.isInHallOfSages)
+    {
+      socket.emit("hallOfSages", "exit");
     }
     
     return false;
