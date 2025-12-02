@@ -7,13 +7,17 @@ import { Player } from "../interfaces/PlayerInterface";
 
 function TowerEntrance() {
 
+  const { fontScale } = useWindowDimensions();
+
   const warning = "Turn back, traveler. The gate ahead does not open to the world of men."
 
   const player = usePlayerStore(state => state.player);
 
   const playerList = usePlayerStore(state => state.playerList);
 
-  const imageSource = require('../assets/towerEntrance.png')
+  const imageSource = require('../assets/towerEntrance.png');
+
+  const styles = getStyle();
 
   if (player?.profile.role !== 'ACOLITO') {
     return (
@@ -47,51 +51,57 @@ function TowerEntrance() {
 
 export default TowerEntrance;
 
-const { height, fontScale } = useWindowDimensions();
+function getStyle()
+{
+  const { height, fontScale } = useWindowDimensions();
 
-const styles = StyleSheet.create({
-  image: {
-    height: '100%',
-    width: '100%',
-    position: 'absolute',
-    zIndex: -10,
-  },
-  title: {
-    fontSize: 30 * fontScale,
-    marginBottom: '150%',
-    marginTop: '20%',
-    color: '#E2DFD2',
-    textShadowColor: 'rgba(0, 0, 0, 0.7)',
-    textShadowOffset: { width: 2, height: 4 },
-    textShadowRadius: 4,
-    fontFamily: 'OptimusPrincepsSemiBold',
-    boxShadow: '5px 5px 5px 5px black',
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
-    padding: '5%',
-    textAlign: 'center'
-  },
-  title2: {
-    fontSize: 30 * fontScale,
-    marginBottom: '5%',
-    marginTop: '25%',
-    color: '#E2DFD2',
-    textShadowColor: 'rgba(0, 0, 0, 0.7)',
-    textShadowOffset: { width: 2, height: 4 },
-    textShadowRadius: 4,
-    fontFamily: 'OptimusPrincepsSemiBold',
-    boxShadow: '5px 5px 5px 5px black',
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
-    padding: '5%',
-    textAlign: 'center'
-  },
-  entryImage: {
-    height: 0.1 * height,
-    width: 0.1 * height,
-    position: 'relative',
-    padding: '1%',
-    borderRadius: 0.1 * height,
-    borderColor: 'lightblue',
-    borderStyle: 'solid',
-    borderWidth: 0.005 * height
-  },
-})
+  const styles = StyleSheet.create({
+    image: {
+      height: '100%',
+      width: '100%',
+      position: 'absolute',
+      zIndex: -10,
+    },
+    title: {
+      fontSize: 30 * fontScale,
+      marginBottom: '150%',
+      marginTop: '20%',
+      color: '#E2DFD2',
+      textShadowColor: 'rgba(0, 0, 0, 0.7)',
+      textShadowOffset: { width: 2, height: 4 },
+      textShadowRadius: 4,
+      fontFamily: 'OptimusPrincepsSemiBold',
+      boxShadow: '5px 5px 5px 5px black',
+      backgroundColor: 'rgba(0, 0, 0, 0.5)',
+      padding: '5%',
+      textAlign: 'center'
+    },
+    title2: {
+      fontSize: 30 * fontScale,
+      marginBottom: '5%',
+      marginTop: '25%',
+      color: '#E2DFD2',
+      textShadowColor: 'rgba(0, 0, 0, 0.7)',
+      textShadowOffset: { width: 2, height: 4 },
+      textShadowRadius: 4,
+      fontFamily: 'OptimusPrincepsSemiBold',
+      boxShadow: '5px 5px 5px 5px black',
+      backgroundColor: 'rgba(0, 0, 0, 0.5)',
+      padding: '5%',
+      textAlign: 'center'
+    },
+    entryImage: {
+      height: 0.1 * height,
+      width: 0.1 * height,
+      position: 'relative',
+      padding: '1%',
+      borderRadius: 0.1 * height,
+      borderColor: 'lightblue',
+      borderStyle: 'solid',
+      borderWidth: 0.005 * height
+    },
+  });
+
+  return styles;
+}
+
