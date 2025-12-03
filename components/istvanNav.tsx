@@ -2,8 +2,8 @@ import React from 'react';
 import { MainTabNav } from './myTabs';
 
 export function IstvanNav() {
-  return (
-    <MainTabNav />
-  )
+    return (
+      <MainTabNav />
+    )
 }
 export default IstvanNav;

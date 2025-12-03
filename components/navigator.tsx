@@ -128,6 +128,11 @@ function Navigator() {
     if (socket && player?.isInHallOfSages) {
       socket.emit("hallOfSages", "exit");
     }
+
+    if (socket && player) {
+      socket.emit("removeCoordinates", player.email);
+    }
+
     return false;
   });
   if (!player) {

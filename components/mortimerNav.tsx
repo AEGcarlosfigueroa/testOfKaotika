@@ -2,8 +2,8 @@ import React from 'react';
 import { MainTabNav } from './myTabs';
 
 export function MortimerNav() {
-  return (
-    <MainTabNav />
-  );
+    return (
+      <MainTabNav />
+    );
 }
 export default MortimerNav;
