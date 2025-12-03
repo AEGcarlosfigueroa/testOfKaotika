@@ -12,7 +12,9 @@ import Tower from '../screens/Tower';
 import pNotify from '../pushNotification';
 import { serverURL } from '../App';
 import ScrollAlert from '../screens/ScrollAlert';
-import { usePlayerStore, scrollStateList } from '../gameStore'
+import { usePlayerStore, scrollStateList } from '../gameStore';
+import { useIsFocused } from '@react-navigation/native';
+import { getAuth } from '@react-native-firebase/auth';
 
 function Navigator() {
 
@@ -36,6 +38,8 @@ function Navigator() {
 
   const setPositionList = usePlayerStore(state => state.setPositionList);
 
+  const isFocused = useIsFocused();
+
   const [, forceUpdate] = useReducer(x => x + 1, 0);
 
   const handleNewData = (newData: any) => {
@@ -49,6 +53,32 @@ function Navigator() {
 
   const [socketId, setSocketId] = useState<String>('');
   const navigation = useNavigation();
+
+  useEffect(() => {
+    const restartSocketService = async() => {
+      const idToken = await getAuth().currentUser?.getIdToken(false);
+      const socket = socketIO.getSocket();
+      if(isFocused && idToken && !socket)
+      {
+        socketIO.connectSocket(idToken, serverURL);
+        const newSocket = socketIO.getSocket();
+
+        if(newSocket)
+        {
+          setSocketId(newSocket.id || '');
+        }
+      }
+      else if(!isFocused)
+      {
+        if(socket)
+        {
+          socket.disconnect();
+          setSocketId('');
+        }
+      }
+    }
+    restartSocketService();
+  }, [isFocused])
 
   // --- Handle sockeimport scrollAlert from '../screens/ScrollAlert';t connection ---
   useEffect(() => {

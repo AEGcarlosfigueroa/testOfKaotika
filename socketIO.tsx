@@ -23,4 +23,4 @@ const connectSocket = (firebaseIdToken: string, serverUrl:  string) => {
 const getSocket= () => {
   return socket
 }
-export default { getSocket, connectSocket};
+export default { getSocket, connectSocket };

@@ -12,7 +12,6 @@ import socketIO from "./socketIO";
 import { NavigationContainer } from '@react-navigation/native';
 import pNotify from './pushNotification';
 import messaging from '@react-native-firebase/messaging';
-import { Player } from './interfaces/PlayerInterface';
 import { StatusBar } from 'react-native';
 import { usePlayerStore } from './gameStore'
 
@@ -112,10 +111,6 @@ function App() {
 
   const [initializing, setInitializing] = useState<Boolean>(true);
 
-  const playerList = usePlayerStore(state => state.playerList)
-
-  const setPlayerList = usePlayerStore(state => state.setPlayerList)
-
   const [user, setUser] = useState<User | null>(null);
 
   const [loading, setLoading] = useState<Boolean>(false);
@@ -128,15 +123,7 @@ function App() {
 
   const setPlayer = usePlayerStore(state => state.setPlayer);
 
-  const isInTower = usePlayerStore(state => state.isInTower)
-
   const setIsInTower = usePlayerStore(state => state.setIsInTower)
-
-  const mapView = usePlayerStore(state => state.mapView);
-
-  const setMap = usePlayerStore(state => state.setMap)
-
-  const scrollState = usePlayerStore(state => state.scrollState)
 
   const setScrollState = usePlayerStore(state => state.setScrollState)
 
@@ -240,11 +227,6 @@ function App() {
         <Navigator />
 
       </NavigationContainer>
-
-
-
-
-
     )
 
   }
