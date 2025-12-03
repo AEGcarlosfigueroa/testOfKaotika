@@ -37,7 +37,7 @@ function Home() {
 
 export default Home;
 
-const { fontScale } = useWindowDimensions();
+const { height, width, scale, fontScale } = useWindowDimensions();
 
 const styles = StyleSheet.create({
   image: {

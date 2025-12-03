@@ -1,12 +1,12 @@
 import MapView, { PROVIDER_GOOGLE, Marker } from 'react-native-maps';
 import { StyleSheet, View, Image, TouchableOpacity } from 'react-native';
 import Geolocation from '@react-native-community/geolocation';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { usePlayerStore } from "../gameStore";
 import mapStyle from './../mapStyle.json'
 import socketIO from '../socketIO';
-import { serverURL } from '../App';
 import { Text } from 'react-native-gesture-handler';
+import treasure from '../assets/icons/treasure.png';
 
 export default function Swamp() {
   const player = usePlayerStore(state => state.player);
@@ -14,6 +14,12 @@ export default function Swamp() {
   const position = usePlayerStore(state => state.position);
 
   const setPosition = usePlayerStore(state => state.setPosition);
+
+  const artifactsDB = usePlayerStore(state => state.artifactsDB)
+
+  const playerNartifactsPos = usePlayerStore(state => state.playerNartifactsPos)
+
+  const setPlayerNartifactsPos = usePlayerStore(state => state.setPlayerNartifactsPos)
 
   const uploadCoordinates = () => {
     const socket = socketIO.getSocket();
@@ -30,13 +36,6 @@ export default function Swamp() {
     console.log("Message sent");
 
   }
-
-  const artifacts = usePlayerStore(state => state.player)
-
-  const setArtifacts = usePlayerStore(state => state.setArtifacts)
-
-  const [isPlayerInRange, setPlayerInRage] = useState(false);
-
 
   const tryLowAccuracy = () => {
     Geolocation.getCurrentPosition(info => setPosition(info), undefined, { enableHighAccuracy: false, timeout: 20000, maximumAge: 10000 });
@@ -60,20 +59,6 @@ export default function Swamp() {
   }
 
   useEffect(() => {
-    const fetchArtifactsDB = async () => {
-      try {
-        const response = await fetch(`${serverURL}/api/artifacts/all`);
-        const data = await response.json();
-        setArtifacts(data);
-        console.log("all artifacts acquired:", data);
-      } catch (error) {
-        console.log("Error fetching artifacts:", error);
-      }
-    };
-    fetchArtifactsDB();
-  }, []);
-
-  useEffect(() => {
     Geolocation.getCurrentPosition(info => setPosition(info), tryLowAccuracy, { enableHighAccuracy: true, timeout: 20000, maximumAge: 10000 });
     uploadCoordinates();
   }, [])
@@ -83,6 +68,18 @@ export default function Swamp() {
       Geolocation.getCurrentPosition(info => setPosition(info), tryLowAccuracy, { enableHighAccuracy: true, timeout: 20000, maximumAge: 10000 });
       console.log("position updated!");
       uploadCoordinates();
+      if (position && artifactsDB?.length > 0) {
+        artifactsDB.forEach(artifact => {
+          const distance = getDistanceInMeters(
+            position.coords.latitude,
+            position.coords.longitude,
+            artifact.latitude,
+            artifact.longitude
+          );
+          console.log(`Distance to ${artifact.artifactName}: ${distance} meters`);
+          setPlayerNartifactsPos(distance)
+        });
+      }
     }, 2000);
 
     return () => clearInterval(interval);
@@ -110,6 +107,22 @@ export default function Swamp() {
           >
             <Image source={{ uri: player.avatar }} style={{ width: 50, height: 50 }} />
           </Marker>
+
+{artifactsDB.length >= 0 && artifactsDB.map((artifact, i) => (
+  <Marker
+    key={i}
+    coordinate={{
+      latitude: artifact.latitude,
+      longitude: artifact.longitude,
+    }}
+    title={artifact.artifactName}
+  >
+    <Image
+      source={treasure}
+      style={{ width: 40, height: 40 }}
+    />
+  </Marker>
+))}
         </MapView>
 
         <TouchableOpacity style={styles.buttonContainer}>

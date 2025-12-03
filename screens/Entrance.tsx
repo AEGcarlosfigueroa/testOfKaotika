@@ -127,7 +127,7 @@ function Entrance() {
 
 export default Entrance;
 
-const { fontScale } = useWindowDimensions();
+const { height, width, scale, fontScale } = useWindowDimensions();
 
 const styles = StyleSheet.create({
   image: {

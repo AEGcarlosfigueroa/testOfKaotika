@@ -31,7 +31,7 @@ export function stackNav() {
     <Stack.Navigator screenOptions={{ headerShown: false }}>
       <Stack.Screen name="Home" component={Home} />
     </Stack.Navigator>
-  )
+  );
 }
 function mapNav() {
   return (
@@ -48,7 +48,7 @@ function mapNav() {
   )
 }
 export function MainTabNav() {
-  const { height } = useWindowDimensions();
+  const { height, width, scale, fontScale } = useWindowDimensions();
   return (
     <Tab.Navigator
       screenOptions={({ route }) => ({
