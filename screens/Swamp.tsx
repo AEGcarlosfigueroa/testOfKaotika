@@ -47,7 +47,7 @@ export default function Swamp() {
 
     console.log("sending message....")
 
-    socket?.emit("ArtifactCollected", artifactID)
+    socket?.emit("artifactCollected", artifactID)
 
     console.log("Message Sent")
   }
@@ -86,6 +86,7 @@ export default function Swamp() {
         if (artifactsDB?.length > 0) {
           const artifactsdistances: ArtifactDistances[] = artifactsDB.map(artifact => ({
             id: artifact.artifactID,
+            isCollected: artifact.isCollected,
             distance: getDistanceInMeters(
               info.coords.latitude,
               info.coords.longitude,
@@ -111,7 +112,7 @@ export default function Swamp() {
       return;
     }
 
-    const artifactsInRange = artifactsDistances.filter(a => a.distance <= 10);
+    const artifactsInRange = artifactsDistances.filter(a => (a.distance <= 10 && !a.isCollected));
 
     if (artifactsInRange.length === 0) {
       setPlayerInRange(false);
@@ -160,33 +161,40 @@ export default function Swamp() {
               style={{ width: 50, height: 50 }}
             />
           </Marker>
-          {artifactsDB.map((artifact, i) => (
-            <React.Fragment key={i}>
-              <Marker
-                coordinate={{
-                  latitude: artifact.latitude,
-                  longitude: artifact.longitude,
-                }}
-                title={artifact.artifactName}
-              >
-                <Image
-                  source={treasure}
-                  style={{ width: 40, height: 40 }}
-                  resizeMode="contain"
-                />
-              </Marker>
-              <Circle
-                center={{
-                  latitude: artifact.latitude,
-                  longitude: artifact.longitude,
-                }}
-                radius={10} // meters
-                strokeColor="rgba(0, 150, 255, 0.9)"
-                strokeWidth={2}
-                fillColor="rgba(0, 150, 255, 0.2)"
-              />
-            </React.Fragment>
-          ))}
+          {artifactsDB.map((artifact, i) => {
+            if(!artifact.isCollected)
+            {
+              return (
+                <React.Fragment key={i}>
+                  <Marker
+                    coordinate={{
+                      latitude: artifact.latitude,
+                      longitude: artifact.longitude,
+                    }}
+                    title={artifact.artifactName}
+                  >
+                    <Image
+                      source={treasure}
+                      style={{ width: 40, height: 40 }}
+                      resizeMode="contain"
+                    />
+                  </Marker>
+                  <Circle
+                    center={{
+                      latitude: artifact.latitude,
+                      longitude: artifact.longitude,
+                    }}
+                    radius={10} // meters
+                    strokeColor="rgba(0, 150, 255, 0.9)"
+                    strokeWidth={2}
+                    fillColor="rgba(0, 150, 255, 0.2)"
+                  />
+                </React.Fragment>
+              );
+            }
+
+            return <></>
+          })}
         </MapView>
 
         {playerInRange && closestArtifact && <TouchableOpacity style={styles.buttonContainer} onPress={() => confirmArtifactCollected(closestArtifact.id)}>

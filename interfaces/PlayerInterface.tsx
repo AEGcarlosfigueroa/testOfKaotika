@@ -187,6 +187,7 @@ export interface ArtifactsDB {
 
 export interface ArtifactDistances {
   id: string,
-  distance: number
+  distance: number,
+  isCollected: boolean
 }
 
