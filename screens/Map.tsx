@@ -49,9 +49,6 @@ function Map() {
     image: {
       width : (50*fontScale), height : (50*fontScale), tintColor: 'white'
     },
-    spycamStyle: {
-      width : (15*scale), height : (15*scale), top: (0.6*height), left: '85%', tintColor: 'white', position: 'absolute', zIndex: 20
-    },
     swampStyle: {
        width : (15*scale), height : (15*scale), top: (0.5*height), left: '70%', position: 'absolute', zIndex: 20
     },
@@ -116,11 +113,6 @@ function Map() {
         navigation.navigate('Tower');
       }}>
         <Image source={rune} style={styles.image}/>
-      </TouchableOpacity>
-      <TouchableOpacity style={styles.spycamStyle} onPress={() => {
-        navigation.navigate('SpyCam')
-      }}>
-        <Image source={eye} style={styles.image}/>
       </TouchableOpacity>
       <TouchableOpacity style={styles.swampStyle} onPress={() => {
         navigation.navigate('Swamp')
