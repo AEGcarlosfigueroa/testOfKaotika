@@ -94,26 +94,40 @@ export default function Swamp() {
             )
           }));
           setArtifactsDistances(artifactsdistances);
-          console.log(artifactsDistances)
+          console.log("new distances", artifactsdistances);
+
         }
       }, tryLowAccuracy, { enableHighAccuracy: true, timeout: 20000, maximumAge: 10000 });
     }, 2000);
 
     return () => clearInterval(interval);
-  }, [position]);
+  }, [position, artifactsDB]);
 
 
   const playerArtifactsRangeHandler = () => {
-    if (artifactsDistances.length > 0) {
-      const inRange = artifactsDistances.some(artifact => artifact.distance <= 1);
-      setPlayerInRange(inRange);
-      const artifactsInRange = artifactsDistances.filter(artifact => artifact.distance <= 1);
-      const closestArtifact = artifactsInRange.reduce((prev, current) => {
-        return current.distance < prev.distance ? current : prev;
-      }, artifactsInRange[0]);
-      setClosestArtifact(closestArtifact)
+    if (artifactsDistances.length === 0) {
+      setPlayerInRange(false);
+      setClosestArtifact(null);
+      return;
     }
-  }
+
+    const artifactsInRange = artifactsDistances.filter(a => a.distance <= 10);
+
+    if (artifactsInRange.length === 0) {
+      setPlayerInRange(false);
+      setClosestArtifact(null);
+      return;
+    }
+
+    setPlayerInRange(true);
+
+    const closest = artifactsInRange.reduce((prev, curr) =>
+      curr.distance < prev.distance ? curr : prev
+    );
+
+    setClosestArtifact(closest);
+  };
+
 
   useEffect(() => {
 
@@ -175,7 +189,7 @@ export default function Swamp() {
           ))}
         </MapView>
 
-        {playerInRange && closestArtifact && <TouchableOpacity style={styles.buttonContainer}onPress={() => confirmArtifactCollected(closestArtifact.id)}>
+        {playerInRange && closestArtifact && <TouchableOpacity style={styles.buttonContainer} onPress={() => confirmArtifactCollected(closestArtifact.id)}>
           <Text style={styles.buttonText}>Collect Artifact</Text>
         </TouchableOpacity>}
       </View>
