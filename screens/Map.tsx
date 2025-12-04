@@ -35,8 +35,10 @@ function Map() {
     try {
       const response = await fetch(`${serverURL}/api/artifacts/all`);
       const data = await response.json();
-      setArtifacts(data);
-      console.log("all artifacts acquired:", data);
+      console.log("Artifacts:");
+      console.log(data);
+      setArtifacts(data.artifactData);
+      console.log("all artifacts acquired:", data.artifactData);
     } catch (error) {
       console.log("Error fetching artifacts:", error);
     }

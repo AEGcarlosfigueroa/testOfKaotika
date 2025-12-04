@@ -1,4 +1,4 @@
-import { Player, ArtifactsDB } from './PlayerInterface';
+import { Player, ArtifactsDB, ArtifactDistances } from './PlayerInterface';
 import { GeolocationResponse } from '@react-native-community/geolocation';
 
 export interface PlayerStore {
@@ -26,11 +26,12 @@ export interface PlayerStore {
     positionList: CoordinateEntry[];
     setPositionList: (positionList: CoordinateEntry[]) => void;
 
-    playerNartifactsPos: number | null;
-    setPlayerNartifactsPos: (playerNartifactsPos: number | null) => void;
-
-
+    artifactsDistances: ArtifactDistances[]; // array of numbers
+    setArtifactsDistances: (artifactsDistances: ArtifactDistances[]) => void; // function to update the array
 }
+
+
+
 
 interface CoordinateEntry {
     email: string,

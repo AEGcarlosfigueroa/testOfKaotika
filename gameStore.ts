@@ -28,8 +28,8 @@ export const usePlayerStore = create<PlayerStore>((set) => ({
     positionList: [],
     setPositionList: (positionList) => set({ positionList }),
 
-    playerNartifactsPos: null,
-    setPlayerNartifactsPos: (playerNartifactsPos) => set({ playerNartifactsPos })
+    artifactsDistances: [],
+    setArtifactsDistances: (artifactsDistances) => set({ artifactsDistances })
 }))
 
 export const scrollStateList = {

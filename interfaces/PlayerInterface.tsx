@@ -185,3 +185,8 @@ export interface ArtifactsDB {
   longitude: number
 }
 
+export interface ArtifactDistances {
+  id: string,
+  distance: number
+}
+

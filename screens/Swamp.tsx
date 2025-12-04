@@ -1,12 +1,13 @@
-import MapView, { PROVIDER_GOOGLE, Marker } from 'react-native-maps';
+import MapView, { PROVIDER_GOOGLE, Marker, Circle } from 'react-native-maps';
 import { StyleSheet, View, Image, TouchableOpacity } from 'react-native';
 import Geolocation from '@react-native-community/geolocation';
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { usePlayerStore } from "../gameStore";
 import mapStyle from './../mapStyle.json'
 import socketIO from '../socketIO';
 import { Text } from 'react-native-gesture-handler';
 import treasure from '../assets/icons/treasure.png';
+import { ArtifactDistances } from '../interfaces/PlayerInterface'
 
 export default function Swamp() {
   const player = usePlayerStore(state => state.player);
@@ -17,9 +18,13 @@ export default function Swamp() {
 
   const artifactsDB = usePlayerStore(state => state.artifactsDB)
 
-  const playerNartifactsPos = usePlayerStore(state => state.playerNartifactsPos)
+  const artifactsDistances = usePlayerStore(state => state.artifactsDistances)
 
-  const setPlayerNartifactsPos = usePlayerStore(state => state.setPlayerNartifactsPos)
+  const setArtifactsDistances = usePlayerStore(state => state.setArtifactsDistances)
+
+  const [playerInRange, setPlayerInRange] = useState<Boolean>(false);
+
+  const [closestArtifact, setClosestArtifact] = useState<ArtifactDistances | null>(null)
 
   const uploadCoordinates = () => {
     const socket = socketIO.getSocket();
@@ -35,6 +40,16 @@ export default function Swamp() {
 
     console.log("Message sent");
 
+  }
+
+  const confirmArtifactCollected = (artifactID: String) => {
+    const socket = socketIO.getSocket();
+
+    console.log("sending message....")
+
+    socket?.emit("ArtifactCollected", artifactID)
+
+    console.log("Message Sent")
   }
 
   const tryLowAccuracy = () => {
@@ -57,7 +72,6 @@ export default function Swamp() {
 
     return R * c; // Distance in meters
   }
-
   useEffect(() => {
     Geolocation.getCurrentPosition(info => setPosition(info), tryLowAccuracy, { enableHighAccuracy: true, timeout: 20000, maximumAge: 10000 });
     uploadCoordinates();
@@ -65,25 +79,47 @@ export default function Swamp() {
 
   useEffect(() => {
     const interval = setInterval(() => {
-      Geolocation.getCurrentPosition(info => setPosition(info), tryLowAccuracy, { enableHighAccuracy: true, timeout: 20000, maximumAge: 10000 });
-      console.log("position updated!");
-      uploadCoordinates();
-      if (position && artifactsDB?.length > 0) {
-        artifactsDB.forEach(artifact => {
-          const distance = getDistanceInMeters(
-            position.coords.latitude,
-            position.coords.longitude,
-            artifact.latitude,
-            artifact.longitude
-          );
-          console.log(`Distance to ${artifact.artifactName}: ${distance} meters`);
-          setPlayerNartifactsPos(distance)
-        });
-      }
+      Geolocation.getCurrentPosition(info => {
+        setPosition(info);
+        uploadCoordinates();
+
+        if (artifactsDB?.length > 0) {
+          const artifactsdistances: ArtifactDistances[] = artifactsDB.map(artifact => ({
+            id: artifact.artifactID,
+            distance: getDistanceInMeters(
+              info.coords.latitude,
+              info.coords.longitude,
+              artifact.latitude,
+              artifact.longitude
+            )
+          }));
+          setArtifactsDistances(artifactsdistances);
+          console.log(artifactsDistances)
+        }
+      }, tryLowAccuracy, { enableHighAccuracy: true, timeout: 20000, maximumAge: 10000 });
     }, 2000);
 
     return () => clearInterval(interval);
   }, [position]);
+
+
+  const playerArtifactsRangeHandler = () => {
+    if (artifactsDistances.length > 0) {
+      const inRange = artifactsDistances.some(artifact => artifact.distance <= 1);
+      setPlayerInRange(inRange);
+      const artifactsInRange = artifactsDistances.filter(artifact => artifact.distance <= 1);
+      const closestArtifact = artifactsInRange.reduce((prev, current) => {
+        return current.distance < prev.distance ? current : prev;
+      }, artifactsInRange[0]);
+      setClosestArtifact(closestArtifact)
+    }
+  }
+
+  useEffect(() => {
+
+    playerArtifactsRangeHandler()
+
+  }, [artifactsDistances])
 
   if (player !== null && position !== null) {
     return (
@@ -105,29 +141,43 @@ export default function Swamp() {
               longitude: position.coords.longitude,
             }}
           >
-            <Image source={{ uri: player.avatar }} style={{ width: 50, height: 50 }} />
+            <Image
+              source={{ uri: player.avatar }}
+              style={{ width: 50, height: 50 }}
+            />
           </Marker>
-
-{artifactsDB.length >= 0 && artifactsDB.map((artifact, i) => (
-  <Marker
-    key={i}
-    coordinate={{
-      latitude: artifact.latitude,
-      longitude: artifact.longitude,
-    }}
-    title={artifact.artifactName}
-  >
-    <Image
-      source={treasure}
-      style={{ width: 40, height: 40 }}
-    />
-  </Marker>
-))}
+          {artifactsDB.map((artifact, i) => (
+            <React.Fragment key={i}>
+              <Marker
+                coordinate={{
+                  latitude: artifact.latitude,
+                  longitude: artifact.longitude,
+                }}
+                title={artifact.artifactName}
+              >
+                <Image
+                  source={treasure}
+                  style={{ width: 40, height: 40 }}
+                  resizeMode="contain"
+                />
+              </Marker>
+              <Circle
+                center={{
+                  latitude: artifact.latitude,
+                  longitude: artifact.longitude,
+                }}
+                radius={10} // meters
+                strokeColor="rgba(0, 150, 255, 0.9)"
+                strokeWidth={2}
+                fillColor="rgba(0, 150, 255, 0.2)"
+              />
+            </React.Fragment>
+          ))}
         </MapView>
 
-        <TouchableOpacity style={styles.buttonContainer}>
+        {playerInRange && closestArtifact && <TouchableOpacity style={styles.buttonContainer}onPress={() => confirmArtifactCollected(closestArtifact.id)}>
           <Text style={styles.buttonText}>Collect Artifact</Text>
-        </TouchableOpacity>
+        </TouchableOpacity>}
       </View>
     );
   }
@@ -136,7 +186,6 @@ export default function Swamp() {
     return (<></>)
   }
 }
-
 const styles = StyleSheet.create({
   container: {
     ...StyleSheet.absoluteFillObject,
