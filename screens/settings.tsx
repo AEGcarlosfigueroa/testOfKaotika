@@ -51,7 +51,7 @@ function Settings() {
 
 export default Settings;
 
-const { fontScale } = useWindowDimensions();
+const { height, width, scale, fontScale } = useWindowDimensions();
 
 const styles = StyleSheet.create({
   button: {

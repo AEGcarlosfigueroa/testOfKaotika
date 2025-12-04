@@ -20,12 +20,16 @@ export interface PlayerStore {
     position: GeolocationResponse | null;
     setPosition: (position: GeolocationResponse | null) => void;
 
-    artifactsDB: ArtifactsDB | null;
-    setArtifacts: (artifactsDB: ArtifactsDB | null) => void;
-
+    artifactsDB: ArtifactsDB[];
+    setArtifacts: (artifactsDB: ArtifactsDB[]) => void;
 
     positionList: CoordinateEntry[];
     setPositionList: (positionList: CoordinateEntry[]) => void;
+
+    playerNartifactsPos: number | null;
+    setPlayerNartifactsPos: (playerNartifactsPos: number | null) => void;
+
+
 }
 
 interface CoordinateEntry {

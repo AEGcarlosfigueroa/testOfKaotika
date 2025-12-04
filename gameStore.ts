@@ -22,12 +22,14 @@ export const usePlayerStore = create<PlayerStore>((set) => ({
     position: null,
     setPosition: (position) => set({ position }),
 
-    artifactsDB: null,
+    artifactsDB: [],
     setArtifacts: (artifactsDB) => set({ artifactsDB }),
 
-
     positionList: [],
-    setPositionList: (positionList) => set({ positionList })
+    setPositionList: (positionList) => set({ positionList }),
+
+    playerNartifactsPos: null,
+    setPlayerNartifactsPos: (playerNartifactsPos) => set({ playerNartifactsPos })
 }))
 
 export const scrollStateList = {

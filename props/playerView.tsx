@@ -31,7 +31,7 @@ export default function PlayerView({ player, index }: { player: any, index: numb
 
 function getStyle()
 {
-    const {width, height} = useWindowDimensions();
+const { height, width, scale, fontScale } = useWindowDimensions();
     const styles = StyleSheet.create({
         view: {
             width: 0.90*width,

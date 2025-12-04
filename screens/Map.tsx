@@ -8,6 +8,7 @@ import rune from "../assets/icons/rune.png"
 import { StatusBar } from "react-native";
 import { usePlayerStore } from "../gameStore";
 import book from "../assets/icons/book.png";
+import { serverURL } from "../App";
 
 function Map() {
 
@@ -26,7 +27,63 @@ function Map() {
 
   const setIsInTower = usePlayerStore(state => state.setIsInTower)
 
-  const {height, scale, fontScale} = useWindowDimensions();
+  const artifactsDB = usePlayerStore(state => state.artifactsDB)
+
+  const setArtifacts = usePlayerStore(state => state.setArtifacts)
+
+  const fetchArtifactsDB = async () => {
+    try {
+      const response = await fetch(`${serverURL}/api/artifacts/all`);
+      const data = await response.json();
+      setArtifacts(data);
+      console.log("all artifacts acquired:", data);
+    } catch (error) {
+      console.log("Error fetching artifacts:", error);
+    }
+    
+  };
+  return (
+    <View style={styles.container}>
+      <Text style={styles.title}>THE MAP</Text>
+      <Image source={map} style={styles.mapImage} />
+      <TouchableOpacity
+        style={styles.button2}
+        onPress={() => navigation.navigate('Home')}
+      >
+        <Text style={styles.buttonText2}>Back</Text>
+      </TouchableOpacity>
+
+      <TouchableOpacity style={styles.oldschoolStyle} onPress={() => {
+        navigation.navigate('OldSchool');
+      }}>
+        <Image source={moon} style={styles.image} />
+      </TouchableOpacity>
+      <TouchableOpacity style={styles.towerStyle} onPress={() => {
+        setIsInTower(true);
+        console.log("entered tower");
+        navigation.navigate('Tower');
+      }}>
+        <Image source={rune} style={styles.image} />
+      </TouchableOpacity>
+      <TouchableOpacity style={styles.spycamStyle} onPress={() => {
+        navigation.navigate('SpyCam')
+      }}>
+        <Image source={eye} style={styles.image} />
+      </TouchableOpacity>
+      <TouchableOpacity style={styles.swampStyle} onPress={ async () => {
+        await fetchArtifactsDB();
+        navigation.navigate('Swamp')
+      }}>
+        <Image source={book} style={styles.image} />
+      </TouchableOpacity>
+    </View>
+  );
+}
+
+export default Map;
+
+const { height, width, scale, fontScale } = useWindowDimensions();
+
 
   const styles = StyleSheet.create({
     container: {
@@ -81,10 +138,10 @@ function Map() {
     alignItems: 'center',
     zIndex: 15
   },
-    buttonText2: {
+  buttonText2: {
     fontFamily: 'OptimusPrincepsSemiBold',
     color: '#E2DFD2',
-    fontSize: 30*fontScale,
+    fontSize: 30 * fontScale,
     textAlign: 'center',
     },
   
