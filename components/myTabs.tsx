@@ -14,6 +14,8 @@ import Laboratory from '../screens/laboratory';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import Swamp from '../screens/Swamp';
 import { useWindowDimensions } from 'react-native';
+import { usePlayerStore } from '../gameStore';
+import Scanner from '../screens/scanner';
 
 const Tab = createBottomTabNavigator();
 
@@ -34,18 +36,49 @@ export function stackNav() {
   );
 }
 function mapNav() {
-  return (
-    <Stack.Navigator screenOptions={{ headerShown: false }}>
-      <Stack.Screen name="Map" component={Map} />
-      <Stack.Screen name="Entrance" component={Entrance} />
-      <Stack.Screen name="Tower" component={TowerEntrance} />
-      <Stack.Screen name='SpyCam' component={SpyCam} />
-      <Stack.Screen name='Swamp' component={Swamp} />
-      <Stack.Screen name="Laboratory" component={Laboratory} />
-      <Stack.Screen name="OldSchool" component={OldSchool} />
-      <Stack.Screen name="HallOfSages" component={HallOfSages} />
-    </Stack.Navigator>
-  )
+  const player = usePlayerStore(state => state.player);
+  if(player?.profile.role === 'ACOLITO')
+  {
+    return (
+      <Stack.Navigator screenOptions={{ headerShown: false }}>
+        <Stack.Screen name="Map" component={Map} />
+        <Stack.Screen name="Entrance" component={Entrance} />
+        <Stack.Screen name="Tower" component={TowerEntrance} />
+        <Stack.Screen name='Swamp' component={Swamp} />
+        <Stack.Screen name="Laboratory" component={Laboratory} />
+        <Stack.Screen name="OldSchool" component={OldSchool} />
+        <Stack.Screen name="HallOfSages" component={HallOfSages} />
+      </Stack.Navigator>
+    )
+  }
+  else if(player?.profile.role === 'ISTVAN')
+  {
+    return (
+      <Stack.Navigator screenOptions={{ headerShown: false }}>
+        <Stack.Screen name="Map" component={Map} />
+        <Stack.Screen name="Entrance" component={Scanner} />
+        <Stack.Screen name="Tower" component={TowerEntrance} />
+        <Stack.Screen name='Swamp' component={SpyCam} />
+        <Stack.Screen name="Laboratory" component={Laboratory} />
+        <Stack.Screen name="OldSchool" component={OldSchool} />
+        <Stack.Screen name="HallOfSages" component={HallOfSages} />
+      </Stack.Navigator>
+    )
+  }
+  else
+  {
+    return (
+      <Stack.Navigator screenOptions={{ headerShown: false }}>
+        <Stack.Screen name="Map" component={Map} />
+        <Stack.Screen name="Entrance" component={Entrance} />
+        <Stack.Screen name="Tower" component={TowerEntrance} />
+        <Stack.Screen name='Swamp' component={SpyCam} />
+        <Stack.Screen name="Laboratory" component={Laboratory} />
+        <Stack.Screen name="OldSchool" component={OldSchool} />
+        <Stack.Screen name="HallOfSages" component={HallOfSages} />
+      </Stack.Navigator>
+    )
+  }
 }
 export function MainTabNav() {
   const { height, width, scale, fontScale } = useWindowDimensions();
