@@ -65,11 +65,6 @@ function Map() {
       }}>
         <Image source={rune} style={styles.image} />
       </TouchableOpacity>
-      <TouchableOpacity style={styles.spycamStyle} onPress={() => {
-        navigation.navigate('SpyCam')
-      }}>
-        <Image source={eye} style={styles.image} />
-      </TouchableOpacity>
       <TouchableOpacity style={styles.swampStyle} onPress={ async () => {
         await fetchArtifactsDB();
         navigation.navigate('Swamp')
@@ -147,38 +142,3 @@ const { height, width, scale, fontScale } = useWindowDimensions();
   
   });
 
-  return (
-    <View style={styles.container}>
-       <Text style={styles.title}>THE MAP</Text>
-      <Image source={map} style={styles.mapImage} />
-      <TouchableOpacity
-      style={styles.button2}
-      onPress={() => navigation.navigate('Home')}
-    >
-    <Text style={styles.buttonText2}>Back</Text>
-    </TouchableOpacity>
-
-      <TouchableOpacity style={styles.oldschoolStyle} onPress={() =>
-      {
-        navigation.navigate('OldSchool');
-      }}>
-        <Image source={moon} style={styles.image}/>
-      </TouchableOpacity>
-      <TouchableOpacity style={styles.towerStyle} onPress={() => {
-        setIsInTower(true);
-        console.log("entered tower");
-        navigation.navigate('Tower');
-      }}>
-        <Image source={rune} style={styles.image}/>
-      </TouchableOpacity>
-      <TouchableOpacity style={styles.swampStyle} onPress={() => {
-        navigation.navigate('Swamp')
-      }}>
-        <Image source={book} style={styles.image}/>
-      </TouchableOpacity>
-
-    </View>
-  );
-}
-
-export default Map;
