@@ -181,7 +181,7 @@ export interface ArtifactsDB {
   artifactID: string,
   artifactName: string,
   isCollected: false,
-  latitude: 45,
-  longitude: 25
+  latitude: number,
+  longitude: number
 }
 

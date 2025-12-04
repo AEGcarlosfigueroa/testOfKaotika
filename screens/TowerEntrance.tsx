@@ -7,7 +7,7 @@ import { Player } from "../interfaces/PlayerInterface";
 
 function TowerEntrance() {
 
-  const { fontScale } = useWindowDimensions();
+const { height, width, scale, fontScale } = useWindowDimensions();
 
   const warning = "Turn back, traveler. The gate ahead does not open to the world of men."
 

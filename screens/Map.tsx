@@ -8,6 +8,7 @@ import rune from "../assets/icons/rune.png"
 import { StatusBar } from "react-native";
 import { usePlayerStore } from "../gameStore";
 import book from "../assets/icons/book.png";
+import { serverURL } from "../App";
 
 function Map() {
 
@@ -26,50 +27,106 @@ function Map() {
 
   const setIsInTower = usePlayerStore(state => state.setIsInTower)
 
-  const {height, scale, fontScale} = useWindowDimensions();
+  const artifactsDB = usePlayerStore(state => state.artifactsDB)
 
-  const styles = StyleSheet.create({
-    container: {
-      flex: 1,
-      width: "100%",
-      height: "100%"
-    },
-    mapImage: {
-      width: "100%",
-      height: "100%",
-      zIndex: -10,
-      position: 'absolute'
-    },
-    oldschoolStyle: {
-      width: (15*scale), height: (15*scale), top: (0.55*height), left: '10%', tintColor: 'white', position: 'absolute', zIndex: 20
-    },
-    towerStyle: {
-      width : (15*scale), height : (15*scale), top: (0.3*height), left: '50%', position: 'absolute', zIndex: 20
-    },
-    image: {
-      width : (50*fontScale), height : (50*fontScale), tintColor: 'white'
-    },
-    spycamStyle: {
-      width : (15*scale), height : (15*scale), top: (0.6*height), left: '85%', tintColor: 'white', position: 'absolute', zIndex: 20
-    },
-    swampStyle: {
-       width : (15*scale), height : (15*scale), top: (0.5*height), left: '70%', position: 'absolute', zIndex: 20
-    },
-    title: {
-      fontSize: 30*fontScale,
-      marginBottom: '5%',
-      marginTop: '25%',
-      color: '#E2DFD2',
-      textShadowColor: 'rgba(0, 0, 0, 0.7)',
-      textShadowOffset: { width: 2, height: 4 },
-      textShadowRadius: 4,
-      fontFamily: 'OptimusPrincepsSemiBold',
-      boxShadow: '5px 5px 5px 5px black',
-      backgroundColor: 'rgba(0, 0, 0, 0.5)',
-      padding: '5%',
-      textAlign: 'center'
-      // elevation: 2
-    },
+  const setArtifacts = usePlayerStore(state => state.setArtifacts)
+
+  const fetchArtifactsDB = async () => {
+    try {
+      const response = await fetch(`${serverURL}/api/artifacts/all`);
+      const data = await response.json();
+      setArtifacts(data);
+      console.log("all artifacts acquired:", data);
+    } catch (error) {
+      console.log("Error fetching artifacts:", error);
+    }
+    
+  };
+  return (
+    <View style={styles.container}>
+      <Text style={styles.title}>THE MAP</Text>
+      <Image source={map} style={styles.mapImage} />
+      <TouchableOpacity
+        style={styles.button2}
+        onPress={() => navigation.navigate('Home')}
+      >
+        <Text style={styles.buttonText2}>Back</Text>
+      </TouchableOpacity>
+
+      <TouchableOpacity style={styles.oldschoolStyle} onPress={() => {
+        navigation.navigate('OldSchool');
+      }}>
+        <Image source={moon} style={styles.image} />
+      </TouchableOpacity>
+      <TouchableOpacity style={styles.towerStyle} onPress={() => {
+        setIsInTower(true);
+        console.log("entered tower");
+        navigation.navigate('Tower');
+      }}>
+        <Image source={rune} style={styles.image} />
+      </TouchableOpacity>
+      <TouchableOpacity style={styles.spycamStyle} onPress={() => {
+        navigation.navigate('SpyCam')
+      }}>
+        <Image source={eye} style={styles.image} />
+      </TouchableOpacity>
+      <TouchableOpacity style={styles.swampStyle} onPress={ async () => {
+        await fetchArtifactsDB();
+        navigation.navigate('Swamp')
+      }}>
+        <Image source={book} style={styles.image} />
+      </TouchableOpacity>
+    </View>
+  );
+}
+
+export default Map;
+
+const { height, width, scale, fontScale } = useWindowDimensions();
+
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    width: "100%",
+    height: "100%"
+  },
+  mapImage: {
+    width: "100%",
+    height: "100%",
+    zIndex: -10,
+    position: 'absolute'
+  },
+  oldschoolStyle: {
+    width: (15 * scale), height: (15 * scale), top: (0.55 * height), left: '10%', tintColor: 'white', position: 'absolute', zIndex: 20
+  },
+  towerStyle: {
+    width: (15 * scale), height: (15 * scale), top: (0.3 * height), left: '50%', position: 'absolute', zIndex: 20
+  },
+  image: {
+    width: (50 * fontScale), height: (50 * fontScale), tintColor: 'white'
+  },
+  spycamStyle: {
+    width: (15 * scale), height: (15 * scale), top: (0.6 * height), left: '85%', tintColor: 'white', position: 'absolute', zIndex: 20
+  },
+  swampStyle: {
+    width: (15 * scale), height: (15 * scale), top: (0.5 * height), left: '70%', position: 'absolute', zIndex: 20
+  },
+  title: {
+    fontSize: 30 * fontScale,
+    marginBottom: '5%',
+    marginTop: '25%',
+    color: '#E2DFD2',
+    textShadowColor: 'rgba(0, 0, 0, 0.7)',
+    textShadowOffset: { width: 2, height: 4 },
+    textShadowRadius: 4,
+    fontFamily: 'OptimusPrincepsSemiBold',
+    boxShadow: '5px 5px 5px 5px black',
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    padding: '5%',
+    textAlign: 'center'
+    // elevation: 2
+  },
   button2: {
     position: 'absolute',
     top: StatusBar.currentHeight,
@@ -84,52 +141,11 @@ function Map() {
     alignItems: 'center',
     zIndex: 15
   },
-    buttonText2: {
+  buttonText2: {
     fontFamily: 'OptimusPrincepsSemiBold',
     color: '#E2DFD2',
-    fontSize: 30*fontScale,
+    fontSize: 30 * fontScale,
     textAlign: 'center',
-    },
-  
-  });
+  },
 
-  return (
-    <View style={styles.container}>
-       <Text style={styles.title}>THE MAP</Text>
-      <Image source={map} style={styles.mapImage} />
-      <TouchableOpacity
-      style={styles.button2}
-      onPress={() => navigation.navigate('Home')}
-    >
-    <Text style={styles.buttonText2}>Back</Text>
-    </TouchableOpacity>
-
-      <TouchableOpacity style={styles.oldschoolStyle} onPress={() =>
-      {
-        navigation.navigate('OldSchool');
-      }}>
-        <Image source={moon} style={styles.image}/>
-      </TouchableOpacity>
-      <TouchableOpacity style={styles.towerStyle} onPress={() => {
-        setIsInTower(true);
-        console.log("entered tower");
-        navigation.navigate('Tower');
-      }}>
-        <Image source={rune} style={styles.image}/>
-      </TouchableOpacity>
-      <TouchableOpacity style={styles.spycamStyle} onPress={() => {
-        navigation.navigate('SpyCam')
-      }}>
-        <Image source={eye} style={styles.image}/>
-      </TouchableOpacity>
-      <TouchableOpacity style={styles.swampStyle} onPress={() => {
-        navigation.navigate('Swamp')
-      }}>
-        <Image source={book} style={styles.image}/>
-      </TouchableOpacity>
-
-    </View>
-  );
-}
-
-export default Map;
+});

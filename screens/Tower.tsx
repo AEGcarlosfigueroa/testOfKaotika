@@ -83,7 +83,7 @@ function Tower() {
 
   const scrollState = usePlayerStore(state => state.scrollState)
 
-  const { fontScale } = useWindowDimensions();
+const { height, width, scale, fontScale } = useWindowDimensions();
 
   //Refractor later put in a seperate file called styles 
   const styles = StyleSheet.create({
