@@ -38,6 +38,10 @@ function Navigator() {
 
   const setPositionList = usePlayerStore(state => state.setPositionList);
 
+  const artifacts = usePlayerStore(state => state.artifactsDB);
+
+  const setArtifacts = usePlayerStore(state => state.setArtifacts);
+
   const isFocused = useIsFocused();
 
   const [, forceUpdate] = useReducer(x => x + 1, 0);
@@ -131,12 +135,17 @@ function Navigator() {
       console.log("New coords received");
     }
 
+    const handleArtifactUpdate = (message: any) => {
+      setArtifacts(message);
+    }
+
     socket.on('isInTowerEntranceRequest', sendIsInTower);
     socket.on('authorization', handleEntryGranted);
     socket.on('update', handleNewData);
     socket.on('scrollCollectedEvent', handleScrollCollected);
     socket.on('scrollDestroyedEvent', handleScrollDestroyed);
     socket.on("locationUpdated", handleLocationUpdated);
+    socket.on("updateArtifacts", handleArtifactUpdate);
     return () => {
       socket.off('authorization', handleEntryGranted);
       socket.off('isInTowerEntranceRequest', sendIsInTower);
@@ -144,8 +153,9 @@ function Navigator() {
       socket.off('scrollCollectedEvent', handleScrollCollected);
       socket.off('scrollDestroyedEvent', handleScrollDestroyed);
       socket.off("locationUpdated", handleLocationUpdated);
+      socket.off("updateArtifacts", handleArtifactUpdate);
     }
-  }, [navigation, isInTower, scrollState, positionList, playerList]);
+  }, [navigation, isInTower, scrollState, positionList, playerList, artifacts]);
 
   BackHandler.addEventListener('hardwareBackPress', () => {
 

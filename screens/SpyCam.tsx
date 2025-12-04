@@ -1,9 +1,9 @@
 import MapView, { PROVIDER_GOOGLE, Marker } from 'react-native-maps';
-import { StyleSheet, View, Image } from 'react-native';
+import { StyleSheet, View, Image, ActivityIndicator } from 'react-native';
 import Geolocation from '@react-native-community/geolocation';
 import React, { useEffect } from 'react';
 import { usePlayerStore } from "../gameStore";
-import mapStyle from './../mapStyle.json'
+import mapStyle from './../mapStyle.json';
 
 function SpyCam() {
 
@@ -71,7 +71,11 @@ function SpyCam() {
   }
   else {
     console.log("map not loaded");
-    return (<></>)
+    return (
+        <View style={styles.fullScreen}>
+          <ActivityIndicator size="large" style={styles.spinner} />
+        </View>
+    );
   }
 
 }
@@ -88,4 +92,14 @@ const styles = StyleSheet.create({
   map: {
     ...StyleSheet.absoluteFillObject,
   },
+  fullScreen: {
+    height: '100%',
+    position: 'absolute',
+    zIndex: 10,
+    width: '100%',
+    backgroundColor: 'rgba(0,0,0,1)'
+  },
+  spinner: {
+    marginTop: '99%'
+  }
 });

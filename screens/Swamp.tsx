@@ -1,5 +1,5 @@
 import MapView, { PROVIDER_GOOGLE, Marker, Circle } from 'react-native-maps';
-import { StyleSheet, View, Image, TouchableOpacity } from 'react-native';
+import { StyleSheet, View, Image, TouchableOpacity, ActivityIndicator } from 'react-native';
 import Geolocation from '@react-native-community/geolocation';
 import React, { useEffect, useState } from 'react';
 import { usePlayerStore } from "../gameStore";
@@ -105,7 +105,7 @@ export default function Swamp() {
 
   const playerArtifactsRangeHandler = () => {
     if (artifactsDistances.length > 0) {
-      const inRange = artifactsDistances.some(artifact => artifact.distance <= 1);
+      const inRange = artifactsDistances.some(artifact => artifact.distance <= 10);
       setPlayerInRange(inRange);
       const artifactsInRange = artifactsDistances.filter(artifact => artifact.distance <= 1);
       const closestArtifact = artifactsInRange.reduce((prev, current) => {
@@ -183,7 +183,11 @@ export default function Swamp() {
   }
   else {
     console.log("map not loaded");
-    return (<></>)
+    return (
+        <View style={styles.fullScreen}>
+          <ActivityIndicator size="large" style={styles.spinner} />
+        </View>
+    );
   }
 }
 const styles = StyleSheet.create({
@@ -219,4 +223,14 @@ const styles = StyleSheet.create({
   map: {
     ...StyleSheet.absoluteFillObject,
   },
+  fullScreen: {
+    height: '100%',
+    position: 'absolute',
+    zIndex: 10,
+    width: '100%',
+    backgroundColor: 'rgba(0,0,0,1)'
+  },
+  spinner: {
+    marginTop: '99%'
+  }
 });
