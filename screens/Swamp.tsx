@@ -7,10 +7,12 @@ import mapStyle from './../mapStyle.json'
 import socketIO from '../socketIO';
 import { Text } from 'react-native-gesture-handler';
 import treasure from '../assets/icons/treasure.png';
-import { ArtifactDistances } from '../interfaces/PlayerInterface'
+import { ArtifactDistances, Player } from '../interfaces/PlayerInterface'
 
 export default function Swamp() {
   const player = usePlayerStore(state => state.player);
+
+  const setPlayer = usePlayerStore(state => state.setPlayer)
 
   const position = usePlayerStore(state => state.position);
 
@@ -51,6 +53,25 @@ export default function Swamp() {
 
     console.log("Message Sent")
   }
+  useEffect(() => {
+    const socket = socketIO.getSocket();
+    if (!socket) return;
+
+    console.log("Subscribing to authorization events");
+
+    const handler = (updatePlayer: Player) => {
+      console.log("Received updated player:", updatePlayer);
+      setPlayer(updatePlayer);
+    };
+
+    socket.on("authorization", handler);
+
+    return () => {
+      console.log("Unsubscribing from authorization events");
+      socket.off("authorization", handler);
+    };
+  }, []); 
+
 
   const tryLowAccuracy = () => {
     Geolocation.getCurrentPosition(info => setPosition(info), undefined, { enableHighAccuracy: false, timeout: 20000, maximumAge: 10000 });
@@ -162,8 +183,7 @@ export default function Swamp() {
             />
           </Marker>
           {artifactsDB.map((artifact, i) => {
-            if(!artifact.isCollected)
-            {
+            if (!artifact.isCollected) {
               return (
                 <React.Fragment key={i}>
                   <Marker
@@ -206,9 +226,9 @@ export default function Swamp() {
   else {
     console.log("map not loaded");
     return (
-        <View style={styles.fullScreen}>
-          <ActivityIndicator size="large" style={styles.spinner} />
-        </View>
+      <View style={styles.fullScreen}>
+        <ActivityIndicator size="large" style={styles.spinner} />
+      </View>
     );
   }
 }
