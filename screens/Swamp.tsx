@@ -1,12 +1,15 @@
 import MapView, { PROVIDER_GOOGLE, Marker, Circle } from 'react-native-maps';
-import { StyleSheet, View, Image, TouchableOpacity, ActivityIndicator } from 'react-native';
+import { StyleSheet, View, Image, TouchableOpacity, ActivityIndicator, useWindowDimensions, StatusBar } from 'react-native';
 import Geolocation from '@react-native-community/geolocation';
 import React, { useEffect, useState } from 'react';
 import { usePlayerStore } from "../gameStore";
 import mapStyle from './../mapStyle.json'
 import socketIO from '../socketIO';
 import { Text } from 'react-native-gesture-handler';
-import treasure from '../assets/icons/treasure.png';
+import artifactImage0 from './../assets/artifacts/artifact0.png'
+import artifactImage1 from './../assets/artifacts/artifact1.png'
+import artifactImage2 from './../assets/artifacts/artifact2.png'
+import artifactImage3 from './../assets/artifacts/artifact3.png'
 import { ArtifactDistances, Player } from '../interfaces/PlayerInterface'
 
 export default function Swamp() {
@@ -26,7 +29,16 @@ export default function Swamp() {
 
   const [playerInRange, setPlayerInRange] = useState<Boolean>(false);
 
-  const [closestArtifact, setClosestArtifact] = useState<ArtifactDistances | null>(null)
+  const [closestArtifact, setClosestArtifact] = useState<ArtifactDistances | null>(null);
+
+  const { height } = useWindowDimensions();
+
+  const artifactImages = [
+    artifactImage0,
+    artifactImage1,
+    artifactImage2,
+    artifactImage3
+  ]
 
   const uploadCoordinates = () => {
     const socket = socketIO.getSocket();
@@ -194,8 +206,8 @@ export default function Swamp() {
                     title={artifact.artifactName}
                   >
                     <Image
-                      source={treasure}
-                      style={{ width: 40, height: 40 }}
+                      source={artifactImages[parseInt(artifact.artifactID)]}
+                      style={{ width: 0.05*height, height: 0.05*height }}
                       resizeMode="contain"
                     />
                   </Marker>
@@ -220,6 +232,13 @@ export default function Swamp() {
         {playerInRange && closestArtifact && <TouchableOpacity style={styles.buttonContainer} onPress={() => confirmArtifactCollected(closestArtifact.id)}>
           <Text style={styles.buttonText}>Collect Artifact</Text>
         </TouchableOpacity>}
+        <View style={styles.inventory}>
+          {player.artifactInventory.map((elem: string, i: number) => {
+            return(
+              <Image key={i} source={artifactImages[parseInt(elem)]} style={styles.image}/>
+            )
+          })}
+        </View>
       </View>
     );
   }
@@ -239,6 +258,20 @@ const styles = StyleSheet.create({
     width: '100%',
     justifyContent: 'flex-end',
     alignItems: 'center',
+  },
+  inventory: {
+    height: '10%',
+    width: '100%',
+    flex: 1,
+    flexDirection: 'row',
+    marginTop: StatusBar.currentHeight,
+    position: 'absolute',
+    backgroundColor: 'rgba(0,0,0,0.5)'
+  },
+  image: {
+    height: '75%',
+    width: '12%',
+    marginTop: '1%'
   },
   buttonContainer: {
     position: 'absolute',
