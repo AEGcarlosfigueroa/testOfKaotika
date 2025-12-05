@@ -33,6 +33,8 @@ export default function Swamp() {
 
   const { height } = useWindowDimensions();
 
+  const styles = getStyles();
+
   const artifactImages = [
     artifactImage0,
     artifactImage1,
@@ -251,61 +253,73 @@ export default function Swamp() {
     );
   }
 }
-const styles = StyleSheet.create({
-  container: {
-    ...StyleSheet.absoluteFillObject,
-    height: '100%',
-    width: '100%',
-    justifyContent: 'flex-end',
-    alignItems: 'center',
-  },
-  inventory: {
-    height: '10%',
-    width: '100%',
-    flex: 1,
-    flexDirection: 'row',
-    marginTop: StatusBar.currentHeight,
-    position: 'absolute',
-    backgroundColor: 'rgba(0,0,0,0.5)'
-  },
-  image: {
-    height: '75%',
-    width: '12%',
-    marginTop: '1%'
-  },
-  buttonContainer: {
-    position: 'absolute',
-    bottom: '10%',
-    left: '12.5%',
-    width: '75%',
-    height: '10%',
-    backgroundColor: 'rgba(0,0,0,0.5)',
-    borderRadius: 5,
-    borderWidth: 2,
-    borderColor: 'grey',
-    justifyContent: 'center',
-    alignItems: 'center',
-    zIndex: 100
-  },
-  buttonText: {
-    fontSize: 32,
-    color: '#fff',
-    textShadowColor: 'rgba(0, 0, 0, 0.7)',
-    textShadowOffset: { width: 2, height: 2 },
-    textShadowRadius: 4,
-    fontFamily: 'OptimusPrincepsSemiBold',
-  },
-  map: {
-    ...StyleSheet.absoluteFillObject,
-  },
-  fullScreen: {
-    height: '100%',
-    position: 'absolute',
-    zIndex: 10,
-    width: '100%',
-    backgroundColor: 'rgba(0,0,0,1)'
-  },
-  spinner: {
-    marginTop: '99%'
-  }
-});
+
+function getStyles()
+{
+  const { height } = useWindowDimensions();
+
+  const styles = StyleSheet.create({
+    container: {
+      ...StyleSheet.absoluteFillObject,
+      height: '100%',
+      width: '100%',
+      justifyContent: 'flex-end',
+      alignItems: 'center',
+    },
+    inventory: {
+      height: '10%',
+      width: '100%',
+      flex: 1,
+      flexDirection: 'row',
+      marginTop: StatusBar.currentHeight,
+      position: 'absolute',
+      backgroundColor: 'rgba(0,0,0,0.5)'
+    },
+    image: {
+      height: '75%',
+      width: '12%',
+      marginTop: '1%'
+    },
+    artifactImage: {
+      width: 0.05*height, 
+      height: 0.05*height
+    },
+    buttonContainer: {
+      position: 'absolute',
+      bottom: '10%',
+      left: '12.5%',
+      width: '75%',
+      height: '10%',
+      backgroundColor: 'rgba(0,0,0,0.5)',
+      borderRadius: 5,
+      borderWidth: 2,
+      borderColor: 'grey',
+      justifyContent: 'center',
+      alignItems: 'center',
+      zIndex: 100
+    },
+    buttonText: {
+      fontSize: 32,
+      color: '#fff',
+      textShadowColor: 'rgba(0, 0, 0, 0.7)',
+      textShadowOffset: { width: 2, height: 2 },
+      textShadowRadius: 4,
+      fontFamily: 'OptimusPrincepsSemiBold',
+    },
+    map: {
+      ...StyleSheet.absoluteFillObject,
+    },
+    fullScreen: {
+      height: '100%',
+      position: 'absolute',
+      zIndex: 10,
+      width: '100%',
+      backgroundColor: 'rgba(0,0,0,1)'
+    },
+    spinner: {
+      marginTop: '99%'
+    }
+  });
+
+  return styles;
+}
