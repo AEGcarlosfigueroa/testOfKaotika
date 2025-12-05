@@ -277,8 +277,9 @@ function getStyles()
     },
     image: {
       height: '75%',
-      width: '12%',
-      marginTop: '1%'
+      width: '15%',
+      marginTop: '1%',
+      resizeMode: 'contain'
     },
     artifactImage: {
       width: 0.05*height, 

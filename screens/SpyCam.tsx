@@ -1,9 +1,20 @@
-import MapView, { PROVIDER_GOOGLE, Marker } from 'react-native-maps';
-import { StyleSheet, View, Image, ActivityIndicator } from 'react-native';
+import MapView, { PROVIDER_GOOGLE, Marker, Circle } from 'react-native-maps';
+import { StyleSheet, View, Image, ActivityIndicator, useWindowDimensions, StatusBar } from 'react-native';
 import Geolocation from '@react-native-community/geolocation';
 import React, { useEffect } from 'react';
 import { usePlayerStore } from "../gameStore";
 import mapStyle from './../mapStyle.json';
+import artifactImage0 from './../assets/artifacts/artifact0.png'
+import artifactImage1 from './../assets/artifacts/artifact1.png'
+import artifactImage2 from './../assets/artifacts/artifact2.png'
+import artifactImage3 from './../assets/artifacts/artifact3.png'
+
+const artifactImages = [
+    artifactImage0,
+    artifactImage1,
+    artifactImage2,
+    artifactImage3
+  ]
 
 function SpyCam() {
 
@@ -12,6 +23,10 @@ function SpyCam() {
 
   const positionList = usePlayerStore(state => state.positionList);
   const playerList = usePlayerStore(state => state.playerList);
+
+  const artifactsDB = usePlayerStore(state => state.artifactsDB);
+
+  const { height } = useWindowDimensions();
 
   const getAvatarImage = (email: string) => {
     for (let i = 0; i < playerList.length; i++) {
@@ -33,8 +48,28 @@ function SpyCam() {
 
   const player = usePlayerStore(state => state.player);
 
+  let artifactCollectedBar = <></>
+
+  if(player?.profile.role === 'MORTIMER')
+  {
+    artifactCollectedBar = (
+      <View style={styles.inventory}>
+        {artifactsDB.map((elem, i: number) => {
+          if(elem.isCollected)
+          {
+            return(
+              <Image key={i} source={artifactImages[parseInt(elem.artifactID)]} style={styles.image}/>
+            )
+          }
+        })}
+      </View>
+    );
+  }
+
   if (player !== null && position !== null) {
     return (
+      <>
+      {artifactCollectedBar}
       <View style={styles.container}>
         <MapView
           provider={PROVIDER_GOOGLE} // remove if not using Google Maps
@@ -62,11 +97,33 @@ function SpyCam() {
 
             })
           }
-          {/* <Marker image={{uri: player.avatar}} coordinate={{latitude: position?.coords.latitude, longitude: position?.coords.longitude}}>
-                     <Image source={{uri: player.avatar}}/>
-                 </Marker> */}
+          {artifactsDB.map((artifact, i) => {
+            if (!artifact.isCollected && player.profile.role === 'MORTIMER') {
+              return (
+                <React.Fragment key={i}>
+                  <Marker
+                    coordinate={{
+                      latitude: artifact.latitude,
+                      longitude: artifact.longitude,
+                    }}
+                    title={artifact.artifactName}
+                  >
+                    <Image
+                      source={artifactImages[parseInt(artifact.artifactID)]}
+                      style={{ width: 0.05*height, height: 0.05*height }}
+                      resizeMode="contain"
+                    />
+                  </Marker>
+                </React.Fragment>
+              );
+            }
+
+
+            return <></>
+          })}
         </MapView>
       </View>
+      </>
     )
   }
   else {
@@ -101,5 +158,21 @@ const styles = StyleSheet.create({
   },
   spinner: {
     marginTop: '99%'
-  }
+  },
+  inventory: {
+    height: '10%',
+    width: '100%',
+    flex: 1,
+    flexDirection: 'row',
+    marginTop: StatusBar.currentHeight,
+    position: 'absolute',
+    backgroundColor: 'rgba(0,0,0,0.5)', 
+    zIndex: 20
+  },
+  image: {
+    height: '75%',
+    width: '15%',
+    marginTop: '1%',
+    resizeMode: 'contain'
+  },
 });
