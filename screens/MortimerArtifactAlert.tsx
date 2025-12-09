@@ -1,6 +1,7 @@
 import scrollImage from "./../assets/scrollAlert.png"
-import { StyleSheet, Image, Text, View } from "react-native";
+import { StyleSheet, Image, Text, View, TouchableOpacity } from "react-native";
 import React from "react";
+import socketIO from "../socketIO";
 
 export default function MortimerArtifactAlert()
 {
@@ -24,6 +25,26 @@ export default function MortimerArtifactAlert()
             backgroundColor: 'rgba(0, 0, 0, 0.5)',
             padding: 15 
             },
+            button: {
+              position: 'absolute',
+              top: '80%',
+              left: '10%',
+              width: '80%',
+              height: '8%',
+              backgroundColor: 'rgba(0,0,0,0.5)',
+              borderRadius: 5,
+              borderWidth: 2,
+              borderColor: 'grey',
+              justifyContent: 'center',
+              alignItems: 'center',
+              zIndex: 15
+            },
+            buttonText2: {
+              fontFamily: 'OptimusPrincepsSemiBold',
+              color: '#E2DFD2',
+              fontSize: 30,
+              textAlign: 'center',
+            },
         })
     
         return (
@@ -32,6 +53,19 @@ export default function MortimerArtifactAlert()
             <View style={{ flex: 1, alignItems: 'center' }}>
                 <Text style={[styles.title, { top: '40%', fontSize: 20}]}>YOU ARE VERIFYING THE ARTIFACTS</Text>
             </View>
+            <TouchableOpacity
+              style={styles.button}
+              onPress={() => {
+                const socket = socketIO.getSocket();
+              
+                if (socket) {
+                  socket.emit("artifactEvaluation", "reset");
+                }
+              }}
+            >
+              <Text style={styles.buttonText2}>Reset Search</Text>
+            </TouchableOpacity>
+
             </>
         );
 }
