@@ -29,8 +29,20 @@ export const usePlayerStore = create<PlayerStore>((set) => ({
     setPositionList: (positionList) => set({ positionList }),
 
     artifactsDistances: [],
-    setArtifactsDistances: (artifactsDistances) => set({ artifactsDistances })
+    setArtifactsDistances: (artifactsDistances) => set({ artifactsDistances }),
+
+    obituaryState: null,
+    setObituaryState: (obituaryState) => set({ obituaryState }),
+
+    canShowArtifacts: false,
+    setCanShowArtifacts: (canShowArtifacts) => set({ canShowArtifacts })
 }))
+
+export const obituaryStateList = {
+    locked: 0,
+    evaluating: 1,
+    unlocked: 2
+}
 
 export const scrollStateList = {
     uncollected: 0,

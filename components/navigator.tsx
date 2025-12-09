@@ -12,9 +12,11 @@ import Tower from '../screens/Tower';
 import pNotify from '../pushNotification';
 import { serverURL } from '../App';
 import ScrollAlert from '../screens/ScrollAlert';
-import { usePlayerStore, scrollStateList } from '../gameStore';
+import { usePlayerStore, scrollStateList, obituaryStateList } from '../gameStore';
 import { useIsFocused } from '@react-navigation/native';
 import { getAuth } from '@react-native-firebase/auth';
+import AcolyteArtifactAlert from '../screens/AcolyteArtifactAlert';
+import MortimerArtifactAlert from '../screens/MortimerArtifactAlert';
 
 function Navigator() {
 
@@ -41,6 +43,14 @@ function Navigator() {
   const artifacts = usePlayerStore(state => state.artifactsDB);
 
   const setArtifacts = usePlayerStore(state => state.setArtifacts);
+
+  const obituaryState = usePlayerStore(state => state.obituaryState);
+
+  const setObituaryState = usePlayerStore(state => state.setObituaryState);
+
+  const canShowArtifacts = usePlayerStore(state => state.canShowArtifacts);
+
+  const setCanShowArtifacts = usePlayerStore(state => state.setCanShowArtifacts);
 
   const isFocused = useIsFocused();
 
@@ -139,6 +149,14 @@ function Navigator() {
       setArtifacts(message);
     }
 
+    const handleStateUpdate = (message: any) => {
+      setObituaryState(message.obituaryState);
+      setScrollState(message.scrollState);
+      setCanShowArtifacts(message.canShowArtifacts);
+
+      console.log("can show artifact: " + canShowArtifacts);
+    }
+
     socket.on('isInTowerEntranceRequest', sendIsInTower);
     socket.on('authorization', handleEntryGranted);
     socket.on('update', handleNewData);
@@ -146,6 +164,7 @@ function Navigator() {
     socket.on('scrollDestroyedEvent', handleScrollDestroyed);
     socket.on("locationUpdated", handleLocationUpdated);
     socket.on("updateArtifacts", handleArtifactUpdate);
+    socket.on("stateUpdate", handleStateUpdate);
     return () => {
       socket.off('authorization', handleEntryGranted);
       socket.off('isInTowerEntranceRequest', sendIsInTower);
@@ -154,8 +173,9 @@ function Navigator() {
       socket.off('scrollDestroyedEvent', handleScrollDestroyed);
       socket.off("locationUpdated", handleLocationUpdated);
       socket.off("updateArtifacts", handleArtifactUpdate);
+      socket.off("stateUpdate", handleStateUpdate);
     }
-  }, [navigation, isInTower, scrollState, positionList, playerList, artifacts]);
+  }, [navigation, isInTower, scrollState, positionList, playerList, artifacts, obituaryState, canShowArtifacts]);
 
   BackHandler.addEventListener('hardwareBackPress', () => {
 
@@ -184,7 +204,10 @@ function Navigator() {
       return <IstvanNav />
 
     case 'ACOLITO':
-      if (player.isInside) {
+      if(obituaryState === obituaryStateList.evaluating) {
+        return <AcolyteArtifactAlert/>
+      }
+      else if (player.isInside) {
         return <Laboratory />
       }
       else if (player.isInTower) {
@@ -194,7 +217,10 @@ function Navigator() {
         return <AcolitoNav />
       }
     case 'MORTIMER':
-      if (scrollState === scrollStateList.collected) {
+      if(obituaryState === obituaryStateList.evaluating) {
+        return <MortimerArtifactAlert/>
+      }
+      else if (scrollState === scrollStateList.collected) {
         return <ScrollAlert />
       }
       else {

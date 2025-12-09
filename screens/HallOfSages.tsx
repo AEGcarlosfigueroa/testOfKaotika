@@ -1,5 +1,6 @@
 import { TouchableOpacity, Text, Image, StyleSheet, StatusBar, View, useWindowDimensions } from "react-native";
 import { useNavigation, NavigationProp } from "@react-navigation/native";
+import React from "react";
 import HallOfSagesImage from "./../assets/hallOfSages.png";
 import { usePlayerStore } from "../gameStore";
 import socketIO from "../socketIO";
@@ -20,13 +21,32 @@ export default function HallOfSages() {
 
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
 
-  const { height, width, scale, fontScale } = useWindowDimensions();
+  const player = usePlayerStore(state => state.player);
+
+  const canShowArtifacts = usePlayerStore(state => state.canShowArtifacts);
+
+  const { height } = useWindowDimensions();
+
   const styles = StyleSheet.create({
     image: {
       height: '100%',
       width: '100%',
       position: 'absolute',
       zIndex: -10,
+    },
+     button: {
+      position: 'absolute',
+      top: '80%',
+      left: '10%',
+      width: '80%',
+      height: '8%',
+      backgroundColor: 'rgba(0,0,0,0.5)',
+      borderRadius: 5,
+      borderWidth: 2,
+      borderColor: 'grey',
+      justifyContent: 'center',
+      alignItems: 'center',
+      zIndex: 15
     },
     button2: {
       position: 'absolute',
@@ -41,7 +61,6 @@ export default function HallOfSages() {
       justifyContent: 'center',
       alignItems: 'center',
       zIndex: 15
-
     },
     buttonText2: {
       fontFamily: 'OptimusPrincepsSemiBold',
@@ -62,7 +81,7 @@ export default function HallOfSages() {
     title: {
       fontSize: 40,
       marginBottom: '5%',
-      marginTop: '20%',
+      marginTop: '25%',
       color: '#E2DFD2',
       textShadowColor: 'rgba(0, 0, 0, 0.7)',
       textShadowOffset: { width: 2, height: 4 },
@@ -71,7 +90,7 @@ export default function HallOfSages() {
       boxShadow: '5px 5px 5px 5px black',
       backgroundColor: 'rgba(0, 0, 0, 0.5)',
       padding: '5%',
-      textAlign: 'center'
+      textAlign: 'center',
     },
   });
   
@@ -101,6 +120,21 @@ export default function HallOfSages() {
           return <View key={i}></View>
         })}
       </View>
+       {
+        (canShowArtifacts && player?.profile.role === 'ACOLITO') &&
+            (<TouchableOpacity
+              style={styles.button}
+              onPress={() => {
+                const socket = socketIO.getSocket();
+              
+                if (socket) {
+                  socket.emit("showArtifacts", " ");
+                }
+              }}
+            >
+              <Text style={styles.buttonText2}>Show Artifacts</Text>
+            </TouchableOpacity>)
+       }
     </>
   );
 };
