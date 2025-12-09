@@ -57,6 +57,7 @@
   "devDependencies": {
     "@babel/core": "^7.28.5",
     "@babel/preset-env": "^7.28.5",
+    "@babel/preset-typescript": "^7.28.5",
     "@babel/runtime": "^7.28.4",
     "@react-native-community/cli": "20.0.0",
     "@react-native-community/cli-platform-android": "20.0.0",
@@ -69,10 +70,13 @@
     "@types/react": "^19.2.5",
     "@types/react-native-vector-icons": "^6.4.18",
     "@types/react-test-renderer": "^19.1.0",
+    "babel-jest": "^30.2.0",
     "eslint": "^8.57.1",
     "jest": "^30.2.0",
+    "metro-react-native-babel-preset": "^0.77.0",
     "prettier": "2.8.8",
-    "react-test-renderer": "19.1.1",
+    "react-test-renderer": "^19.1.1",
+    "ts-jest": "^29.4.6",
     "typescript": "^5.9.3"
   },
   "engines": {
