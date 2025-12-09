@@ -28,6 +28,12 @@ export interface PlayerStore {
 
     artifactsDistances: ArtifactDistances[]; // array of numbers
     setArtifactsDistances: (artifactsDistances: ArtifactDistances[]) => void; // function to update the array
+
+    obituaryState: number | null;
+    setObituaryState: (obituaryState: number | null) => void;
+
+    canShowArtifacts: boolean;
+    setCanShowArtifacts: (canShowArtifacts: boolean) => void;
 }
 
 
