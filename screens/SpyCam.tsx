@@ -4,6 +4,7 @@ import Geolocation from '@react-native-community/geolocation';
 import React, { useEffect } from 'react';
 import { usePlayerStore } from "../gameStore";
 import mapStyle from './../mapStyle.json';
+import socketIO from '../socketIO';
 import artifactImage0 from './../assets/artifacts/artifact0.png'
 import artifactImage1 from './../assets/artifacts/artifact1.png'
 import artifactImage2 from './../assets/artifacts/artifact2.png'
@@ -23,6 +24,9 @@ function SpyCam() {
 
   const positionList = usePlayerStore(state => state.positionList);
   const playerList = usePlayerStore(state => state.playerList);
+
+  const setPositionList = usePlayerStore(state => state.setPositionList);
+  const setArtifacts = usePlayerStore(state => state.setArtifacts);
 
   const artifactsDB = usePlayerStore(state => state.artifactsDB);
 
@@ -44,7 +48,28 @@ function SpyCam() {
 
   useEffect(() => {
     Geolocation.getCurrentPosition(info => setPosition(info), tryLowAccuracy, { enableHighAccuracy: true, timeout: 20000, maximumAge: 10000 });
-  }, [positionList])
+  }, [position])
+
+  useEffect(() => {
+      const socket = socketIO.getSocket();
+      if (!socket) return;
+  
+      const handleLocationUpdated = (message: any) => {
+        setPositionList(message);
+        console.log("New coords received");
+      }
+  
+      const handleArtifactUpdate = (message: any) => {
+        setArtifacts(message);
+      }
+  
+      socket.on("locationUpdated", handleLocationUpdated);
+      socket.on("updateArtifacts", handleArtifactUpdate);
+      return () => {
+        socket.off("locationUpdated", handleLocationUpdated);
+        socket.off("updateArtifacts", handleArtifactUpdate);
+      }
+    }, [positionList, playerList]);
 
   const player = usePlayerStore(state => state.player);
 
