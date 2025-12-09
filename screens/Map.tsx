@@ -6,11 +6,15 @@ import eye from "../assets/icons/eye.png"
 import moon from "../assets/icons/moon.png"
 import rune from "../assets/icons/rune.png"
 import { StatusBar } from "react-native";
-import { usePlayerStore } from "../gameStore";
+import { obituaryStateList, usePlayerStore } from "../gameStore";
 import book from "../assets/icons/book.png";
 import { serverURL } from "../App";
 
 function Map() {
+
+  const styles = getStyles();
+
+  const obituaryState = usePlayerStore(state => state.obituaryState);
 
   type RootStackParamList = {
     Home: undefined,
@@ -73,13 +77,22 @@ function Map() {
       }}>
         <Image source={book} style={styles.image} />
       </TouchableOpacity>
+      {(obituaryState === obituaryStateList.unlocked) && (
+        <TouchableOpacity style={styles.obituaryStyle} onPress={() => {
+          
+        }}>
+          <Image source={eye} style={styles.image} />
+        </TouchableOpacity>
+      )}
     </View>
   );
 }
 
 export default Map;
 
-const { height, width, scale, fontScale } = useWindowDimensions();
+function getStyles()
+{
+  const { height, scale, fontScale } = useWindowDimensions();
 
 
   const styles = StyleSheet.create({
@@ -105,6 +118,9 @@ const { height, width, scale, fontScale } = useWindowDimensions();
     },
     swampStyle: {
        width : (15*scale), height : (15*scale), top: (0.5*height), left: '70%', position: 'absolute', zIndex: 20
+    },
+    obituaryStyle: {
+       width : (15*scale), height : (15*scale), top: (0.75*height), left: '60%', position: 'absolute', zIndex: 20
     },
     title: {
       fontSize: 30*fontScale,
@@ -143,4 +159,9 @@ const { height, width, scale, fontScale } = useWindowDimensions();
     },
   
   });
+
+  return styles
+}
+
+
 

@@ -39,6 +39,20 @@ export default function MortimerArtifactAlert()
               alignItems: 'center',
               zIndex: 15
             },
+            button2: {
+              position: 'absolute',
+              top: '70%',
+              left: '10%',
+              width: '80%',
+              height: '8%',
+              backgroundColor: 'rgba(0,0,0,0.5)',
+              borderRadius: 5,
+              borderWidth: 2,
+              borderColor: 'grey',
+              justifyContent: 'center',
+              alignItems: 'center',
+              zIndex: 15
+            },
             buttonText2: {
               fontFamily: 'OptimusPrincepsSemiBold',
               color: '#E2DFD2',
@@ -54,7 +68,7 @@ export default function MortimerArtifactAlert()
                 <Text style={[styles.title, { top: '40%', fontSize: 20}]}>YOU ARE VERIFYING THE ARTIFACTS</Text>
             </View>
             <TouchableOpacity
-              style={styles.button}
+              style={styles.button2}
               onPress={() => {
                 const socket = socketIO.getSocket();
               
@@ -64,6 +78,18 @@ export default function MortimerArtifactAlert()
               }}
             >
               <Text style={styles.buttonText2}>Reset Search</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.button}
+              onPress={() => {
+                const socket = socketIO.getSocket();
+              
+                if (socket) {
+                  socket.emit("artifactEvaluation", "verify");
+                }
+              }}
+            >
+              <Text style={styles.buttonText2}>Validate Search</Text>
             </TouchableOpacity>
 
             </>
