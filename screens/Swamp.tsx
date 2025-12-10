@@ -46,6 +46,8 @@ export default function Swamp() {
 
   const [playerInRange, setPlayerInRange] = useState<Boolean>(false);
 
+  const [isProcessingCollection, setIsProcessingCollection] = useState<Boolean>(false);
+
   const [closestArtifact, setClosestArtifact] = useState<ArtifactDistances | null>(null);
 
   const { height } = useWindowDimensions();
@@ -83,7 +85,10 @@ export default function Swamp() {
     socket?.emit("artifactCollected", artifactID)
 
     console.log("Message Sent")
+
+    setIsProcessingCollection(true);
   }
+  
   useEffect(() => {
     const socket = socketIO.getSocket();
     if (!socket) return;
@@ -93,6 +98,7 @@ export default function Swamp() {
     const handler = (updatePlayer: Player) => {
       console.log("Received updated player:", updatePlayer);
       setPlayer(updatePlayer);
+      setIsProcessingCollection(false);
     };
 
     socket.on("authorization", handler);
@@ -101,40 +107,35 @@ export default function Swamp() {
       console.log("Unsubscribing from authorization events");
       socket.off("authorization", handler);
     };
-  }, []); 
+  }, [player]); 
+
+  const handleNewPosition = (info: any) => {
+    setPosition(info);
+    uploadCoordinates();
+    if (artifactsDB?.length > 0) {
+      const artifactsdistances: ArtifactDistances[] = artifactsDB.map(artifact => ({
+        id: artifact.artifactID,
+        isCollected: artifact.isCollected,
+        distance: getDistanceInMeters(
+          info.coords.latitude,
+          info.coords.longitude,
+          artifact.latitude,
+          artifact.longitude
+        )
+      }));
+      setArtifactsDistances(artifactsdistances);
+      console.log("new distances", artifactsdistances);
+    }
+  }
 
 
   const tryLowAccuracy = () => {
-    Geolocation.getCurrentPosition(info => setPosition(info), undefined, { enableHighAccuracy: false, timeout: 20000, maximumAge: 10000 });
+    Geolocation.getCurrentPosition(info => handleNewPosition(info), undefined, { enableHighAccuracy: false, timeout: 20000, maximumAge: 10000 });
   }
 
   useEffect(() => {
-    Geolocation.getCurrentPosition(info => setPosition(info), tryLowAccuracy, { enableHighAccuracy: true, timeout: 20000, maximumAge: 10000 });
-    uploadCoordinates();
-  }, [])
-
-  useEffect(() => {
     const interval = setInterval(() => {
-      Geolocation.getCurrentPosition(info => {
-        setPosition(info);
-        uploadCoordinates();
-
-        if (artifactsDB?.length > 0) {
-          const artifactsdistances: ArtifactDistances[] = artifactsDB.map(artifact => ({
-            id: artifact.artifactID,
-            isCollected: artifact.isCollected,
-            distance: getDistanceInMeters(
-              info.coords.latitude,
-              info.coords.longitude,
-              artifact.latitude,
-              artifact.longitude
-            )
-          }));
-          setArtifactsDistances(artifactsdistances);
-          console.log("new distances", artifactsdistances);
-
-        }
-      }, tryLowAccuracy, { enableHighAccuracy: true, timeout: 20000, maximumAge: 10000 });
+      Geolocation.getCurrentPosition(info => handleNewPosition(info), tryLowAccuracy, { enableHighAccuracy: true, timeout: 20000, maximumAge: 10000 });
     }, 2000);
 
     return () => clearInterval(interval);
@@ -147,6 +148,8 @@ export default function Swamp() {
       setClosestArtifact(null);
       return;
     }
+
+    console.log("distances: " + artifactsDistances)
 
     const artifactsInRange = artifactsDistances.filter(a => (a.distance <= 10 && !a.isCollected));
 
@@ -172,7 +175,7 @@ export default function Swamp() {
 
   }, [artifactsDistances])
 
-  if (player !== null && position !== null) {
+  if (player !== null && position !== null && !isProcessingCollection) {
     return (
       <View style={{ flex: 1 }}>
         <MapView
@@ -201,20 +204,20 @@ export default function Swamp() {
             if (!artifact.isCollected) {
               return (
                 <React.Fragment key={i}>
-                  <Marker
+                  <Marker key={i/2}
                     coordinate={{
                       latitude: artifact.latitude,
                       longitude: artifact.longitude,
                     }}
                     title={artifact.artifactName}
                   >
-                    <Image
+                    <Image key={i/4}
                       source={artifactImages[parseInt(artifact.artifactID)]}
                       style={{ width: 0.05*height, height: 0.05*height }}
                       resizeMode="contain"
                     />
                   </Marker>
-                  <Circle
+                  <Circle key={i/8}
                     center={{
                       latitude: artifact.latitude,
                       longitude: artifact.longitude,
@@ -232,11 +235,12 @@ export default function Swamp() {
           })}
         </MapView>
 
-        {playerInRange && closestArtifact && <TouchableOpacity style={styles.buttonContainer} onPress={() => confirmArtifactCollected(closestArtifact.id)}>
+        {(playerInRange && closestArtifact) && <TouchableOpacity style={styles.buttonContainer} onPress={() => confirmArtifactCollected(closestArtifact.id)}>
           <Text style={styles.buttonText}>Collect Artifact</Text>
         </TouchableOpacity>}
         <View style={styles.inventory}>
           {player.artifactInventory.map((elem: string, i: number) => {
+            console.log("render image " + elem);
             return(
               <Image key={i} source={artifactImages[parseInt(elem)]} style={styles.image}/>
             )
