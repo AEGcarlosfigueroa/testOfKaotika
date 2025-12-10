@@ -1,4 +1,4 @@
-import scrollImage from "./../assets/scrollAlert.png"
+import scrollImage from "./../assets/hallOfSages.png"
 import { StyleSheet, Image, Text, View } from "react-native";
 import React from "react";
 

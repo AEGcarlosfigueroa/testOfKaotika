@@ -21,6 +21,8 @@ function Entrance() {
     OldSchool: undefined
   }
 
+  const styles = getStyles();
+
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
 
   const player = usePlayerStore(state => state.player);
@@ -127,67 +129,73 @@ function Entrance() {
 
 export default Entrance;
 
-const { height, width, scale, fontScale } = useWindowDimensions();
+function getStyles()
+{
+  const { fontScale } = useWindowDimensions();
 
-const styles = StyleSheet.create({
-  image: {
-    height: '100%',
-    width: '100%',
-    position: 'absolute',
-    zIndex: -10,
-  },
-  qrContainer: {
-    alignItems: 'center',
-    justifyContent: 'center',
-    position: 'absolute',
-    top: '40%',
-    marginBottom: 50
-  },
-  button2: {
-    position: 'absolute',
-    top: StatusBar.currentHeight,
-    left: '5%',
-    width: '25%',
-    height: '5%',
-    backgroundColor: 'rgba(0,0,0,0.5)',
-    borderRadius: 5,
-    borderWidth: 2,
-    borderColor: 'grey',
-    justifyContent: 'center',
-    alignItems: 'center',
-    zIndex: 15
-  },
-  buttonText2: {
-    fontFamily: 'OptimusPrincepsSemiBold',
-    color: '#E2DFD2',
-    fontSize: 30 * fontScale,
-    textAlign: 'center',
-  },
-  buttonContainer: {
-    position: 'absolute',
-    bottom: '10%',
-    left: '12.5%',
-    width: '75%',
-    height: '10%',
-    backgroundColor: 'rgba(0,0,0,0.5)',
-    borderRadius: 5,
-    borderWidth: 2,
-    borderColor: 'grey',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  title: {
-    fontSize: 30 * fontScale,
-    marginBottom: '5%',
-    marginTop: '30%',
-    color: '#E2DFD2',
-    textShadowColor: 'rgba(0, 0, 0, 0.7)',
-    textShadowOffset: { width: 2, height: 4 },
-    textShadowRadius: 4,
-    fontFamily: 'OptimusPrincepsSemiBold',
-    boxShadow: '5px 5px 5px 5px black',
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
-    padding: '5%',
-    textAlign: 'center'
-  },
-});
+  const styles = StyleSheet.create({
+    image: {
+      height: '100%',
+      width: '100%',
+      position: 'absolute',
+      zIndex: -10,
+    },
+    qrContainer: {
+      alignItems: 'center',
+      justifyContent: 'center',
+      position: 'absolute',
+      top: '40%',
+      marginBottom: 50
+    },
+    button2: {
+      position: 'absolute',
+      top: StatusBar.currentHeight,
+      left: '5%',
+      width: '25%',
+      height: '5%',
+      backgroundColor: 'rgba(0,0,0,0.5)',
+      borderRadius: 5,
+      borderWidth: 2,
+      borderColor: 'grey',
+      justifyContent: 'center',
+      alignItems: 'center',
+      zIndex: 15
+    },
+    buttonText2: {
+      fontFamily: 'OptimusPrincepsSemiBold',
+      color: '#E2DFD2',
+      fontSize: 30 * fontScale,
+      textAlign: 'center',
+    },
+    buttonContainer: {
+      position: 'absolute',
+      bottom: '10%',
+      left: '12.5%',
+      width: '75%',
+      height: '10%',
+      backgroundColor: 'rgba(0,0,0,0.5)',
+      borderRadius: 5,
+      borderWidth: 2,
+      borderColor: 'grey',
+      justifyContent: 'center',
+      alignItems: 'center',
+    },
+    title: {
+      fontSize: 30 * fontScale,
+      marginBottom: '5%',
+      marginTop: '30%',
+      color: '#E2DFD2',
+      textShadowColor: 'rgba(0, 0, 0, 0.7)',
+      textShadowOffset: { width: 2, height: 4 },
+      textShadowRadius: 4,
+      fontFamily: 'OptimusPrincepsSemiBold',
+      boxShadow: '5px 5px 5px 5px black',
+      backgroundColor: 'rgba(0, 0, 0, 0.5)',
+      padding: '5%',
+      textAlign: 'center'
+    },
+  });
+
+  return styles;
+}
+

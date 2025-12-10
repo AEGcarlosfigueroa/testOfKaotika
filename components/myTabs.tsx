@@ -16,6 +16,7 @@ import Swamp from '../screens/Swamp';
 import { useWindowDimensions } from 'react-native';
 import { usePlayerStore } from '../gameStore';
 import Scanner from '../screens/scanner';
+import Obituary from '../screens/Obituary';
 
 const Tab = createBottomTabNavigator();
 
@@ -48,6 +49,7 @@ function mapNav() {
         <Stack.Screen name="Laboratory" component={Laboratory} />
         <Stack.Screen name="OldSchool" component={OldSchool} />
         <Stack.Screen name="HallOfSages" component={HallOfSages} />
+        <Stack.Screen name="Obituary" component={Obituary} />
       </Stack.Navigator>
     )
   }
@@ -62,6 +64,7 @@ function mapNav() {
         <Stack.Screen name="Laboratory" component={Laboratory} />
         <Stack.Screen name="OldSchool" component={OldSchool} />
         <Stack.Screen name="HallOfSages" component={HallOfSages} />
+        <Stack.Screen name="Obituary" component={Obituary} />
       </Stack.Navigator>
     )
   }
@@ -76,6 +79,7 @@ function mapNav() {
         <Stack.Screen name="Laboratory" component={Laboratory} />
         <Stack.Screen name="OldSchool" component={OldSchool} />
         <Stack.Screen name="HallOfSages" component={HallOfSages} />
+        <Stack.Screen name="Obituary" component={Obituary} />
       </Stack.Navigator>
     )
   }

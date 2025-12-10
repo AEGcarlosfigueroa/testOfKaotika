@@ -10,6 +10,8 @@ function Settings() {
 
   const player = usePlayerStore(state => state.player);
 
+  const styles = getStyles();
+
   let imageSource;
 
   switch (player?.profile.role) {
@@ -51,41 +53,48 @@ function Settings() {
 
 export default Settings;
 
-const { height, width, scale, fontScale } = useWindowDimensions();
+function getStyles()
+{
+  const { fontScale } = useWindowDimensions();
 
-const styles = StyleSheet.create({
-  button: {
-    position: 'absolute',
-    bottom: '50%',
-    left: '12.5%',
-    width: '75%',
-    height: '10%',
-    backgroundColor: 'rgba(0,0,0,0.5)',
-    borderRadius: 5,
-    borderWidth: 2,
-    borderColor: 'grey',
-    justifyContent: 'center',
-    alignItems: 'center',
+  const styles = StyleSheet.create({
+    button: {
+      position: 'absolute',
+      bottom: '50%',
+      left: '12.5%',
+      width: '75%',
+      height: '10%',
+      backgroundColor: 'rgba(0,0,0,0.5)',
+      borderRadius: 5,
+      borderWidth: 2,
+      borderColor: 'grey',
+      justifyContent: 'center',
+      alignItems: 'center',
 
-  },
-  text: {
-    fontSize: 35 * fontScale,
-    color: '#fff',
-    textShadowColor: 'rgba(0, 0, 0, 0.7)',
-    textShadowOffset: { width: 2, height: 2 },
-    textShadowRadius: 4,
-    fontFamily: 'OptimusPrincepsSemiBold',
-  },
-  view: {
-    backgroundColor: 'grey',
-    height: '100%',
-    width: '100%'
-  },
-  image: {
-    height: '100%',
-    position: 'absolute',
-    zIndex: -10,
-    width: '100%'
-  }
-});
+    },
+    text: {
+      fontSize: 35 * fontScale,
+      color: '#fff',
+      textShadowColor: 'rgba(0, 0, 0, 0.7)',
+      textShadowOffset: { width: 2, height: 2 },
+      textShadowRadius: 4,
+      fontFamily: 'OptimusPrincepsSemiBold',
+    },
+    view: {
+      backgroundColor: 'grey',
+      height: '100%',
+      width: '100%'
+    },
+    image: {
+      height: '100%',
+      position: 'absolute',
+      zIndex: -10,
+      width: '100%'
+    }
+  });
+
+  return styles;
+}
+
+
 
