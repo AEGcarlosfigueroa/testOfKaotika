@@ -31,21 +31,21 @@ describe("Socket interactions", () => {
 
 //test function from the navigator
 const sendIsInTower = (isInTower: boolean) => {
-  const socket = socketIO.getSocket();
-  socket?.emit("inTower", isInTower);
+    const socket = socketIO.getSocket();
+    socket?.emit("inTower", isInTower);
 };
 
 describe("sendIsInTower", () => {
-  it("should emit the isInTower boolean", () => {
-    const mockEmit = jest.fn();
-    (socketIO.getSocket as jest.Mock).mockReturnValue({ emit: mockEmit });
+    it("should emit the isInTower boolean", () => {
+        const mockEmit = jest.fn();
+        (socketIO.getSocket as jest.Mock).mockReturnValue({ emit: mockEmit });
 
-    sendIsInTower(true);
-    expect(mockEmit).toHaveBeenCalledWith("inTower", true);
+        sendIsInTower(true);
+        expect(mockEmit).toHaveBeenCalledWith("inTower", true);
 
-    sendIsInTower(false);
-    expect(mockEmit).toHaveBeenCalledWith("inTower", false);
-  });
+        sendIsInTower(false);
+        expect(mockEmit).toHaveBeenCalledWith("inTower", false);
+    });
 });
 
 

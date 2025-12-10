@@ -1,3 +1,5 @@
+// googleSiginFake.ts
+
 export const GoogleSignin = {
   signIn: jest.fn(),
   configure: jest.fn(),
