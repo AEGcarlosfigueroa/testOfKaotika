@@ -1,4 +1,16 @@
-import { getAuth } from "../__mocks__/mockFirebaseAuth";
+export interface MockFirebaseUser {
+    getIdToken: () => Promise<string>;
+}
+
+export interface MockFirebaseAuth {
+    currentUser: MockFirebaseUser | null;
+}
+
+export const getAuth = (): MockFirebaseAuth => ({
+    currentUser: {
+        getIdToken: jest.fn().mockResolvedValue("mockToken123")
+    }
+});
 
 export const sendTokenToServer = async (SERVER_URL: string, token: string | null, playerEmail: string) => {
     try {
@@ -11,4 +23,5 @@ export const sendTokenToServer = async (SERVER_URL: string, token: string | null
     } catch (error) {
         console.error("could not post the data", error);
     }
+    
 };
