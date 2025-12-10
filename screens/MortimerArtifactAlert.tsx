@@ -71,7 +71,6 @@ export default function MortimerArtifactAlert()
               style={styles.button2}
               onPress={() => {
                 const socket = socketIO.getSocket();
-              
                 if (socket) {
                   socket.emit("artifactEvaluation", "reset");
                 }
@@ -91,7 +90,6 @@ export default function MortimerArtifactAlert()
             >
               <Text style={styles.buttonText2}>Validate Search</Text>
             </TouchableOpacity>
-
             </>
         );
 }

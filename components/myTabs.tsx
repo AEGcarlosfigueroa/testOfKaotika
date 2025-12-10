@@ -17,6 +17,7 @@ import { useWindowDimensions } from 'react-native';
 import { usePlayerStore } from '../gameStore';
 import Scanner from '../screens/scanner';
 import Obituary from '../screens/Obituary';
+import MortimerArtifactAlert from '../screens/MortimerArtifactAlert';
 
 const Tab = createBottomTabNavigator();
 
@@ -78,7 +79,7 @@ function mapNav() {
         <Stack.Screen name='Swamp' component={SpyCam} />
         <Stack.Screen name="Laboratory" component={Laboratory} />
         <Stack.Screen name="OldSchool" component={OldSchool} />
-        <Stack.Screen name="HallOfSages" component={HallOfSages} />
+        <Stack.Screen name="HallOfSages" component={MortimerArtifactAlert} />
         <Stack.Screen name="Obituary" component={Obituary} />
       </Stack.Navigator>
     )
