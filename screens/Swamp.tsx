@@ -99,6 +99,7 @@ export default function Swamp() {
       console.log("Received updated player:", updatePlayer);
       setPlayer(updatePlayer);
       setIsProcessingCollection(false);
+      setPlayerInRange(false);
     };
 
     socket.on("authorization", handler);
