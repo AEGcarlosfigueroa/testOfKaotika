@@ -1,4 +1,4 @@
-import scrollImage from "./../assets/scrollAlert.png"
+import scrollImage from "./../assets/hallOfSages.png"
 import { StyleSheet, Image, Text, View, TouchableOpacity } from "react-native";
 import React from "react";
 import socketIO from "../socketIO";

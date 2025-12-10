@@ -24,7 +24,8 @@ function Map() {
     SpyCam: undefined,
     Map: undefined,
     OldSchool: undefined,
-    Swamp: undefined
+    Swamp: undefined,
+    Obituary: undefined
   }
 
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
@@ -79,7 +80,7 @@ function Map() {
       </TouchableOpacity>
       {(obituaryState === obituaryStateList.unlocked) && (
         <TouchableOpacity style={styles.obituaryStyle} onPress={() => {
-          
+          navigation.navigate('Obituary')
         }}>
           <Image source={eye} style={styles.image} />
         </TouchableOpacity>

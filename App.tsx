@@ -127,14 +127,17 @@ function App() {
 
   const setIsInTower = usePlayerStore(state => state.setIsInTower)
 
-  const setScrollState = usePlayerStore(state => state.setScrollState)
+  const setScrollState = usePlayerStore(state => state.setScrollState);
+
+  const setObituaryState = usePlayerStore(state => state.setObituaryState)
 
   const [hasLoggedIn, setHasLoggedIn] = useState<Boolean>(false);
 
   async function fetchCurrentScrollState() {
-    const response = await fetch(serverURL + "/api/states/scrollstate");
+    const response = await fetch(serverURL + "/api/states/all");
     const data = await response.json();
-    setScrollState(data.state);
+    setScrollState(data.state.scrollState);
+    setObituaryState(data.state.obituaryState);
     console.log("Server response:", data);
   }
 

@@ -2,7 +2,6 @@ import { View, Text, Image, StyleSheet, useWindowDimensions } from "react-native
 import React from "react";
 import { GenericButton } from "../props/genericButton";
 import { usePlayerStore } from "../gameStore";
-import pergamino from "../assets/pergamino.png";
 import { Player } from "../interfaces/PlayerInterface";
 
 function TowerEntrance() {
@@ -22,7 +21,7 @@ const { height, width, scale, fontScale } = useWindowDimensions();
   if (player?.profile.role !== 'ACOLITO') {
     return (
       <>
-      <Image source={pergamino} style={styles.image} />
+      <Image source={imageSource} style={styles.image} />
         <Text style={styles.title}>Tower Logs</Text>
         <GenericButton />
         <View style={{ height: '85%', flex: 1, flexDirection: 'row', position: 'absolute', width: '90%', marginLeft: '5%', marginTop: '50%'}}>
