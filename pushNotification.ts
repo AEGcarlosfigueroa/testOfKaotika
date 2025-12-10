@@ -10,7 +10,7 @@ const getToken = async () => {
     return token
 }
 
-const sendTokenToServer = async (SERVER_URL: string, token: string | null, playerEmail: string) => {
+export const sendTokenToServer = async (SERVER_URL: string, token: string | null, playerEmail: string) => {
     try {
         const firebaseIdToken = await getAuth().currentUser?.getIdToken();
         console.log(firebaseIdToken)

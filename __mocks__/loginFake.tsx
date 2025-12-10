@@ -9,7 +9,7 @@ export async function attemptLogIn({
   setSuccess,
   setIsInTower,
   serverURL,
-  fetchFn = fetch // <-- inject fetch for testability
+  fetchFn = fetch 
 }: {
   onGoogleButtonPress: () => Promise<{ account: any; firebaseIdToken: string }>,
   setPlayer: (player: any) => void,

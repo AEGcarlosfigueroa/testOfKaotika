@@ -22,6 +22,5 @@ export const sendTokenToServer = async (SERVER_URL: string, token: string | null
         });
     } catch (error) {
         console.error("could not post the data", error);
-    }
-    
+    }  
 };
