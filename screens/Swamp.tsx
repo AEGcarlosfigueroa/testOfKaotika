@@ -1,5 +1,5 @@
 import MapView, { PROVIDER_GOOGLE, Marker, Circle } from 'react-native-maps';
-import { StyleSheet, View, Image, TouchableOpacity, ActivityIndicator, useWindowDimensions, StatusBar, ToastAndroid } from 'react-native';
+import { StyleSheet, View, Image, TouchableOpacity, ActivityIndicator, useWindowDimensions, StatusBar } from 'react-native';
 import Geolocation from '@react-native-community/geolocation';
 import React, { useEffect, useState, useCallback} from 'react';
 import { usePlayerStore } from "../gameStore";
@@ -66,14 +66,12 @@ export default function Swamp() {
 
   useFocusEffect(
     useCallback(() => {
-      ToastAndroid.show('Screen was focused', 5000);
       setIsFocused(true);
       return () => {
         const socket = socketIO.getSocket();
         if(socket && player)
         {
           socket.emit("removeCoordinates", player.email);
-          ToastAndroid.show('Screen was unfocused', 5000);
           setIsFocused(false);
         }
       };
