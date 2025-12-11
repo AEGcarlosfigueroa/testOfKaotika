@@ -1,12 +1,13 @@
 import scrollImage from "./../assets/hallOfSages.png"
-import { StyleSheet, Image, Text, View, TouchableOpacity } from "react-native";
-import React from "react";
+import { StyleSheet, Image, Text, View, TouchableOpacity, Animated, useWindowDimensions } from "react-native";
+import React, { useEffect, useRef } from "react";
 import socketIO from "../socketIO";
 import { usePlayerStore } from "../gameStore";
 import artifactImage0 from './../assets/artifacts/artifact0.png'
 import artifactImage1 from './../assets/artifacts/artifact1.png'
 import artifactImage2 from './../assets/artifacts/artifact2.png'
 import artifactImage3 from './../assets/artifacts/artifact3.png'
+import Navigator from "../components/navigator";
 
 export default function MortimerArtifactAlert() {
 
@@ -17,7 +18,11 @@ export default function MortimerArtifactAlert() {
     artifactImage3
   ]
 
+  console.log(artifactImages)
+
   const player = usePlayerStore(state => state.player)
+
+  console.log(player?.artifactInventory)
 
   const styles = StyleSheet.create({
     image: {
@@ -74,30 +79,94 @@ export default function MortimerArtifactAlert() {
       textAlign: 'center',
     },
     artifactImage: {
+      marginTop: 10,
       width: 80,
       height: 80,
-      margin: 10,
-      zIndex: 10,
+      margin: 50,
+
     }
 
   })
 
+  const { height, width } = useWindowDimensions();
+
+  const moveAnim = useRef(new Animated.ValueXY({ x: 0.6 * width, y: 0.6 * height })).current;
+
+  const fadeAnim = useRef(new Animated.Value(0)).current;
+
+  const anims = artifactImages.map(() => ({
+    moveAnim: useRef(new Animated.ValueXY({ x: 0.6 * width, y: 0.6 * height  })).current,
+    fadeAnim: useRef(new Animated.Value(1)).current,
+  }));
+
+  useEffect(() => {
+    const sequences = anims.map((anim, i) =>
+      Animated.sequence([
+        Animated.parallel([
+          Animated.timing(anim.moveAnim, {
+            toValue: { x: 50, y: 50 },
+            duration: 1000,
+            useNativeDriver: true,
+          }),
+          Animated.timing(anim.fadeAnim, {
+            toValue: 0.5,
+            duration: 1000,
+            useNativeDriver: true,
+          }),
+        ]),
+        Animated.parallel([
+          Animated.timing(anim.moveAnim, {
+            toValue: { x: 0, y: 0 },
+            duration: 1000,
+            useNativeDriver: true,
+          }),
+          Animated.timing(anim.fadeAnim, {
+            toValue: 1,
+            duration: 1000,
+            useNativeDriver: true,
+          }),
+        ]),
+      ])
+    );
+
+    Animated.stagger(300, sequences).start();
+  }, [anims]);
+
+
   return (
     <>
       <Image style={styles.image} source={scrollImage} />
-      <View style={{ flex: 1, alignItems: 'center' }}>
-        <Text style={[styles.title, { top: '40%', fontSize: 20 }]}>YOU ARE VERIFYING THE ARTIFACTS</Text>
-        {player?.artifactInventory.map((elem: string, i: number) => {
-          console.log("Player inventory:", player?.artifactInventory);
-          console.log("elem:", elem, "index:", parseInt(elem));
-          return (
-            <Image
+      <View >
+        <Animated.View
+          style={{
+            transform: moveAnim.getTranslateTransform(), // handles x/y movement
+            opacity: fadeAnim,                            // handles fading
+            flexDirection: 'row',   // children go in a row
+            flexWrap: 'wrap',       // allow wrapping to next line
+            justifyContent: 'center', // center horizontally
+            left: '-50%',
+            top: '-100%',
+          }}
+        >
+          {artifactImages.map((img, i) => (
+            <Image key={i} source={img} style={styles.artifactImage} />
+          ))}
+        </Animated.View><View style={{ flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'center' }}>
+          {artifactImages.map((img, i) => (
+            <Animated.View
               key={i}
-              source={artifactImages[parseInt(elem)]}
-              style={styles.artifactImage}
-            />
-          );
-        })}
+              style={{
+                transform: anims[i].moveAnim.getTranslateTransform(),
+                opacity: anims[i].fadeAnim,
+                margin: 10,
+              }}
+            >
+              <Image source={img} style={styles.artifactImage} />
+            </Animated.View>
+          ))}
+        </View>
+
+
       </View>
       <TouchableOpacity
         style={styles.button2}
