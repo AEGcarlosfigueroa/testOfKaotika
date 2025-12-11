@@ -1,6 +1,6 @@
 import scrollImage from "./../assets/hallOfSages.png"
 import { StyleSheet, Image, Text, View, TouchableOpacity, Animated, useWindowDimensions } from "react-native";
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import socketIO from "../socketIO";
 import { usePlayerStore } from "../gameStore";
 import artifactImage0 from './../assets/artifacts/artifact0.png'
@@ -21,6 +21,8 @@ export default function MortimerArtifactAlert() {
   console.log(artifactImages)
 
   const player = usePlayerStore(state => state.player)
+
+  const [isButton, setButton] = useState<Boolean>(false);
 
   console.log(player?.artifactInventory)
 
@@ -83,23 +85,18 @@ export default function MortimerArtifactAlert() {
       width: 80,
       height: 80,
       margin: 50,
-
     }
-
   })
 
   const { height, width } = useWindowDimensions();
 
-  const moveAnim = useRef(new Animated.ValueXY({ x: 0.6 * width, y: 0.6 * height })).current;
-
-  const fadeAnim = useRef(new Animated.Value(0)).current;
-
   const anims = artifactImages.map(() => ({
-    moveAnim: useRef(new Animated.ValueXY({ x: 0.6 * width, y: 0.6 * height  })).current,
-    fadeAnim: useRef(new Animated.Value(1)).current,
+    moveAnim: useRef(new Animated.ValueXY({ x: 0.6 * width, y: 0.6 * height })).current,
+    fadeAnim: useRef(new Animated.Value(0)).current,
   }));
 
   useEffect(() => {
+    setButton(false);
     const sequences = anims.map((anim, i) =>
       Animated.sequence([
         Animated.parallel([
@@ -109,7 +106,7 @@ export default function MortimerArtifactAlert() {
             useNativeDriver: true,
           }),
           Animated.timing(anim.fadeAnim, {
-            toValue: 0.5,
+            toValue: 1,
             duration: 1000,
             useNativeDriver: true,
           }),
@@ -129,7 +126,9 @@ export default function MortimerArtifactAlert() {
       ])
     );
 
-    Animated.stagger(300, sequences).start();
+    Animated.stagger(300, sequences).start(() =>{
+      setButton(true)
+    });
   }, [anims]);
 
 
@@ -139,8 +138,6 @@ export default function MortimerArtifactAlert() {
       <View >
         <Animated.View
           style={{
-            transform: moveAnim.getTranslateTransform(), // handles x/y movement
-            opacity: fadeAnim,                            // handles fading
             flexDirection: 'row',   // children go in a row
             flexWrap: 'wrap',       // allow wrapping to next line
             justifyContent: 'center', // center horizontally
@@ -151,7 +148,7 @@ export default function MortimerArtifactAlert() {
           {artifactImages.map((img, i) => (
             <Image key={i} source={img} style={styles.artifactImage} />
           ))}
-        </Animated.View><View style={{ flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'center' }}>
+        </Animated.View><View>
           {artifactImages.map((img, i) => (
             <Animated.View
               key={i}
@@ -168,6 +165,7 @@ export default function MortimerArtifactAlert() {
 
 
       </View>
+      {isButton && (<>
       <TouchableOpacity
         style={styles.button2}
         onPress={() => {
@@ -191,6 +189,7 @@ export default function MortimerArtifactAlert() {
       >
         <Text style={styles.buttonText2}>Validate Search</Text>
       </TouchableOpacity>
+      </>)}
     </>
   );
 }
