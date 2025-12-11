@@ -95,8 +95,7 @@ export default Map;
 
 function getStyles()
 {
-  const { height, scale, fontScale } = useWindowDimensions();
-
+  const { height, fontScale } = useWindowDimensions();
 
   const styles = StyleSheet.create({
     container: {

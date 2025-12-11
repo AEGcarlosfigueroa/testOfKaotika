@@ -83,15 +83,16 @@ export default function Swamp() {
 
     if (!socket || !position || !isFocused) {
       console.log("not sending coordinates");
-      return;
     }
+    else
+    {
+      console.log("sending message...");
 
-    console.log("sending message...");
+      const messageToUpload = { playerEmail: player?.email, latitude: position?.coords.latitude, longitude: position?.coords.longitude };
+      socket.emit("sendCoordinates", messageToUpload);
 
-    const messageToUpload = { playerEmail: player?.email, latitude: position?.coords.latitude, longitude: position?.coords.longitude };
-    socket.emit("sendCoordinates", messageToUpload);
-
-    console.log("Message sent");
+      console.log("Message sent");
+    }
 
   }
 
