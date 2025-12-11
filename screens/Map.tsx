@@ -32,9 +32,7 @@ function Map() {
 
   const setIsInTower = usePlayerStore(state => state.setIsInTower)
 
-  const artifactsDB = usePlayerStore(state => state.artifactsDB)
-
-  const setArtifacts = usePlayerStore(state => state.setArtifacts)
+  const setArtifacts = usePlayerStore(state => state.setArtifacts);
 
   const fetchArtifactsDB = async () => {
     try {
@@ -64,6 +62,7 @@ function Map() {
         navigation.navigate('OldSchool');
       }}>
         <Image source={moon} style={styles.image} />
+        <Text style={styles.text}>School</Text>
       </TouchableOpacity>
       <TouchableOpacity style={styles.towerStyle} onPress={() => {
         setIsInTower(true);
@@ -71,18 +70,21 @@ function Map() {
         navigation.navigate('Tower');
       }}>
         <Image source={rune} style={styles.image} />
+        <Text style={styles.text}>Tower</Text>
       </TouchableOpacity>
       <TouchableOpacity style={styles.swampStyle} onPress={ async () => {
         await fetchArtifactsDB();
         navigation.navigate('Swamp')
       }}>
         <Image source={book} style={styles.image} />
+        <Text style={styles.text}>Swamp</Text>
       </TouchableOpacity>
       {(obituaryState === obituaryStateList.unlocked) && (
         <TouchableOpacity style={styles.obituaryStyle} onPress={() => {
           navigation.navigate('Obituary')
         }}>
           <Image source={eye} style={styles.image} />
+          <Text style={styles.text}>Obituary</Text>
         </TouchableOpacity>
       )}
     </View>
@@ -109,19 +111,19 @@ function getStyles()
       position: 'absolute'
     },
     oldschoolStyle: {
-      width: (15*scale), height: (15*scale), top: (0.55*height), left: '10%', tintColor: 'white', position: 'absolute', zIndex: 20
+      width: (108*fontScale), height: (100*fontScale), top: (0.55*height), left: '10%', tintColor: 'white', position: 'absolute', zIndex: 20
     },
     towerStyle: {
-      width : (15*scale), height : (15*scale), top: (0.3*height), left: '50%', position: 'absolute', zIndex: 20
+      width : (108*fontScale), height : (100*fontScale), top: (0.3*height), left: '50%', position: 'absolute', zIndex: 20
     },
     image: {
       width : (50*fontScale), height : (50*fontScale), tintColor: 'white'
     },
     swampStyle: {
-       width : (15*scale), height : (15*scale), top: (0.5*height), left: '70%', position: 'absolute', zIndex: 20
+      width : (108*fontScale), height : (100*fontScale), top: (0.5*height), left: '70%', position: 'absolute', zIndex: 20
     },
     obituaryStyle: {
-       width : (15*scale), height : (15*scale), top: (0.75*height), left: '60%', position: 'absolute', zIndex: 20
+      width : (108*fontScale), height : (100*fontScale), top: (0.75*height), left: '60%', position: 'absolute', zIndex: 20
     },
     title: {
       fontSize: 30*fontScale,
@@ -136,30 +138,36 @@ function getStyles()
       backgroundColor: 'rgba(0, 0, 0, 0.5)',
       padding: '5%',
       textAlign: 'center'
-      // elevation: 2
     },
-  button2: {
-    position: 'absolute',
-    top: StatusBar.currentHeight,
-    left: '5%',
-    width: '25%',
-    height: '5%',
-    backgroundColor: 'rgba(0,0,0,0.5)',
-    borderRadius: 5,
-    borderWidth: 2,
-    borderColor: 'grey',
-    justifyContent: 'center',
-    alignItems: 'center',
-    zIndex: 15
-  },
-  buttonText2: {
-    fontFamily: 'OptimusPrincepsSemiBold',
-    color: '#E2DFD2',
-    fontSize: 30 * fontScale,
-    textAlign: 'center',
+    text: {
+      fontSize: 20*fontScale,
+      marginBottom: '5%',
+      marginTop: '25%',
+      color: '#E2DFD2',
+      fontFamily: 'OptimusPrincepsSemiBold',
     },
-  
-  });
+    button2: {
+      position: 'absolute',
+      top: StatusBar.currentHeight,
+      left: '5%',
+      width: '25%',
+      height: '5%',
+      backgroundColor: 'rgba(0,0,0,0.5)',
+      borderRadius: 5,
+      borderWidth: 2,
+      borderColor: 'grey',
+      justifyContent: 'center',
+      alignItems: 'center',
+      zIndex: 15
+    },
+    buttonText2: {
+      fontFamily: 'OptimusPrincepsSemiBold',
+      color: '#E2DFD2',
+      fontSize: 30 * fontScale,
+      textAlign: 'center',
+      },
+    
+    });
 
   return styles
 }
