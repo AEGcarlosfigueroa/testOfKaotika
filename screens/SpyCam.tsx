@@ -11,11 +11,11 @@ import artifactImage2 from './../assets/artifacts/artifact2.png'
 import artifactImage3 from './../assets/artifacts/artifact3.png'
 
 const artifactImages = [
-    artifactImage0,
-    artifactImage1,
-    artifactImage2,
-    artifactImage3
-  ]
+  artifactImage0,
+  artifactImage1,
+  artifactImage2,
+  artifactImage3
+]
 
 function SpyCam() {
 
@@ -51,39 +51,37 @@ function SpyCam() {
   }, [position])
 
   useEffect(() => {
-      const socket = socketIO.getSocket();
-      if (!socket) return;
-  
-      const handleLocationUpdated = (message: any) => {
-        setPositionList(message);
-        console.log("New coords received");
-      }
-  
-      const handleArtifactUpdate = (message: any) => {
-        setArtifacts(message);
-      }
-  
-      socket.on("locationUpdated", handleLocationUpdated);
-      socket.on("updateArtifacts", handleArtifactUpdate);
-      return () => {
-        socket.off("locationUpdated", handleLocationUpdated);
-        socket.off("updateArtifacts", handleArtifactUpdate);
-      }
-    }, [positionList, playerList]);
+    const socket = socketIO.getSocket();
+    if (!socket) return;
+
+    const handleLocationUpdated = (message: any) => {
+      setPositionList(message);
+      console.log("New coords received");
+    }
+
+    const handleArtifactUpdate = (message: any) => {
+      setArtifacts(message);
+    }
+
+    socket.on("locationUpdated", handleLocationUpdated);
+    socket.on("updateArtifacts", handleArtifactUpdate);
+    return () => {
+      socket.off("locationUpdated", handleLocationUpdated);
+      socket.off("updateArtifacts", handleArtifactUpdate);
+    }
+  }, [positionList, playerList]);
 
   const player = usePlayerStore(state => state.player);
 
   let artifactCollectedBar = <></>
 
-  if(player?.profile.role === 'MORTIMER')
-  {
+  if (player?.profile.role === 'MORTIMER') {
     artifactCollectedBar = (
       <View style={styles.inventory}>
         {artifactsDB.map((elem, i: number) => {
-          if(elem.isCollected)
-          {
-            return(
-              <Image key={i} source={artifactImages[parseInt(elem.artifactID)]} style={styles.image}/>
+          if (elem.isCollected) {
+            return (
+              <Image key={i} source={artifactImages[parseInt(elem.artifactID)]} style={styles.image} />
             )
           }
         })}
@@ -94,69 +92,69 @@ function SpyCam() {
   if (player !== null && position !== null) {
     return (
       <>
-      {artifactCollectedBar}
-      <View style={styles.container}>
-        <MapView
-          provider={PROVIDER_GOOGLE} // remove if not using Google Maps
-          style={styles.map}
-          customMapStyle={mapStyle}
-          initialRegion={{
-            latitude: position?.coords.latitude,
-            longitude: position?.coords.longitude,
-            latitudeDelta: 0.015,
-            longitudeDelta: 0.0121,
-          }}
-        >
-          {
-            positionList.map((entry, i) => {
-              const avatarImage = getAvatarImage(entry.email);
-              if (avatarImage !== " ") {
+        {artifactCollectedBar}
+        <View style={styles.container}>
+          <MapView
+            provider={PROVIDER_GOOGLE} // remove if not using Google Maps
+            style={styles.map}
+            customMapStyle={mapStyle}
+            initialRegion={{
+              latitude: position?.coords.latitude,
+              longitude: position?.coords.longitude,
+              latitudeDelta: 0.015,
+              longitudeDelta: 0.0121,
+            }}
+          >
+            {
+              positionList.map((entry, i) => {
+                const avatarImage = getAvatarImage(entry.email);
+                if (avatarImage !== " ") {
+                  return (
+                    <Marker key={i} image={{ uri: avatarImage }} coordinate={{ latitude: entry.latitude, longitude: entry.longitude }}>
+                      <Image source={{ uri: avatarImage }} />
+                    </Marker>
+                  )
+                }
+
+                return <></>
+
+              })
+            }
+            {artifactsDB.map((artifact, i) => {
+              if (!artifact.isCollected && player.profile.role === 'MORTIMER') {
                 return (
-                  <Marker key={i} image={{ uri: avatarImage }} coordinate={{ latitude: entry.latitude, longitude: entry.longitude }}>
-                    <Image source={{ uri: avatarImage }} />
-                  </Marker>
-                )
+                  <React.Fragment key={i}>
+                    <Marker
+                      coordinate={{
+                        latitude: artifact.latitude,
+                        longitude: artifact.longitude,
+                      }}
+                      title={artifact.artifactName}
+                    >
+                      <Image
+                        source={artifactImages[parseInt(artifact.artifactID)]}
+                        style={{ width: 0.05 * height, height: 0.05 * height }}
+                        resizeMode="contain"
+                      />
+                    </Marker>
+                  </React.Fragment>
+                );
               }
 
+
               return <></>
-
-            })
-          }
-          {artifactsDB.map((artifact, i) => {
-            if (!artifact.isCollected && player.profile.role === 'MORTIMER') {
-              return (
-                <React.Fragment key={i}>
-                  <Marker
-                    coordinate={{
-                      latitude: artifact.latitude,
-                      longitude: artifact.longitude,
-                    }}
-                    title={artifact.artifactName}
-                  >
-                    <Image
-                      source={artifactImages[parseInt(artifact.artifactID)]}
-                      style={{ width: 0.05*height, height: 0.05*height }}
-                      resizeMode="contain"
-                    />
-                  </Marker>
-                </React.Fragment>
-              );
-            }
-
-
-            return <></>
-          })}
-        </MapView>
-      </View>
+            })}
+          </MapView>
+        </View>
       </>
     )
   }
   else {
     console.log("map not loaded");
     return (
-        <View style={styles.fullScreen}>
-          <ActivityIndicator size="large" style={styles.spinner} />
-        </View>
+      <View style={styles.fullScreen}>
+        <ActivityIndicator size="large" style={styles.spinner} />
+      </View>
     );
   }
 
@@ -191,7 +189,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     marginTop: StatusBar.currentHeight,
     position: 'absolute',
-    backgroundColor: 'rgba(0,0,0,0.5)', 
+    backgroundColor: 'rgba(0,0,0,0.5)',
     zIndex: 20
   },
   image: {

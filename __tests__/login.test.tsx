@@ -84,3 +84,4 @@ describe("attemptLogIn", () => {
     expect(mockSetLoading).toHaveBeenCalledTimes(2); // true and false
   });
 });
+

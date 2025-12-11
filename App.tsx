@@ -31,6 +31,7 @@ export const serverURL = "http://10.50.0.50:6002";
 // export const serverURL = "http://10.70.0.24:3000"
 // export const serverURL = 'http://10.70.0.154:3000'
 // export const serverURL = 'http://192.168.0.224:3000'
+// export const serverURL = 'http://192.168.1.131:3000'
 
 
 const onGoogleButtonPress = async () => {
