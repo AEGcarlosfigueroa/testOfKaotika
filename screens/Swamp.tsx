@@ -1,11 +1,12 @@
 import MapView, { PROVIDER_GOOGLE, Marker, Circle } from 'react-native-maps';
-import { StyleSheet, View, Image, TouchableOpacity, ActivityIndicator, useWindowDimensions, StatusBar } from 'react-native';
+import { StyleSheet, View, Image, TouchableOpacity, ActivityIndicator, useWindowDimensions, StatusBar, ToastAndroid } from 'react-native';
 import Geolocation from '@react-native-community/geolocation';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback} from 'react';
 import { usePlayerStore } from "../gameStore";
 import mapStyle from './../mapStyle.json'
 import socketIO from '../socketIO';
 import { Text } from 'react-native-gesture-handler';
+import { useFocusEffect } from '@react-navigation/native';
 import artifactImage0 from './../assets/artifacts/artifact0.png'
 import artifactImage1 from './../assets/artifacts/artifact1.png'
 import artifactImage2 from './../assets/artifacts/artifact2.png'
@@ -48,6 +49,8 @@ export default function Swamp() {
 
   const [isProcessingCollection, setIsProcessingCollection] = useState<Boolean>(false);
 
+  const [isFocused, setIsFocused] = useState<Boolean>(false)
+
   const [closestArtifact, setClosestArtifact] = useState<ArtifactDistances | null>(null);
 
   const { height } = useWindowDimensions();
@@ -61,10 +64,27 @@ export default function Swamp() {
     artifactImage3
   ]
 
+  useFocusEffect(
+    useCallback(() => {
+      ToastAndroid.show('Screen was focused', 5000);
+      setIsFocused(true);
+      return () => {
+        const socket = socketIO.getSocket();
+        if(socket && player)
+        {
+          socket.emit("removeCoordinates", player.email);
+          ToastAndroid.show('Screen was unfocused', 5000);
+          setIsFocused(false);
+        }
+      };
+    }, [])
+  )
+
   const uploadCoordinates = () => {
     const socket = socketIO.getSocket();
 
-    if (!socket || !position) {
+    if (!socket || !position || !isFocused) {
+      console.log("not sending coordinates");
       return;
     }
 
@@ -112,7 +132,6 @@ export default function Swamp() {
 
   const handleNewPosition = (info: any) => {
     setPosition(info);
-    uploadCoordinates();
     if (artifactsDB?.length > 0) {
       const artifactsdistances: ArtifactDistances[] = artifactsDB.map(artifact => ({
         id: artifact.artifactID,
@@ -129,7 +148,6 @@ export default function Swamp() {
     }
   }
 
-
   const tryLowAccuracy = () => {
     Geolocation.getCurrentPosition(info => handleNewPosition(info), undefined, { enableHighAccuracy: false, timeout: 20000, maximumAge: 10000 });
   }
@@ -137,9 +155,11 @@ export default function Swamp() {
   useEffect(() => {
     const interval = setInterval(() => {
       Geolocation.getCurrentPosition(info => handleNewPosition(info), tryLowAccuracy, { enableHighAccuracy: true, timeout: 20000, maximumAge: 10000 });
+      uploadCoordinates();
     }, 2000);
+    
 
-    return () => clearInterval(interval);
+    return () => clearInterval(interval)
   }, [position, artifactsDB]);
 
 

@@ -6,7 +6,6 @@ import { useNavigation, NavigationProp } from "@react-navigation/native";
 import stars from "../assets/icons/stars.png"
 import tarot from "../assets/icons/tarot.png"
 import { usePlayerStore, scrollStateList } from "../gameStore";
-import socketIO from "../socketIO";
 
 function OldSchool() {
 
@@ -32,14 +31,10 @@ function OldSchool() {
   if (scrollState === scrollStateList.destroyed) {
     hallSages = (
       <TouchableOpacity style={styles.hallStyle} onPress={() => {
-        const socket = socketIO.getSocket();
-        if (socket) {
-          socket.emit("hallOfSages", "enter");
-          console.log("hallOfSages message emitted");
-        }
         navigation.navigate('HallOfSages');
       }}>
         <Image source={tarot} style={styles.image2} />
+        <Text style={styles.text}>HALL OF SAGES</Text>
       </TouchableOpacity>
     )
   }
@@ -58,6 +53,7 @@ function OldSchool() {
         navigation.navigate('Entrance');
       }}>
         <Image source={stars} style={styles.image} />
+        <Text style={styles.text}>LAB</Text>
       </TouchableOpacity>
       {hallSages}
     </View>
@@ -83,10 +79,10 @@ function getStyles()
       position: 'absolute'
     },
     entranceStyle: {
-      width: (15 * scale), height: (15 * scale), top: (0.25 * height), left: (0.15 * width), tintColor: 'black', position: 'absolute', zIndex: 20
+      width: (100*fontScale), height: (100*fontScale), top: (0.25 * height), left: (0.15 * width), tintColor: 'black', position: 'absolute', zIndex: 20
     },
     hallStyle: {
-      width: (15 * scale), height: (15 * scale), top: (0.25 * height), left: '80%', tintColor: 'yellow', position: 'absolute', zIndex: 20
+      width: (100*fontScale), height: (100*fontScale), top: (0.25 * height), left: '75%', tintColor: 'yellow', position: 'absolute', zIndex: 20
     },
     image: {
       width: (60 * fontScale), height: (60 * fontScale), tintColor: 'white'
@@ -107,7 +103,6 @@ function getStyles()
       backgroundColor: 'rgba(0, 0, 0, 0.5)',
       padding: '5%',
       textAlign: 'center'
-      // elevation: 2
     },
     button2: {
       position: 'absolute',
@@ -122,7 +117,13 @@ function getStyles()
       justifyContent: 'center',
       alignItems: 'center',
       zIndex: 15
-
+    },
+    text: {
+      fontSize: 20*fontScale,
+      marginBottom: '5%',
+      marginTop: '25%',
+      color: '#E2DFD2',
+      fontFamily: 'OptimusPrincepsSemiBold',
     },
     buttonText2: {
       fontFamily: 'OptimusPrincepsSemiBold',
