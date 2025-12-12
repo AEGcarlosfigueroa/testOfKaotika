@@ -6,17 +6,15 @@ import { Player } from "../interfaces/PlayerInterface";
 
 function TowerEntrance() {
 
-const { height, width, scale, fontScale } = useWindowDimensions();
-
-  const warning = "Turn back, traveler. The gate ahead does not open to the world of men."
-
   const player = usePlayerStore(state => state.player);
 
   const playerList = usePlayerStore(state => state.playerList);
 
+  const styles = getStyle();
+
   const imageSource = require('../assets/towerEntrance.png');
 
-  const styles = getStyle();
+  const warning = "Turn back, traveler. The gate ahead does not open to the world of men.";
 
   if (player?.profile.role !== 'ACOLITO') {
     return (
@@ -41,7 +39,7 @@ const { height, width, scale, fontScale } = useWindowDimensions();
       <View style={{ flex: 1, alignItems: 'center' }}>
         <Text style={styles.title2}>THE TOWER ENTRANCE</Text>
         <Image source={imageSource} style={styles.image} />
-        {player?.profile.role === "ACOLITO" && <Text style={[styles.title, { top: '40%', fontSize: 30 * fontScale }]}>{warning}</Text>}
+        {player?.profile.role === "ACOLITO" && <Text style={[styles.title, { top: '40%', fontSize: 30 }]}>{warning}</Text>}
         <GenericButton />
       </View>
     )

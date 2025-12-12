@@ -95,6 +95,23 @@ export default function HallOfSages() {
     },
   });
 
+  const button = (
+    <TouchableOpacity
+      style={styles.button}
+      onPress={() => {
+        const socket = socketIO.getSocket();
+      
+        if (socket) {
+          socket.emit("showArtifacts", " ");
+        }
+      }}
+    >
+      <Text style={styles.buttonText2}>Show Artifacts</Text>
+    </TouchableOpacity>
+  );
+
+  
+
   useFocusEffect(
       useCallback(() => {
         const socket = socketIO.getSocket();
@@ -136,20 +153,7 @@ export default function HallOfSages() {
         })}
       </View>
        {
-        (canShowArtifacts && player?.profile.role === 'ACOLITO') &&
-            (<TouchableOpacity
-              style={styles.button}
-              onPress={() => {
-                const socket = socketIO.getSocket();
-              
-                if (socket) {
-                  socket.emit("showArtifacts", " ");
-                }
-              }}
-            >
-              <Text style={styles.buttonText2}>Show Artifacts</Text>
-            </TouchableOpacity>)
-       }
+        (canShowArtifacts && player?.profile.role === 'ACOLITO') && button}
     </>
   );
 };
