@@ -7,7 +7,6 @@ import artifactImage0 from './../assets/artifacts/artifact0.png'
 import artifactImage1 from './../assets/artifacts/artifact1.png'
 import artifactImage2 from './../assets/artifacts/artifact2.png'
 import artifactImage3 from './../assets/artifacts/artifact3.png'
-import Navigator from "../components/navigator";
 
 export default function MortimerArtifactAlert() {
 
@@ -24,7 +23,7 @@ export default function MortimerArtifactAlert() {
 
   const [isButton, setButton] = useState<Boolean>(false);
 
-  console.log(player?.artifactInventory)
+  const { height, width } = useWindowDimensions();
 
   const styles = StyleSheet.create({
     image: {
@@ -81,14 +80,12 @@ export default function MortimerArtifactAlert() {
       textAlign: 'center',
     },
     artifactImage: {
-      marginTop: 10,
-      width: 80,
-      height: 80,
-      margin: 50,
+      marginTop: 0.001*width,
+      width: 0.3*width,
+      height: 0.3*width,
+      margin: 0.001*width,
     }
   })
-
-  const { height, width } = useWindowDimensions();
 
   const anims = artifactImages.map(() => ({
     moveAnim: useRef(new Animated.ValueXY({ x: 0.6 * width, y: 0.6 * height })).current,
@@ -101,7 +98,7 @@ export default function MortimerArtifactAlert() {
       Animated.sequence([
         Animated.parallel([
           Animated.timing(anim.moveAnim, {
-            toValue: { x: 50, y: 50 },
+            toValue: { x: 0.5*width, y: 0.05*height },
             duration: 1000,
             useNativeDriver: true,
           }),
@@ -113,7 +110,7 @@ export default function MortimerArtifactAlert() {
         ]),
         Animated.parallel([
           Animated.timing(anim.moveAnim, {
-            toValue: { x: 0, y: 0 },
+            toValue: { x: 0.4*width, y: 0 },
             duration: 1000,
             useNativeDriver: true,
           }),
@@ -126,7 +123,7 @@ export default function MortimerArtifactAlert() {
       ])
     );
 
-    Animated.stagger(300, sequences).start(() =>{
+    Animated.stagger(0.2*width, sequences).start(() =>{
       setButton(true)
     });
   }, [anims]);
@@ -136,26 +133,14 @@ export default function MortimerArtifactAlert() {
     <>
       <Image style={styles.image} source={scrollImage} />
       <View >
-        <Animated.View
-          style={{
-            flexDirection: 'row',   // children go in a row
-            flexWrap: 'wrap',       // allow wrapping to next line
-            justifyContent: 'center', // center horizontally
-            left: '-50%',
-            top: '-100%',
-          }}
-        >
-          {artifactImages.map((img, i) => (
-            <Image key={i} source={img} style={styles.artifactImage} />
-          ))}
-        </Animated.View><View>
+      <View style={{display: 'flex', flexDirection: 'row', right: 0.25*width, top: 0.2*height, flexWrap: 'wrap', width: 0.75*width}}>
           {artifactImages.map((img, i) => (
             <Animated.View
               key={i}
               style={{
                 transform: anims[i].moveAnim.getTranslateTransform(),
                 opacity: anims[i].fadeAnim,
-                margin: 10,
+                margin: 0.025*width,
               }}
             >
               <Image source={img} style={styles.artifactImage} />
