@@ -62,8 +62,7 @@ function OldSchool() {
 
 export default OldSchool;
 
-function getStyles()
-{
+function getStyles() {
   const { height, width, scale, fontScale } = useWindowDimensions();
 
   const styles = StyleSheet.create({
@@ -79,10 +78,10 @@ function getStyles()
       position: 'absolute'
     },
     entranceStyle: {
-      width: (100*fontScale), height: (100*fontScale), top: (0.25 * height), left: (0.15 * width), tintColor: 'black', position: 'absolute', zIndex: 20
+      width: (100 * fontScale), height: (100 * fontScale), top: (0.25 * height), left: (0.15 * width), tintColor: 'black', position: 'absolute', zIndex: 20
     },
     hallStyle: {
-      width: (100*fontScale), height: (100*fontScale), top: (0.25 * height), left: '75%', tintColor: 'yellow', position: 'absolute', zIndex: 20
+      width: (100 * fontScale), height: (100 * fontScale), top: (0.25 * height), left: '75%', tintColor: 'yellow', position: 'absolute', zIndex: 20
     },
     image: {
       width: (60 * fontScale), height: (60 * fontScale), tintColor: 'white'
@@ -119,11 +118,15 @@ function getStyles()
       zIndex: 15
     },
     text: {
-      fontSize: 20*fontScale,
+      fontSize: 20 * fontScale,
       marginBottom: '5%',
       marginTop: '25%',
       color: '#E2DFD2',
+      boxShadow: '5px 5px 5px 5px black',
+      backgroundColor: 'rgba(0, 0, 0, 0.5)',
       fontFamily: 'OptimusPrincepsSemiBold',
+      justifyContent: 'center',
+      alignItems: 'center',
     },
     buttonText2: {
       fontFamily: 'OptimusPrincepsSemiBold',
