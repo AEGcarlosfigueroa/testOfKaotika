@@ -18,6 +18,7 @@ import { usePlayerStore } from '../gameStore';
 import Scanner from '../screens/scanner';
 import Obituary from '../screens/Obituary';
 import OldSchoolDungeon from '../screens/OldSchoolDungeon';
+import HollowOfTheLost from '../screens/HollowOfTheLost';
 
 const Tab = createBottomTabNavigator();
 
@@ -52,6 +53,7 @@ function mapNav() {
         <Stack.Screen name="HallOfSages" component={HallOfSages} />
         <Stack.Screen name="Obituary" component={Obituary} />
         <Stack.Screen name="OldSchoolDungeon" component={OldSchoolDungeon} />
+        <Stack.Screen name="HollowOfTheLost" component={HollowOfTheLost} />
       </Stack.Navigator>
     )
   }
@@ -68,6 +70,7 @@ function mapNav() {
         <Stack.Screen name="HallOfSages" component={HallOfSages} />
         <Stack.Screen name="Obituary" component={Obituary} />
         <Stack.Screen name="OldSchoolDungeon" component={OldSchoolDungeon} />
+        <Stack.Screen name="HollowOfTheLost" component={HollowOfTheLost} />
       </Stack.Navigator>
     )
   }
@@ -84,6 +87,7 @@ function mapNav() {
         <Stack.Screen name="HallOfSages" component={HallOfSages} />
         <Stack.Screen name="Obituary" component={Obituary} />
         <Stack.Screen name="OldSchoolDungeon" component={OldSchoolDungeon} />
+        <Stack.Screen name="HollowOfTheLost" component={HollowOfTheLost} />
       </Stack.Navigator>
     )
   }

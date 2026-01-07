@@ -8,6 +8,7 @@ import rune from "../assets/icons/rune.png"
 import { StatusBar } from "react-native";
 import { obituaryStateList, usePlayerStore } from "../gameStore";
 import book from "../assets/icons/book.png";
+import pluto from '../assets/icons/pluto.png'
 import { serverURL } from "../App";
 
 function Map() {
@@ -26,6 +27,7 @@ function Map() {
     OldSchool: undefined,
     Swamp: undefined,
     Obituary: undefined
+    HollowOfTheLost: undefined
   }
 
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
@@ -63,6 +65,12 @@ function Map() {
       }}>
         <Image source={moon} style={styles.image} />
         <Text style={styles.text}>School</Text>
+      </TouchableOpacity>
+      <TouchableOpacity style={styles.hollowStyle} onPress={() => {
+        navigation.navigate('HollowOfTheLost');
+      }}>
+        <Image source={pluto} style={styles.image} />
+        <Text style={styles.text}>Lost Hollow</Text>
       </TouchableOpacity>
       <TouchableOpacity style={styles.towerStyle} onPress={() => {
         setIsInTower(true);
@@ -114,6 +122,9 @@ function getStyles()
     },
     towerStyle: {
       width : (108*fontScale), height : (100*fontScale), top: (0.3*height), left: '50%', position: 'absolute', zIndex: 20
+    },
+    hollowStyle: {
+      width : (108*fontScale), height : (100*fontScale), top: (0.35*height), left: '15%', position: 'absolute', zIndex: 20
     },
     image: {
       width : (50*fontScale), height : (50*fontScale), tintColor: 'white'
