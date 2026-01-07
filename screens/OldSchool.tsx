@@ -5,6 +5,7 @@ import map from "../assets/oldSchool.png";
 import { useNavigation, NavigationProp } from "@react-navigation/native";
 import stars from "../assets/icons/stars.png"
 import tarot from "../assets/icons/tarot.png"
+import jailDoor from "../assets/icons/jailDoor.png"
 import { usePlayerStore, scrollStateList } from "../gameStore";
 
 function OldSchool() {
@@ -21,7 +22,8 @@ function OldSchool() {
     SpyCam: undefined,
     Map: undefined,
     OldSchool: undefined,
-    HallOfSages: undefined
+    HallOfSages: undefined,
+    OldSchoolDungeon: undefined
   }
 
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
@@ -55,6 +57,12 @@ function OldSchool() {
         <Image source={stars} style={styles.image} />
         <Text style={styles.text}>LAB</Text>
       </TouchableOpacity>
+      <TouchableOpacity style={styles.dungeonStyle} onPress={() => {
+        navigation.navigate('OldSchoolDungeon');
+      }}>
+        <Image source={jailDoor} style={styles.image} />
+        <Text style={styles.text}>DUNGEON</Text>
+      </TouchableOpacity>
       {hallSages}
     </View>
   );
@@ -83,6 +91,9 @@ function getStyles()
     },
     hallStyle: {
       width: (100*fontScale), height: (100*fontScale), top: (0.25 * height), left: '75%', tintColor: 'yellow', position: 'absolute', zIndex: 20
+    },
+    dungeonStyle: {
+      width: (110*fontScale), height: (100*fontScale), top: (0.58 * height), left: '45%', tintColor: 'yellow', position: 'absolute', zIndex: 20
     },
     image: {
       width: (60 * fontScale), height: (60 * fontScale), tintColor: 'white'
