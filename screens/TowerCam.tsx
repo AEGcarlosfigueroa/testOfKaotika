@@ -2,30 +2,35 @@ import { View, Text, Image, StyleSheet, useWindowDimensions } from "react-native
 import React from "react";
 import { GenericButton } from "../props/genericButton";
 import { usePlayerStore } from "../gameStore";
+import { Player } from "../interfaces/PlayerInterface";
 
-function TowerEntrance() 
+function TowerCam() 
 {
-  const { fontScale } = useWindowDimensions();
-
-  const warning = "Turn back, traveler. The gate ahead does not open to the world of men."
-
-  const player = usePlayerStore(state => state.player);
+  const playerList = usePlayerStore(state => state.playerList);
 
   const imageSource = require('../assets/towerEntrance.png');
 
   const styles = getStyle();
 
   return (
-    <View style={{ flex: 1, alignItems: 'center' }}>
-      <Text style={styles.title2}>THE TOWER ENTRANCE</Text>
-      <Image source={imageSource} style={styles.image} />
-      {player?.profile.role === "ACOLITO" && <Text style={[styles.title, { top: '40%', fontSize: 30 * fontScale }]}>{warning}</Text>}
+    <>
+    <Image source={imageSource} style={styles.image} />
+      <Text style={styles.title}>Tower Logs</Text>
       <GenericButton />
-    </View>
+      <View style={{ height: '85%', flex: 1, flexDirection: 'row', position: 'absolute', width: '90%', marginLeft: '5%', marginTop: '50%'}}>
+        {playerList.map((elem: Player, i: any) => {
+          if (elem.isInTower) {
+            console.log(elem);
+            return <Image key={i} src={elem.avatar} style={styles.entryImage} />;
+          }
+          return <View key={i}></View>
+        })}
+      </View>
+    </>
   )
 }
 
-export default TowerEntrance;
+export default TowerCam;
 
 function getStyle()
 {
@@ -80,4 +85,3 @@ function getStyle()
 
   return styles;
 }
-

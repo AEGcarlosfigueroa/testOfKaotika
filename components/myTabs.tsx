@@ -19,6 +19,7 @@ import Scanner from '../screens/scanner';
 import Obituary from '../screens/Obituary';
 import OldSchoolDungeon from '../screens/OldSchoolDungeon';
 import HollowOfTheLost from '../screens/HollowOfTheLost';
+import TowerCam from '../screens/TowerCam';
 
 const Tab = createBottomTabNavigator();
 
@@ -63,7 +64,7 @@ function mapNav() {
       <Stack.Navigator screenOptions={{ headerShown: false }}>
         <Stack.Screen name="Map" component={Map} />
         <Stack.Screen name="Entrance" component={Scanner} />
-        <Stack.Screen name="Tower" component={TowerEntrance} />
+        <Stack.Screen name="Tower" component={TowerCam} />
         <Stack.Screen name='Swamp' component={SpyCam} />
         <Stack.Screen name="Laboratory" component={Laboratory} />
         <Stack.Screen name="OldSchool" component={OldSchool} />
@@ -80,7 +81,7 @@ function mapNav() {
       <Stack.Navigator screenOptions={{ headerShown: false }}>
         <Stack.Screen name="Map" component={Map} />
         <Stack.Screen name="Entrance" component={Entrance} />
-        <Stack.Screen name="Tower" component={TowerEntrance} />
+        <Stack.Screen name="Tower" component={TowerCam} />
         <Stack.Screen name='Swamp' component={SpyCam} />
         <Stack.Screen name="Laboratory" component={Laboratory} />
         <Stack.Screen name="OldSchool" component={OldSchool} />
