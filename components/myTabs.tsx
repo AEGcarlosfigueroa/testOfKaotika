@@ -19,6 +19,7 @@ import Scanner from '../screens/scanner';
 import Obituary from '../screens/Obituary';
 import OldSchoolDungeon from '../screens/OldSchoolDungeon';
 import HollowOfTheLost from '../screens/HollowOfTheLost';
+import InnOfTheForgotten from '../screens/InnOfTheForgotten';
 
 const Tab = createBottomTabNavigator();
 
@@ -40,8 +41,7 @@ export function stackNav() {
 }
 function mapNav() {
   const player = usePlayerStore(state => state.player);
-  if(player?.profile.role === 'ACOLITO')
-  {
+  if (player?.profile.role === 'ACOLITO') {
     return (
       <Stack.Navigator screenOptions={{ headerShown: false }}>
         <Stack.Screen name="Map" component={Map} />
@@ -54,11 +54,12 @@ function mapNav() {
         <Stack.Screen name="Obituary" component={Obituary} />
         <Stack.Screen name="OldSchoolDungeon" component={OldSchoolDungeon} />
         <Stack.Screen name="HollowOfTheLost" component={HollowOfTheLost} />
+        <Stack.Screen name="InnOfTheForgotten" component={InnOfTheForgotten} />
+
       </Stack.Navigator>
     )
   }
-  else if(player?.profile.role === 'ISTVAN')
-  {
+  else if (player?.profile.role === 'ISTVAN') {
     return (
       <Stack.Navigator screenOptions={{ headerShown: false }}>
         <Stack.Screen name="Map" component={Map} />
@@ -71,11 +72,11 @@ function mapNav() {
         <Stack.Screen name="Obituary" component={Obituary} />
         <Stack.Screen name="OldSchoolDungeon" component={OldSchoolDungeon} />
         <Stack.Screen name="HollowOfTheLost" component={HollowOfTheLost} />
+        <Stack.Screen name="InnOfTheForgotten" component={InnOfTheForgotten} />
       </Stack.Navigator>
     )
   }
-  else
-  {
+  else {
     return (
       <Stack.Navigator screenOptions={{ headerShown: false }}>
         <Stack.Screen name="Map" component={Map} />
@@ -87,6 +88,7 @@ function mapNav() {
         <Stack.Screen name="HallOfSages" component={HallOfSages} />
         <Stack.Screen name="Obituary" component={Obituary} />
         <Stack.Screen name="OldSchoolDungeon" component={OldSchoolDungeon} />
+        <Stack.Screen name="HollowOfTheLost" component={HollowOfTheLost} />
         <Stack.Screen name="HollowOfTheLost" component={HollowOfTheLost} />
       </Stack.Navigator>
     )

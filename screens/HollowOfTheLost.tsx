@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { View, Image, StyleSheet, Text, useWindowDimensions, StatusBar, TouchableOpacity } from 'react-native';
 import { NavigationProp, useNavigation } from '@react-navigation/native';
 import background from './../assets/hollowOfTheLost.png';
@@ -14,31 +14,37 @@ function HollowOfTheLost() {
     Tower: undefined,
     TowerEntrance: undefined,
     SpyCam: undefined,
-    OldSchool: undefined
+    OldSchool: undefined,
+    InnOfTheForgotten: undefined
   }
 
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
 
   return (
     <>
-        <TouchableOpacity
-          style={styles.button2}
-          onPress={() => {
-            navigation.navigate('Map')
-          }}
-        >
-          <Text style={styles.buttonText2}>Back</Text>
-        </TouchableOpacity>
-        <Image style={styles.image} source={background} />
-        <Text style={styles.title}>HOLLOW OF THE LOST</Text>
+      <TouchableOpacity
+        style={styles.button2}
+        onPress={() => {
+          navigation.navigate('Map')
+        }}
+      >
+        <Text style={styles.buttonText2}>Back</Text>
+      </TouchableOpacity>
+      <TouchableOpacity
+        style={styles.inn}
+        onPress={() => navigation.navigate('InnOfTheForgotten')}
+      >
+        <Text style={styles.buttonText2}>Inn Of The Forgotten</Text>
+      </TouchableOpacity>
+      <Image style={styles.image} source={background} />
+      <Text style={styles.title}>HOLLOW OF THE LOST</Text>
     </>
   );
 }
 
 export default HollowOfTheLost;
 
-function getStyles()
-{
+function getStyles() {
   const { fontScale, height } = useWindowDimensions();
 
   const styles = StyleSheet.create({
@@ -65,7 +71,7 @@ function getStyles()
     title: {
       fontSize: 50 * fontScale,
       marginBottom: '5%',
-      marginTop: (StatusBar.currentHeight || 0) + (0.07*height),
+      marginTop: (StatusBar.currentHeight || 0) + (0.07 * height),
       color: '#E2DFD2',
       textShadowColor: 'rgba(0, 0, 0, 0.7)',
       textShadowOffset: { width: 2, height: 4 },
@@ -82,6 +88,11 @@ function getStyles()
       fontSize: 30,
       textAlign: 'center',
     },
+    inn: {
+      width: (200 * fontScale), height: (100 * fontScale), top: (0.58 * height), left: '45%', tintColor: 'yellow', position: 'absolute', zIndex: 20
+    }
+
+
   });
 
   return styles
