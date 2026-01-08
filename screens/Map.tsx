@@ -17,6 +17,8 @@ function Map() {
 
   const obituaryState = usePlayerStore(state => state.obituaryState);
 
+  const player = usePlayerStore(state => state.player);
+
   type RootStackParamList = {
     Home: undefined,
     Entrance: undefined,
@@ -60,12 +62,13 @@ function Map() {
         <Text style={styles.buttonText2}>Back</Text>
       </TouchableOpacity>
 
+      {(!player?.isBetrayer) && (
       <TouchableOpacity style={styles.oldschoolStyle} onPress={() => {
         navigation.navigate('OldSchool');
-      }}>
-        <Image source={moon} style={styles.image} />
+        }}>
+        <Image source={moon} style={styles.image}/>
         <Text style={styles.text}>School</Text>
-      </TouchableOpacity>
+      </TouchableOpacity>)}
       <TouchableOpacity style={styles.hollowStyle} onPress={() => {
         navigation.navigate('HollowOfTheLost');
       }}>

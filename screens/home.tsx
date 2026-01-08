@@ -12,11 +12,23 @@ function Home() {
     console.log(player.level); // safe, TypeScript knows player is not null here
   }
 
+  let roleName;
+
+  if(player?.profile.role === 'ACOLITO' && player.isBetrayer)
+  {
+    roleName = "TRAITOR";
+  }
+  else
+  {
+    roleName = player?.profile.role
+  }
+
   let imageSource;
 
   switch (player?.profile.role) {
     case "ACOLITO":
-      imageSource = require("./../assets/Acolytes.webp");
+      if(!player.isBetrayer) imageSource = require("./../assets/Acolytes.webp");
+      else imageSource = require("./../assets/traitorHome.png");
       break;
     case "ISTVAN":
       imageSource = require("./../assets/home.webp");
@@ -30,7 +42,7 @@ function Home() {
   }
   return (
     <View style={{ flex: 1, alignItems: 'center' }}>
-      <Text style={styles.title}>Welcome {player?.profile.role}</Text>
+      <Text style={styles.title}>Welcome {roleName}</Text>
       <Image source={imageSource} style={styles.image} />
     </View>
   );
