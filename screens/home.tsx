@@ -12,23 +12,11 @@ function Home() {
     console.log(player.level); // safe, TypeScript knows player is not null here
   }
 
-  let roleName;
-
-  if(player?.profile.role === 'ACOLITO' && player.isBetrayer)
-  {
-    roleName = "TRAITOR";
-  }
-  else
-  {
-    roleName = player?.profile.role
-  }
-
   let imageSource;
 
   switch (player?.profile.role) {
     case "ACOLITO":
-      if(!player.isBetrayer) imageSource = require("./../assets/Acolytes.webp");
-      else imageSource = require("./../assets/hollowOfTheLost.png");
+      imageSource = require("./../assets/Acolytes.webp");
       break;
     case "ISTVAN":
       imageSource = require("./../assets/home.webp");
@@ -42,7 +30,7 @@ function Home() {
   }
   return (
     <View style={{ flex: 1, alignItems: 'center' }}>
-      <Text style={styles.title}>Welcome {roleName}</Text>
+      <Text style={styles.title}>Welcome {player?.profile.role}</Text>
       <Image source={imageSource} style={styles.image} />
     </View>
   );
@@ -50,8 +38,7 @@ function Home() {
 
 export default Home;
 
-function getStyles()
-{
+function getStyles() {
   const { fontScale } = useWindowDimensions();
 
   const styles = StyleSheet.create({
@@ -61,7 +48,7 @@ function getStyles()
       position: 'absolute',
       zIndex: -10,
     },
-  
+
     title: {
       fontSize: 50 * fontScale,
       marginBottom: '5%',
