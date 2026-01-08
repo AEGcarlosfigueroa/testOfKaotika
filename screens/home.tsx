@@ -28,7 +28,7 @@ function Home() {
   switch (player?.profile.role) {
     case "ACOLITO":
       if(!player.isBetrayer) imageSource = require("./../assets/Acolytes.webp");
-      else imageSource = require("./../assets/traitorHome.png");
+      else imageSource = require("./../assets/hollowOfTheLost.png");
       break;
     case "ISTVAN":
       imageSource = require("./../assets/home.webp");

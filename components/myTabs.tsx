@@ -40,7 +40,7 @@ export function stackNav() {
 }
 function mapNav() {
   const player = usePlayerStore(state => state.player);
-  if(player?.profile.role === 'ACOLITO' && !player?.isBetrayer)
+  if(player?.profile.role === 'ACOLITO')
   {
     return (
       <Stack.Navigator screenOptions={{ headerShown: false }}>
@@ -54,23 +54,6 @@ function mapNav() {
         <Stack.Screen name="Obituary" component={Obituary} />
         <Stack.Screen name="OldSchoolDungeon" component={OldSchoolDungeon} />
         <Stack.Screen name="HollowOfTheLost" component={HollowOfTheLost} />
-      </Stack.Navigator>
-    )
-  }
-  else if(player?.profile.role === 'ACOLITO' && player?.isBetrayer)
-  {
-    return (
-      <Stack.Navigator screenOptions={{ headerShown: false }}>
-        <Stack.Screen name="HollowOfTheLost" component={HollowOfTheLost} />
-        <Stack.Screen name="Map" component={Map} />
-        <Stack.Screen name="Entrance" component={Entrance} />
-        <Stack.Screen name="Tower" component={TowerEntrance} />
-        <Stack.Screen name='Swamp' component={Swamp} />
-        <Stack.Screen name="Laboratory" component={Laboratory} />
-        <Stack.Screen name="OldSchool" component={OldSchool} />
-        <Stack.Screen name="HallOfSages" component={HallOfSages} />
-        <Stack.Screen name="Obituary" component={Obituary} />
-        <Stack.Screen name="OldSchoolDungeon" component={OldSchoolDungeon} />
       </Stack.Navigator>
     )
   }
