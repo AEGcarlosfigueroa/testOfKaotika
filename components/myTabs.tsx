@@ -19,7 +19,11 @@ import Scanner from '../screens/scanner';
 import Obituary from '../screens/Obituary';
 import OldSchoolDungeon from '../screens/OldSchoolDungeon';
 import HollowOfTheLost from '../screens/HollowOfTheLost';
+<<<<<<< HEAD
 import InnOfTheForgotten from '../screens/InnOfTheForgotten';
+=======
+import TowerCam from '../screens/TowerCam';
+>>>>>>> 2f2832e7945e7f3640269253a03d78f9c284df31
 
 const Tab = createBottomTabNavigator();
 
@@ -64,7 +68,7 @@ function mapNav() {
       <Stack.Navigator screenOptions={{ headerShown: false }}>
         <Stack.Screen name="Map" component={Map} />
         <Stack.Screen name="Entrance" component={Scanner} />
-        <Stack.Screen name="Tower" component={TowerEntrance} />
+        <Stack.Screen name="Tower" component={TowerCam} />
         <Stack.Screen name='Swamp' component={SpyCam} />
         <Stack.Screen name="Laboratory" component={Laboratory} />
         <Stack.Screen name="OldSchool" component={OldSchool} />
@@ -81,7 +85,7 @@ function mapNav() {
       <Stack.Navigator screenOptions={{ headerShown: false }}>
         <Stack.Screen name="Map" component={Map} />
         <Stack.Screen name="Entrance" component={Entrance} />
-        <Stack.Screen name="Tower" component={TowerEntrance} />
+        <Stack.Screen name="Tower" component={TowerCam} />
         <Stack.Screen name='Swamp' component={SpyCam} />
         <Stack.Screen name="Laboratory" component={Laboratory} />
         <Stack.Screen name="OldSchool" component={OldSchool} />
@@ -94,7 +98,16 @@ function mapNav() {
     )
   }
 }
+
 export function MainTabNav() {
+  const player = usePlayerStore(state => state.player);
+
+  let barActiveColor = 'white'
+
+  if(player?.profile.role === 'ACOLITO' && player.isBetrayer)
+  {
+    barActiveColor = 'red';
+  }
   const { height, width, scale, fontScale } = useWindowDimensions();
   return (
     <Tab.Navigator
@@ -109,7 +122,7 @@ export function MainTabNav() {
           else if (route.name === 'Settings') iconName = 'settings-sharp';
           return <Ionicons name={iconName} size={size} color={color} />;
         },
-        tabBarActiveTintColor: 'white',
+        tabBarActiveTintColor: barActiveColor,
         tabBarInactiveTintColor: 'gray',
         tabBarShowLabel: false,
         tabBarStyle: {
