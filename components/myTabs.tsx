@@ -100,8 +100,7 @@ export function MainTabNav() {
 
   let barActiveColor = 'white'
 
-  if(player?.profile.role === 'ACOLITO' && player.isBetrayer)
-  {
+  if (player?.profile.role === 'ACOLITO' && player.isBetrayer) {
     barActiveColor = 'red';
   }
   const { height, width, scale, fontScale } = useWindowDimensions();
