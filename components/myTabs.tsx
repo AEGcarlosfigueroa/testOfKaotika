@@ -90,6 +90,7 @@ function mapNav() {
         <Stack.Screen name="Obituary" component={Obituary} />
         <Stack.Screen name="OldSchoolDungeon" component={OldSchoolDungeon} />
         <Stack.Screen name="HollowOfTheLost" component={HollowOfTheLost} />
+        <Stack.Screen name="InnOfTheForgotten" component={InnOfTheForgotten} />
       </Stack.Navigator>
     )
   }

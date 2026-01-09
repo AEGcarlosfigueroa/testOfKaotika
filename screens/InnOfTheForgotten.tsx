@@ -66,7 +66,7 @@ function InnOfTheForgotten() {
       }, [player]); 
 
     useEffect(() => {
-        if (!hasPrompted && player?.isBetrayer === false) {
+        if (!hasPrompted && player?.isBetrayer === false && player.profile.role === 'ACOLITO') {
             setModalVisible(true);
             setHasPrompted(true);
         }
