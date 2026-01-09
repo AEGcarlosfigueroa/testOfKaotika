@@ -58,7 +58,6 @@ function InnOfTheForgotten() {
         <>
             <Image style={styles.image} source={inn} />
             <Text style={styles.title}>Welcome</Text>
-
             <SafeAreaProvider>
                 <SafeAreaView style={styles.centeredView}>
                     <Modal
