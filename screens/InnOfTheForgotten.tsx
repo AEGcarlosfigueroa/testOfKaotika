@@ -15,6 +15,12 @@ function InnOfTheForgotten() {
 
     const [modalVisible, setModalVisible] = useState(false)
 
+    const [sending, setSending] = useState(false);
+
+    const [hasPrompted, setHasPrompted] = useState(false);
+
+
+
     const styles = getStyles();
 
     type RootStackParamList = {
@@ -26,23 +32,25 @@ function InnOfTheForgotten() {
         OldSchool: undefined
     }
 
-    const handleBetrayer = () => {
+    const handleBetrayerChange = () => {
         const socket = socketIO.getSocket();
-        if(socket){
-             socket.emit('turnIntoBetrayer', " ")
+        if (socket) {
+            socket.emit('turnIntoBetrayer', " ")
         }
-        
     }
-
-    const checkIfBetrayer = () => {
-        if (player?.isBetrayer === false) {
-            setModalVisible(true)
-        }
+    const onYesPress = () => {
+        if (sending) return;
+        setSending(true);
+        handleBetrayerChange();
+        setModalVisible(false);
     }
 
     useEffect(() => {
-        checkIfBetrayer()
-    }, [player]);
+        if (!hasPrompted && player?.isBetrayer === false) {
+            setModalVisible(true);
+            setHasPrompted(true);
+        }
+    }, [player, hasPrompted]);
 
     const navigation = useNavigation<NavigationProp<RootStackParamList>>();
 
@@ -67,7 +75,7 @@ function InnOfTheForgotten() {
                                 <View style={styles.buttonRow}>
                                     <Pressable
                                         style={[styles.button, styles.buttonClose]}
-                                        onPress={() => setModalVisible(false)}
+                                        onPress={() => onYesPress()}
                                     >
                                         <Text style={styles.textStyle}>YES!!</Text>
                                     </Pressable>
