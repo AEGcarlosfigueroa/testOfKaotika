@@ -19,11 +19,8 @@ import Scanner from '../screens/scanner';
 import Obituary from '../screens/Obituary';
 import OldSchoolDungeon from '../screens/OldSchoolDungeon';
 import HollowOfTheLost from '../screens/HollowOfTheLost';
-<<<<<<< HEAD
 import InnOfTheForgotten from '../screens/InnOfTheForgotten';
-=======
 import TowerCam from '../screens/TowerCam';
->>>>>>> 2f2832e7945e7f3640269253a03d78f9c284df31
 
 const Tab = createBottomTabNavigator();
 
@@ -92,7 +89,6 @@ function mapNav() {
         <Stack.Screen name="HallOfSages" component={HallOfSages} />
         <Stack.Screen name="Obituary" component={Obituary} />
         <Stack.Screen name="OldSchoolDungeon" component={OldSchoolDungeon} />
-        <Stack.Screen name="HollowOfTheLost" component={HollowOfTheLost} />
         <Stack.Screen name="HollowOfTheLost" component={HollowOfTheLost} />
       </Stack.Navigator>
     )

@@ -5,21 +5,20 @@ import inn from './../assets/inn.png'
 import { SafeAreaView, SafeAreaProvider } from 'react-native-safe-area-context';
 import { usePlayerStore } from "../gameStore";
 import socketIO from '../socketIO';
-import { Socket } from 'socket.io-client';
-
-
+import { Player } from '../interfaces/PlayerInterface';
+import { ActivityIndicator } from 'react-native';
 
 function InnOfTheForgotten() {
 
     const player = usePlayerStore(state => state.player);
+
+    const setPlayer = usePlayerStore(state => state.setPlayer);
 
     const [modalVisible, setModalVisible] = useState(false)
 
     const [sending, setSending] = useState(false);
 
     const [hasPrompted, setHasPrompted] = useState(false);
-
-
 
     const styles = getStyles();
 
@@ -29,7 +28,8 @@ function InnOfTheForgotten() {
         Tower: undefined,
         TowerEntrance: undefined,
         SpyCam: undefined,
-        OldSchool: undefined
+        OldSchool: undefined,
+        HollowOfTheLost: undefined
     }
 
     const handleBetrayerChange = () => {
@@ -46,18 +46,51 @@ function InnOfTheForgotten() {
     }
 
     useEffect(() => {
+        const socket = socketIO.getSocket();
+        if (!socket) return;
+    
+        console.log("Subscribing to authorization events");
+    
+        const handler = (updatePlayer: Player) => {
+          console.log("Received updated player:", updatePlayer);
+          setPlayer(updatePlayer);
+          setSending(false);
+        };
+    
+        socket.on("authorization", handler);
+    
+        return () => {
+          console.log("Unsubscribing from authorization events");
+          socket.off("authorization", handler);
+        };
+      }, [player]); 
+
+    useEffect(() => {
         if (!hasPrompted && player?.isBetrayer === false) {
             setModalVisible(true);
             setHasPrompted(true);
         }
     }, [player, hasPrompted]);
-
+    
     const navigation = useNavigation<NavigationProp<RootStackParamList>>();
 
     return (
         <>
+            {sending && (
+                <View style={styles.fullScreen}>
+                  <ActivityIndicator size="large" style={styles.spinner} />
+                </View>
+            )}
+            <TouchableOpacity
+              style={styles.button2}
+              onPress={() => {
+                navigation.navigate('HollowOfTheLost')
+              }}
+            >
+              <Text style={styles.buttonText2}>Back</Text>
+            </TouchableOpacity>
             <Image style={styles.image} source={inn} />
-            <Text style={styles.title}>Welcome</Text>
+            <Text style={styles.title}>INN OF THE FORGOTTEN</Text>
 
             <SafeAreaProvider>
                 <SafeAreaView style={styles.centeredView}>
@@ -71,7 +104,7 @@ function InnOfTheForgotten() {
                         }}>
                         <View style={styles.centeredView}>
                             <View style={styles.modalView}>
-                                <Text style={styles.modalText}>Would you like to be filthy rich?</Text>
+                                <Text style={styles.modalText}>Would you like to join Dravokar? Ditch that foolish Mortimer dude and get filthy rich and powerful for it.</Text>
                                 <View style={styles.buttonRow}>
                                     <Pressable
                                         style={[styles.button, styles.buttonClose]}
@@ -144,7 +177,6 @@ function getStyles() {
             fontSize: 30,
             textAlign: 'center',
         },
-
         text: {
             fontSize: 16 * fontScale,
             marginBottom: '5%',
@@ -204,7 +236,16 @@ function getStyles() {
             width: '100%',
             marginTop: 20,
         },
-
+        fullScreen: {
+          height: '100%',
+          position: 'absolute',
+          zIndex: 10,
+          width: '100%',
+          backgroundColor: 'rgba(0,0,0,1)'
+        },
+        spinner: {
+          marginTop: '99%'
+        },
     });
 
     return styles
