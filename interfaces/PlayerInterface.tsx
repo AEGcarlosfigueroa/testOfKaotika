@@ -6,6 +6,7 @@ export interface AttributeField {
   constitution: number;
   strength: number;
   insanity: number;
+  resistance: number;
 }
 
 // Basic item fields

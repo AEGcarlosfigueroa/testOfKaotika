@@ -21,6 +21,7 @@ import OldSchoolDungeon from '../screens/OldSchoolDungeon';
 import HollowOfTheLost from '../screens/HollowOfTheLost';
 import InnOfTheForgotten from '../screens/InnOfTheForgotten';
 import TowerCam from '../screens/TowerCam';
+import AcolyteTired from '../screens/AcolyteTired';
 
 const Tab = createBottomTabNavigator();
 
@@ -42,7 +43,7 @@ export function stackNav() {
 }
 function mapNav() {
   const player = usePlayerStore(state => state.player);
-  if (player?.profile.role === 'ACOLITO') {
+  if (player?.profile.role === 'ACOLITO' && player.attributes[0].resistance > 30) {
     return (
       <Stack.Navigator screenOptions={{ headerShown: false }}>
         <Stack.Screen name="Map" component={Map} />
@@ -58,6 +59,11 @@ function mapNav() {
         <Stack.Screen name="InnOfTheForgotten" component={InnOfTheForgotten} />
 
       </Stack.Navigator>
+    )
+  }
+  else if (player?.profile.role === 'ACOLITO' && player.attributes[0].resistance <= 30) {
+    return (
+      <AcolyteTired/>
     )
   }
   else if (player?.profile.role === 'ISTVAN') {
