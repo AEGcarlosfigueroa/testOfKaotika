@@ -22,6 +22,7 @@ import HollowOfTheLost from '../screens/HollowOfTheLost';
 import InnOfTheForgotten from '../screens/InnOfTheForgotten';
 import TowerCam from '../screens/TowerCam';
 import AcolyteTired from '../screens/AcolyteTired';
+import AcolyteStats from '../screens/AcolyteStats';
 
 const Tab = createBottomTabNavigator();
 
@@ -107,6 +108,13 @@ export function MainTabNav() {
 
   let barActiveColor = 'white'
 
+  let component = <></>
+
+  if(player?.profile.role === 'ACOLITO')
+  {
+    component = (<Tab.Screen name="Stats" component={AcolyteStats}/>);
+  }
+
   if (player?.profile.role === 'ACOLITO' && player.isBetrayer) {
     barActiveColor = 'red';
   }
@@ -122,6 +130,7 @@ export function MainTabNav() {
           if (route.name === 'Home') iconName = 'home';
           else if (route.name === 'Map') iconName = 'map';
           else if (route.name === 'Settings') iconName = 'settings-sharp';
+          else iconName='person-circle-sharp'
           return <Ionicons name={iconName} size={size} color={color} />;
         },
         tabBarActiveTintColor: barActiveColor,
@@ -147,6 +156,7 @@ export function MainTabNav() {
       <Tab.Screen name="Home" component={stackNav} />
       <Tab.Screen name="Map" component={mapNav} />
       <Tab.Screen name="Settings" component={SettingsStack} />
+      {component}
     </Tab.Navigator>
   );
 }
