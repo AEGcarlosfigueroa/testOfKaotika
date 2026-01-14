@@ -26,6 +26,7 @@ import AcolyteStats from '../screens/AcolyteStats';
 import istvanCurseApplier from '../screens/istvanCurseApplier';
 import { deadlyEffects } from '../interfaces/constants';
 import AcolyteCursed from '../screens/AcolyteCursed';
+import AcolyteSick from '../screens/AcolyteSick';
 
 const Tab = createBottomTabNavigator();
 
@@ -50,6 +51,11 @@ function mapNav() {
   if (player?.profile.role === 'ACOLITO' && player.statusEffects.includes(deadlyEffects.ethaziumCurse)) {
     return (
       <AcolyteCursed/>
+    )
+  }
+  else if (player?.profile.role === 'ACOLITO' && player.statusEffects.includes(deadlyEffects.epicWeakness || deadlyEffects.medulaApocalypse || deadlyEffects.putridPlague)) {
+    return (
+      <AcolyteSick/>
     )
   }
   else if (player?.profile.role === 'ACOLITO' && player.attributes[0].resistance > 30) {
