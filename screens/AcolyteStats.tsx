@@ -1,14 +1,67 @@
-import React from "react";
-import { View, useWindowDimensions, StyleSheet, StatusBar, Image } from "react-native";
+import React, { useEffect, useState } from "react";
+import { View, useWindowDimensions, StyleSheet, StatusBar, Image, TouchableOpacity, ActivityIndicator } from "react-native";
 import { Text } from "react-native-gesture-handler";
 import image from "./../assets/acolyteStats.png";
 import { usePlayerStore } from "../gameStore";
+import socketIO from "../socketIO";
+import { Player } from "../interfaces/PlayerInterface";
 
 export default function AcolyteStats()
 {
     const player = usePlayerStore(state => state.player);
-    
+
+    const setPlayer = usePlayerStore(state => state.setPlayer);
+
+    const [isProcessing, setIsProcessing] = useState<Boolean>(false);
+
     const styles = getStyles();
+
+    let component = <></>;
+
+    const loading = (
+        <View style={styles.fullScreen}>
+          <ActivityIndicator size="large" style={styles.spinner} />
+        </View>
+    );
+
+    useEffect(() => {
+        const socket = socketIO.getSocket();
+        if (!socket) return;
+    
+        console.log("Subscribing to authorization events");
+    
+        const handler = (updatePlayer: Player) => {
+          console.log("Received updated player:", updatePlayer);
+          setPlayer(updatePlayer);
+          setIsProcessing(false);
+        };
+    
+        socket.on("authorization", handler);
+    
+        return () => {
+          console.log("Unsubscribing from authorization events");
+          socket.off("authorization", handler);
+        };
+      }, [player]); 
+
+    if(!player?.isBetrayer && (player?.attributes[0].resistance || 0) > 30 && player?.statusEffects[0] === undefined)
+    {
+        component = (
+            <TouchableOpacity
+                style={styles.button}
+                onPress={() => {
+                  const socket = socketIO.getSocket();
+                
+                  if (socket) {
+                    socket.emit("acolyteRest", " ");
+                    setIsProcessing(true);
+                  }
+                }}
+            >
+              <Text style={styles.buttonText2}>Get some rest</Text>
+            </TouchableOpacity>
+        )
+    }
 
     return (
     <View style={styles.fullScreen}>
@@ -19,6 +72,8 @@ export default function AcolyteStats()
       <Text style={styles.text}>Charisma: {player?.attributes[0].charisma}</Text>
       <Text style={styles.text}>Dexterity: {player?.attributes[0].dexterity}</Text>
       <Text style={styles.text}>Strength: {player?.attributes[0].strength}</Text>
+      {component}
+      {isProcessing && loading}
       <Image source={image} style={styles.image}/>
     </View>
     );
@@ -102,7 +157,7 @@ function getStyles() {
             borderColor: 'grey',
             borderWidth: 2,
             margin: 10,
-
+            backgroundColor: "rgba(0,0,0,0.5)"
 
         },
         buttonOpen: {

@@ -168,7 +168,8 @@ export interface PlayerInfo {
   isBetrayer: boolean;
   skills: Skill[];
   isInHallOfSages: Boolean,
-  artifactInventory: [string]
+  artifactInventory: [string],
+  statusEffects: [string]
 }
 
 // Main Player Schema
