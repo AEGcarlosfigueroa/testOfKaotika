@@ -14,7 +14,7 @@ export default function Infectorium() {
 
     const setPlayer = usePlayerStore(state => state.setPlayer);
 
-    const playerList = usePlayerStore(state => state.playerList);
+    const playerList = usePlayerStore(state => state.acolyteList);
 
     const [isProcessing, setIsProcessing] = useState<Boolean>(false);
 
