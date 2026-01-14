@@ -24,6 +24,8 @@ import TowerCam from '../screens/TowerCam';
 import AcolyteTired from '../screens/AcolyteTired';
 import AcolyteStats from '../screens/AcolyteStats';
 import istvanCurseApplier from '../screens/istvanCurseApplier';
+import { deadlyEffects } from '../interfaces/constants';
+import AcolyteCursed from '../screens/AcolyteCursed';
 
 const Tab = createBottomTabNavigator();
 
@@ -45,7 +47,12 @@ export function stackNav() {
 }
 function mapNav() {
   const player = usePlayerStore(state => state.player);
-  if (player?.profile.role === 'ACOLITO' && player.attributes[0].resistance > 30) {
+  if (player?.profile.role === 'ACOLITO' && player.statusEffects.includes(deadlyEffects.ethaziumCurse)) {
+    return (
+      <AcolyteCursed/>
+    )
+  }
+  else if (player?.profile.role === 'ACOLITO' && player.attributes[0].resistance > 30) {
     return (
       <Stack.Navigator screenOptions={{ headerShown: false }}>
         <Stack.Screen name="Map" component={Map} />
