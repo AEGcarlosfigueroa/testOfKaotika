@@ -5,6 +5,8 @@ import { AdvancedCheckbox } from 'react-native-advanced-checkbox';
 
 export default function PlayerView({ player, index }: { player: any, index: number }) {
 
+    const { height } = useWindowDimensions();
+
     let textColor = 'grey';
 
     const styles = getStyle();
@@ -19,7 +21,7 @@ export default function PlayerView({ player, index }: { player: any, index: numb
             <Text style={{ fontSize: 20, color: textColor, position: 'relative' }}>{player.nickname}</Text>
             <Text style={{ fontSize: 20, color: textColor, position: 'relative' }}>Is Inside Laboratory?</Text>
             <AdvancedCheckbox
-                size={35}
+                size={0.035*height}
                 checkBoxStyle={styles.checkBox}
                 disabled={true}
                 value={player.isInside}
@@ -31,18 +33,20 @@ export default function PlayerView({ player, index }: { player: any, index: numb
 
 function getStyle()
 {
-const { height, width, scale, fontScale } = useWindowDimensions();
+    const { height, width, scale, fontScale } = useWindowDimensions();
     const styles = StyleSheet.create({
         view: {
             width: 0.90*width,
             marginTop: '5%',
             height: 0.12*height,
-            backgroundColor: 'rgba(0,0,0,1)',
-            borderWidth: 5,
+            backgroundColor: 'rgba(0,0,0,0.75)',
+            borderWidth: 0.005*width,
             borderStyle: 'solid',
             borderColor: 'gray',
             marginLeft: '5%',
             position: 'relative',
+            padding: 0.01 * width,
+            borderRadius: 0.05 * width
         },
         checkBox: {
         },
@@ -50,7 +54,7 @@ const { height, width, scale, fontScale } = useWindowDimensions();
             width: 0.15*width,
             height: 0.15*width,
             marginTop: '5%',
-            marginLeft: '70%',
+            marginLeft: 0.65*width,
             position: 'absolute',
             borderRadius: 0.15*width
         }

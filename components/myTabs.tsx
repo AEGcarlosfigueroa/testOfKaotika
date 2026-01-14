@@ -23,6 +23,7 @@ import InnOfTheForgotten from '../screens/InnOfTheForgotten';
 import TowerCam from '../screens/TowerCam';
 import AcolyteTired from '../screens/AcolyteTired';
 import AcolyteStats from '../screens/AcolyteStats';
+import istvanCurseApplier from '../screens/istvanCurseApplier';
 
 const Tab = createBottomTabNavigator();
 
@@ -114,6 +115,10 @@ export function MainTabNav() {
   {
     component = (<Tab.Screen name="Stats" component={AcolyteStats}/>);
   }
+  else if(player?.profile.role === 'ISTVAN')
+  {
+    component = (<Tab.Screen name="Curse" component={istvanCurseApplier}/>)
+  }
 
   if (player?.profile.role === 'ACOLITO' && player.isBetrayer) {
     barActiveColor = 'red';
@@ -130,6 +135,7 @@ export function MainTabNav() {
           if (route.name === 'Home') iconName = 'home';
           else if (route.name === 'Map') iconName = 'map';
           else if (route.name === 'Settings') iconName = 'settings-sharp';
+          else if (route.name === 'Curse') iconName = 'skull-sharp'
           else iconName='person-circle-sharp'
           return <Ionicons name={iconName} size={size} color={color} />;
         },
