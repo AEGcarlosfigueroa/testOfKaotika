@@ -23,6 +23,7 @@ import InnOfTheForgotten from '../screens/InnOfTheForgotten';
 import TowerCam from '../screens/TowerCam';
 import AcolyteTired from '../screens/AcolyteTired';
 import AcolyteStats from '../screens/AcolyteStats';
+import Infectorium from '../screens/Infectorium';
 
 const Tab = createBottomTabNavigator();
 
@@ -64,7 +65,7 @@ function mapNav() {
   }
   else if (player?.profile.role === 'ACOLITO' && player.attributes[0].resistance <= 30) {
     return (
-      <AcolyteTired/>
+      <AcolyteTired />
     )
   }
   else if (player?.profile.role === 'ISTVAN') {
@@ -110,13 +111,16 @@ export function MainTabNav() {
 
   let component = <></>
 
-  if(player?.profile.role === 'ACOLITO')
-  {
-    component = (<Tab.Screen name="Stats" component={AcolyteStats}/>);
+  if (player?.profile.role === 'ACOLITO') {
+    component = (<Tab.Screen name="Stats" component={AcolyteStats} />);
   }
 
   if (player?.profile.role === 'ACOLITO' && player.isBetrayer) {
     barActiveColor = 'red';
+  }
+  else if (player?.profile.role === 'VILLANO') {
+    component = (<Tab.Screen name="Infectorium" component={Infectorium} />);
+
   }
   const { height, width, scale, fontScale } = useWindowDimensions();
   return (
@@ -130,7 +134,7 @@ export function MainTabNav() {
           if (route.name === 'Home') iconName = 'home';
           else if (route.name === 'Map') iconName = 'map';
           else if (route.name === 'Settings') iconName = 'settings-sharp';
-          else iconName='person-circle-sharp'
+          else iconName = 'person-circle-sharp'
           return <Ionicons name={iconName} size={size} color={color} />;
         },
         tabBarActiveTintColor: barActiveColor,
