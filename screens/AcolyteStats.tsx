@@ -66,12 +66,13 @@ export default function AcolyteStats()
     return (
     <View style={styles.fullScreen}>
       <Text style={styles.title}>PLAYER STATS</Text>
-      <Text style={styles.text}>Resistance: {player?.attributes[0].resistance}</Text>
-      <Text style={styles.text}>Insanity: {player?.attributes[0].insanity}</Text>
-      <Text style={styles.text}>Intelligence: {player?.attributes[0].intelligence}</Text>
-      <Text style={styles.text}>Charisma: {player?.attributes[0].charisma}</Text>
-      <Text style={styles.text}>Dexterity: {player?.attributes[0].dexterity}</Text>
-      <Text style={styles.text}>Strength: {player?.attributes[0].strength}</Text>
+      <Text style={styles.text}>Resistance: {player?.attributes[0].resistance.toPrecision(2)}</Text>
+      <Text style={styles.text}>Insanity: {player?.attributes[0].insanity.toPrecision(2)}</Text>
+      <Text style={styles.text}>Intelligence: {player?.attributes[0].intelligence.toPrecision(2)}</Text>
+      <Text style={styles.text}>Charisma: {player?.attributes[0].charisma.toPrecision(2)}</Text>
+      <Text style={styles.text}>Dexterity: {player?.attributes[0].dexterity.toPrecision(2)}</Text>
+      <Text style={styles.text}>Strength: {player?.attributes[0].strength.toPrecision(2)}</Text>
+      <Text style={styles.text}>Constitution: {player?.attributes[0].constitution.toPrecision(2)}</Text>
       {component}
       {isProcessing && loading}
       <Image source={image} style={styles.image}/>
@@ -125,12 +126,12 @@ function getStyles() {
         },
         text: {
             fontSize: 32 * fontScale,
-            marginBottom: '2%',
-            marginTop: '2%',
+            marginBottom: '1%',
+            marginTop: '1%',
             color: '#E2DFD2',
             backgroundColor: 'rgba(0,0,0,0.5)',
             maxWidth: "100%",
-            padding: '3%',
+            padding: '2%',
             borderRadius: 0.02 * height,
             fontFamily: 'OptimusPrincepsSemiBold',
             justifyContent: 'center',
