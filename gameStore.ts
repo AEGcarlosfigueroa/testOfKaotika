@@ -35,7 +35,13 @@ export const usePlayerStore = create<PlayerStore>((set) => ({
     setObituaryState: (obituaryState) => set({ obituaryState }),
 
     canShowArtifacts: false,
-    setCanShowArtifacts: (canShowArtifacts) => set({ canShowArtifacts })
+    setCanShowArtifacts: (canShowArtifacts) => set({ canShowArtifacts }),
+
+    acolyteList: [],
+    setAcolyteList: (acolyteList) => set({ acolyteList }),
+
+    isProcessingStatusApplication: false,
+    setIsProcessingStatusApplication: (isProcessingStatusApplication) => set({ isProcessingStatusApplication })
 }))
 
 export const obituaryStateList = {

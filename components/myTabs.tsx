@@ -23,6 +23,10 @@ import InnOfTheForgotten from '../screens/InnOfTheForgotten';
 import TowerCam from '../screens/TowerCam';
 import AcolyteTired from '../screens/AcolyteTired';
 import AcolyteStats from '../screens/AcolyteStats';
+import istvanCurseApplier from '../screens/istvanCurseApplier';
+import { deadlyEffects } from '../interfaces/constants';
+import AcolyteCursed from '../screens/AcolyteCursed';
+import AcolyteSick from '../screens/AcolyteSick';
 import Infectorium from '../screens/Infectorium';
 
 const Tab = createBottomTabNavigator();
@@ -45,7 +49,17 @@ export function stackNav() {
 }
 function mapNav() {
   const player = usePlayerStore(state => state.player);
-  if (player?.profile.role === 'ACOLITO' && player.attributes[0].resistance > 30) {
+  if (player?.profile.role === 'ACOLITO' && player.statusEffects.includes(deadlyEffects.ethaziumCurse)) {
+    return (
+      <AcolyteCursed/>
+    )
+  }
+  else if (player?.profile.role === 'ACOLITO' && player.statusEffects.includes(deadlyEffects.epicWeakness || deadlyEffects.medulaApocalypse || deadlyEffects.putridPlague)) {
+    return (
+      <AcolyteSick/>
+    )
+  }
+  else if (player?.profile.role === 'ACOLITO' && player.attributes[0].resistance > 30) {
     return (
       <Stack.Navigator screenOptions={{ headerShown: false }}>
         <Stack.Screen name="Map" component={Map} />
@@ -111,8 +125,13 @@ export function MainTabNav() {
 
   let component = <></>
 
-  if (player?.profile.role === 'ACOLITO') {
-    component = (<Tab.Screen name="Stats" component={AcolyteStats} />);
+  if(player?.profile.role === 'ACOLITO')
+  {
+    component = (<Tab.Screen name="Stats" component={AcolyteStats}/>);
+  }
+  else if(player?.profile.role === 'ISTVAN')
+  {
+    component = (<Tab.Screen name="Curse" component={istvanCurseApplier}/>)
   }
 
   if (player?.profile.role === 'ACOLITO' && player.isBetrayer) {
@@ -134,7 +153,8 @@ export function MainTabNav() {
           if (route.name === 'Home') iconName = 'home';
           else if (route.name === 'Map') iconName = 'map';
           else if (route.name === 'Settings') iconName = 'settings-sharp';
-          else iconName = 'person-circle-sharp'
+          else if (route.name === 'Curse') iconName = 'skull-sharp'
+          else iconName='person-circle-sharp'
           return <Ionicons name={iconName} size={size} color={color} />;
         },
         tabBarActiveTintColor: barActiveColor,
