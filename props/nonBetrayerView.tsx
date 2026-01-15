@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { View, Text, Image, useWindowDimensions, StyleSheet } from "react-native";
+import React from "react";
+import { View, Text, Image, useWindowDimensions, StyleSheet,Pressable } from "react-native";
 import { deadlyEffects } from "../gameStore";
 
 // Simple mapping from stored numbers to readable names
@@ -10,21 +10,23 @@ const deadlyEffectsNames: Record<string, string> = {
     "3": "Ethazium Curse"
 };
 
-export default function NonBetrayerView({ player, index }: { player: any; index: number }) {
+export const deadlyEffectsArray = [
+    { id: "0", label: "Putrid Plague" },
+    { id: "1", label: "Epic Weakness" },
+    { id: "2", label: "Medula Apocalypse" },
+];
+
+export default function NonBetrayerView({ player, index, onPress }: { player: any; index: number; onPress: () => void }) {
 
     const { height, width } = useWindowDimensions();
 
     const styles = getStyles(width, height);
 
-    const [modalVisible, setModalVisible] = useState(false)
-
-    const [hasPrompted, setHasPrompted] = useState(false);
-
-
     // Determine text color for nickname
-    const textColor = player.isInside ? 'yellow' : 'grey';
+    const textColor = player.socketId ? '#E2DFD2' : 'grey';
 
     return (
+                <Pressable onPress={onPress}>
         <View style={styles.view}>
             {/* Player Avatar */}
             <Image
@@ -59,6 +61,7 @@ export default function NonBetrayerView({ player, index }: { player: any; index:
                 )}
             </View>
         </View>
+                </Pressable>
     );
 }
 
@@ -67,17 +70,17 @@ function getStyles(width: number, height: number) {
         view: {
             width: width * 0.9,
             marginTop: '5%',
-            backgroundColor: 'rgba(0,0,0,1)',
+            backgroundColor: 'rgba(0, 0, 0, 0.8)',
             borderWidth: 3,
-            borderColor: 'gray',
+            borderColor: '#E2DFD2',
             padding: 10,
             borderRadius: 10,
             position: 'relative',
         },
         text: {
-            fontSize: 20,
-            fontWeight: 'bold',
+            fontSize: 25,
             marginBottom: 5,
+            fontFamily: 'OptimusPrincepsSemiBold',
         },
         image: {
             width: width * 0.15,
@@ -91,8 +94,10 @@ function getStyles(width: number, height: number) {
             marginTop: 5,
         },
         statusText: {
-            fontSize: 16,
+            fontSize: 18,
             marginVertical: 1,
+            fontFamily: 'OptimusPrincepsSemiBold',
+
         },
         checkBox: {
             position: 'absolute',

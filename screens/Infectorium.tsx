@@ -1,22 +1,24 @@
 import React, { useEffect, useState } from "react";
-import { View, useWindowDimensions, StyleSheet, StatusBar, Image, TouchableOpacity, ActivityIndicator, ScrollView } from "react-native";
+import { View, useWindowDimensions, StyleSheet, StatusBar, Image, TouchableOpacity, ActivityIndicator, ScrollView, Alert, Pressable, Modal } from "react-native";
 import { SafeAreaView, SafeAreaProvider } from 'react-native-safe-area-context';
 import { Text } from "react-native-gesture-handler";
 import image from "./../assets/illness.png";
 import { usePlayerStore, deadlyEffects } from "../gameStore";
 import socketIO from "../socketIO";
 import { Player } from "../interfaces/PlayerInterface";
-import NonBetrayerView from '../props/nonBetrayerView'
+import NonBetrayerView, { deadlyEffectsArray } from '../props/nonBetrayerView'
 
 export default function Infectorium() {
-    
+
     const player = usePlayerStore(state => state.player);
+
+    const [selectedPlayer, setSelectedPlayer] = useState<Player | null>(null);
 
     const setPlayer = usePlayerStore(state => state.setPlayer);
 
     const playerList = usePlayerStore(state => state.acolyteList);
 
-    const [isProcessing, setIsProcessing] = useState<Boolean>(false);
+    const [modalVisible, setModalVisible] = useState(false)
 
     const styles = getStyles();
 
@@ -27,6 +29,11 @@ export default function Infectorium() {
             <ActivityIndicator size="large" style={styles.spinner} />
         </View>
     );
+
+    const handlePressPlayer = (pressedPlayer: Player) => {
+        setSelectedPlayer(pressedPlayer);
+        setModalVisible(true);
+    };
 
     useEffect(() => {
         const socket = socketIO.getSocket();
@@ -57,9 +64,63 @@ export default function Infectorium() {
                 <SafeAreaView>
                     <ScrollView overScrollMode="auto" style={{ height: '75%' }}>
                         {playerList.map((elem: Player, i: number) => (
-                            <NonBetrayerView player={elem} index={i} key={i} />
+                            <NonBetrayerView player={elem} index={i} key={i} onPress={() => handlePressPlayer(elem)} />
                         ))}
                     </ScrollView>
+                    <Modal transparent visible={modalVisible} animationType="fade">
+                        <View style={styles.centeredView}>
+                            <View style={styles.modalView}>
+                                <Text style={styles.modalText}>
+                                    Select an illness to afflict {selectedPlayer?.nickname}
+                                </Text>
+
+                                <View style={{ maxHeight: '60%' }}>
+                                    <ScrollView contentContainerStyle={styles.effectsGrid}>
+                                        {deadlyEffectsArray.map(effect => {
+                                            const isApplied = selectedPlayer?.statusEffects.includes(effect.id); // check if player already has it
+
+                                            return (
+                                                <Pressable
+                                                    key={effect.id}
+                                                    style={[
+                                                        styles.effectButton,
+                                                        isApplied && styles.disabledEffectButton // apply special style
+                                                    ]}
+                                                    onPress={() => {
+                                                        if (isApplied) return; // do nothing if already applied
+                                                        socketIO.getSocket()?.emit(
+                                                            "disease",
+                                                            selectedPlayer?.email,
+                                                            effect.id
+                                                        );
+                                                        setModalVisible(false);
+                                                    }}
+                                                    disabled={isApplied} // actually disables Pressable
+                                                >
+                                                    <Text
+                                                        style={[
+                                                            styles.effectText,
+                                                            isApplied && styles.disabledEffectText
+                                                        ]}
+                                                    >
+                                                        {effect.label}
+                                                    </Text>
+                                                </Pressable>
+                                            );
+                                        })}
+                                    </ScrollView>
+                                </View>
+
+                                <Pressable
+                                    style={[styles.effectButton, { width: '100%', marginTop: 10 }]}
+                                    onPress={() => setModalVisible(false)}
+                                >
+                                    <Text style={styles.effectText}>Cancel</Text>
+                                </Pressable>
+                            </View>
+                        </View>
+                    </Modal>
+
                 </SafeAreaView>
             </SafeAreaProvider>
         </View>
@@ -130,13 +191,13 @@ function getStyles() {
             alignItems: 'center',
         },
         modalView: {
-            margin: 10,
-            backgroundColor: 'rgba(0,0,0,0.5)',
-            borderRadius: 10,
-            padding: 100,
-            alignItems: 'center',
-
+            width: '90%',
+            maxHeight: '70%',
+            backgroundColor: 'rgba(0,0,0,0.9)',
+            borderRadius: 12,
+            padding: 20,
         },
+
         button: {
             borderRadius: 10,
             padding: 15,
@@ -165,12 +226,33 @@ function getStyles() {
             fontSize: 25 * fontScale,
 
         },
-        buttonRow: {
+        effectsGrid: {
             flexDirection: 'row',
-            justifyContent: 'space-between', // or 'center'
-            alignItems: 'center',
-            width: '100%',
-            marginTop: 20,
+            flexWrap: 'wrap',
+            justifyContent: 'center',
+            gap: 10,
+        },
+        effectButton: {
+            width: '45%',      // 2 per row
+            paddingVertical: 12,
+            paddingHorizontal: 10,
+            borderRadius: 10,
+            borderWidth: 2,
+            borderColor: '#E2DFD2',
+            backgroundColor: 'rgba(0,0,0,0.6)',
+        },
+        effectText: {
+            color: 'yellow',
+            textAlign: 'center',
+            fontFamily: 'OptimusPrincepsSemiBold',
+            fontSize: 20,
+        },
+        disabledEffectButton: {
+            backgroundColor: 'rgba(128,128,128,0.5)', // greyed out
+            borderColor: 'grey',
+        },
+        disabledEffectText: {
+            color: 'lightgrey',
         },
         fullScreen: {
             height: '100%',
