@@ -1,18 +1,24 @@
 import React, { useEffect, useState } from "react";
-import { View, useWindowDimensions, StyleSheet, StatusBar, Image, TouchableOpacity, ActivityIndicator } from "react-native";
+import { View, useWindowDimensions, StyleSheet, StatusBar, Image, TouchableOpacity, ActivityIndicator, ScrollView } from "react-native";
+import { SafeAreaView, SafeAreaProvider } from 'react-native-safe-area-context';
 import { Text } from "react-native-gesture-handler";
-import image from "./../assets/acolyteStats.png";
-import { usePlayerStore } from "../gameStore";
+import image from "./../assets/mortimerCurator.png";
+import { usePlayerStore, deadlyEffects } from "../gameStore";
 import socketIO from "../socketIO";
 import { Player } from "../interfaces/PlayerInterface";
+import MortimerCuratorView from "../props/mortimerCuratorView";
 
-export default function AcolyteStats()
-{
+export default function MortimerCurator() {
+    
     const player = usePlayerStore(state => state.player);
 
     const setPlayer = usePlayerStore(state => state.setPlayer);
 
-    const [isProcessing, setIsProcessing] = useState<Boolean>(false);
+    const playerList = usePlayerStore(state => state.acolyteList);
+
+    const setIsProcessingStatusApplication = usePlayerStore(state => state.setIsProcessingStatusApplication);
+
+    const isProcessingStatusApplication = usePlayerStore(state => state.isProcessingStatusApplication)
 
     const styles = getStyles();
 
@@ -20,63 +26,46 @@ export default function AcolyteStats()
 
     const loading = (
         <View style={styles.fullScreen}>
-          <ActivityIndicator size="large" style={styles.spinner} />
+            <ActivityIndicator size="large" style={styles.spinner} />
         </View>
     );
 
     useEffect(() => {
-        const socket = socketIO.getSocket();
-        if (!socket) return;
-    
-        console.log("Subscribing to authorization events");
-    
-        const handler = (updatePlayer: Player) => {
-          console.log("Received updated player:", updatePlayer);
-          setPlayer(updatePlayer);
-          setIsProcessing(false);
-        };
-    
-        socket.on("authorization", handler);
-    
-        return () => {
-          console.log("Unsubscribing from authorization events");
-          socket.off("authorization", handler);
-        };
-      }, [player]); 
+      const socket = socketIO.getSocket();
+      if (!socket) return;
 
-    if(!player?.isBetrayer && (player?.attributes[0].resistance || 0) > 30 && player?.statusEffects[0] === undefined)
-    {
-        component = (
-            <TouchableOpacity
-                style={styles.button}
-                onPress={() => {
-                  const socket = socketIO.getSocket();
-                
-                  if (socket) {
-                    socket.emit("acolyteRest", " ");
-                    setIsProcessing(true);
-                  }
-                }}
-            >
-              <Text style={styles.buttonText2}>Get some rest</Text>
-            </TouchableOpacity>
-        )
-    }
+      console.log("Subscribing to authorization events");
+
+      const handler = () => {
+        setIsProcessingStatusApplication(false);
+      };
+      
+
+      socket.on("confirmation", handler);
+
+      return () => {
+        console.log("Unsubscribing from authorization events");
+        socket.off("confirmation", handler);
+      };
+    }, [isProcessingStatusApplication]); 
+
 
     return (
-    <View style={styles.fullScreen}>
-      <Text style={styles.title}>PLAYER STATS</Text>
-      <Text style={styles.text}>Resistance: {player?.attributes[0].resistance.toPrecision(3)}</Text>
-      <Text style={styles.text}>Insanity: {player?.attributes[0].insanity.toPrecision(3)}</Text>
-      <Text style={styles.text}>Intelligence: {player?.attributes[0].intelligence.toPrecision(3)}</Text>
-      <Text style={styles.text}>Charisma: {player?.attributes[0].charisma.toPrecision(3)}</Text>
-      <Text style={styles.text}>Dexterity: {player?.attributes[0].dexterity.toPrecision(3)}</Text>
-      <Text style={styles.text}>Strength: {player?.attributes[0].strength.toPrecision(3)}</Text>
-      <Text style={styles.text}>Constitution: {player?.attributes[0].constitution.toPrecision(3)}</Text>
-      {component}
-      {isProcessing && loading}
-      <Image source={image} style={styles.image}/>
-    </View>
+        <View style={styles.fullScreen}>
+            <Text style={styles.title}>ACOLYTE RECOVERY</Text>
+            {component}
+            <Image source={image} style={styles.image} />
+            <SafeAreaProvider>
+                <SafeAreaView>
+                    <ScrollView overScrollMode="auto" style={{ height: '75%', marginLeft: '5%' }}>
+                        {playerList.map((elem: Player, i: number) => (
+                            <MortimerCuratorView player={elem} index={i} key={i} />
+                        ))}
+                    </ScrollView>
+                </SafeAreaView>
+            </SafeAreaProvider>
+            {isProcessingStatusApplication && loading}
+        </View>
     );
 }
 
@@ -126,12 +115,12 @@ function getStyles() {
         },
         text: {
             fontSize: 32 * fontScale,
-            marginBottom: '1%',
-            marginTop: '1%',
+            marginBottom: '2%',
+            marginTop: '2%',
             color: '#E2DFD2',
             backgroundColor: 'rgba(0,0,0,0.5)',
             maxWidth: "100%",
-            padding: '2%',
+            padding: '3%',
             borderRadius: 0.02 * height,
             fontFamily: 'OptimusPrincepsSemiBold',
             justifyContent: 'center',
@@ -187,14 +176,14 @@ function getStyles() {
             marginTop: 20,
         },
         fullScreen: {
-          height: '100%',
-          position: 'absolute',
-          zIndex: 10,
-          width: '100%',
-          backgroundColor: 'rgba(0,0,0,1)'
+            height: '100%',
+            position: 'absolute',
+            zIndex: 10,
+            width: '100%',
+            backgroundColor: 'rgba(0,0,0,1)'
         },
         spinner: {
-          marginTop: '99%'
+            marginTop: '99%'
         },
     });
 

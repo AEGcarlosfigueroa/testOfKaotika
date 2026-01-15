@@ -28,6 +28,7 @@ import { deadlyEffects } from '../interfaces/constants';
 import AcolyteCursed from '../screens/AcolyteCursed';
 import AcolyteSick from '../screens/AcolyteSick';
 import Infectorium from '../screens/Infectorium';
+import MortimerCurator from '../screens/MortimerCurator';
 
 const Tab = createBottomTabNavigator();
 
@@ -54,7 +55,7 @@ function mapNav() {
       <AcolyteCursed/>
     )
   }
-  else if (player?.profile.role === 'ACOLITO' && player.statusEffects.includes(deadlyEffects.epicWeakness || deadlyEffects.medulaApocalypse || deadlyEffects.putridPlague)) {
+  else if (player?.profile.role === 'ACOLITO' && (player.statusEffects.includes(deadlyEffects.medulaApocalypse) || player.statusEffects.includes(deadlyEffects.putridPlague) || player.statusEffects.includes(deadlyEffects.epicWeakness))) {
     return (
       <AcolyteSick/>
     )
@@ -133,13 +134,16 @@ export function MainTabNav() {
   {
     component = (<Tab.Screen name="Curse" component={istvanCurseApplier}/>)
   }
+  else if(player?.profile.role === 'MORTIMER')
+  {
+    component = (<Tab.Screen name="Curator" component={MortimerCurator}/>)
+  }
 
   if (player?.profile.role === 'ACOLITO' && player.isBetrayer) {
     barActiveColor = 'red';
   }
   else if (player?.profile.role === 'VILLANO') {
     component = (<Tab.Screen name="Infectorium" component={Infectorium} />);
-
   }
   const { height, width, scale, fontScale } = useWindowDimensions();
   return (
@@ -153,7 +157,8 @@ export function MainTabNav() {
           if (route.name === 'Home') iconName = 'home';
           else if (route.name === 'Map') iconName = 'map';
           else if (route.name === 'Settings') iconName = 'settings-sharp';
-          else if (route.name === 'Curse') iconName = 'skull-sharp'
+          else if (route.name === 'Curse') iconName = 'skull-sharp';
+          else if(route.name === 'Curator') iconName = 'flask-sharp'
           else iconName='person-circle-sharp'
           return <Ionicons name={iconName} size={size} color={color} />;
         },

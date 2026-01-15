@@ -1,17 +1,31 @@
 import React from "react";
 import { View, useWindowDimensions, StyleSheet, StatusBar, Image } from "react-native";
 import { Text } from "react-native-gesture-handler";
-import image from "./../assets/acolyteCursed.png"
+import image from "./../assets/acolyteCursed.png";
+import { deadlyEffects } from "../gameStore";
+import { usePlayerStore } from "../gameStore";
+import medularApocalypse from "./../assets/icons/medularApocalypse.png"
+import epicWeakness from "./../assets/icons/epicWeakness.png"
+import putridPlague from "./../assets/icons/putridPlague.png"
+
 
 export default function AcolyteCursed()
 {
     const styles = getStyles();
 
+    const player = usePlayerStore(state => state.player);
+
     return (
-    <View style={styles.fullScreen}>
-      <Text style={styles.title}>YOU ARE CURSED</Text>
-      <Image source={image} style={styles.image}/>
-    </View>
+        <View style={styles.fullScreen}>
+          <Text style={styles.title}>YOU ARE CURSED</Text>
+          <Text style={styles.text}>You are also sick of:</Text>
+          <View style={styles.centeredView}>
+            {player?.statusEffects.includes(deadlyEffects.epicWeakness) && <Image style={styles.image} source={epicWeakness}/>}
+            {player?.statusEffects.includes(deadlyEffects.putridPlague) && <Image style={styles.image} source={putridPlague}/>}
+            {player?.statusEffects.includes(deadlyEffects.medulaApocalypse) && <Image style={styles.image} source={medularApocalypse}/>}
+          </View>
+          <Image source={image} style={styles.mainImage}/>
+        </View>
     );
 }
 
@@ -19,11 +33,15 @@ function getStyles() {
     const { fontScale, height } = useWindowDimensions();
 
     const styles = StyleSheet.create({
-        image: {
+        mainImage: {
             height: '100%',
             width: '100%',
             position: 'absolute',
             zIndex: -10,
+        },
+        image: {
+            height: 0.1*height,
+            width: 0.1*height,
         },
         button2: {
             position: 'absolute',
@@ -41,7 +59,7 @@ function getStyles() {
         },
         title: {
             fontSize: 50 * fontScale,
-            marginBottom: '5%',
+            marginBottom: '1%',
             marginTop: (StatusBar.currentHeight || 0) + (0.5 * height),
             color: '#E2DFD2',
             textShadowColor: 'rgba(0, 0, 0, 0.7)',
@@ -60,20 +78,26 @@ function getStyles() {
             textAlign: 'center',
         },
         text: {
-            fontSize: 16 * fontScale,
+            fontSize: 24 * fontScale,
             marginBottom: '5%',
-            marginTop: '25%',
+            marginTop: '1%',
             color: '#E2DFD2',
             boxShadow: '5px 5px 5px 5px black',
             backgroundColor: 'rgba(0, 0, 0, 0.5)',
             fontFamily: 'OptimusPrincepsSemiBold',
             justifyContent: 'center',
             alignItems: 'center',
+            textAlign: 'center'
         },
         centeredView: {
             flex: 1,
             justifyContent: 'center',
-            alignItems: 'center',
+            flexDirection: 'row',
+            padding: '5%',
+            height: 0.1 * height,
+            width: '100%',
+            boxShadow: '5px 5px 5px 5px black',
+            backgroundColor: 'rgba(0, 0, 0, 0.5)',
         },
         modalView: {
             margin: 10,
