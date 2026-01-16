@@ -10,6 +10,8 @@ function Settings() {
 
   const player = usePlayerStore(state => state.player);
 
+  const setIsProcessingStatusApplication = usePlayerStore(state=> state.setIsProcessingStatusApplication);
+
   const styles = getStyles();
 
   let imageSource;
@@ -43,6 +45,7 @@ function Settings() {
             GoogleSignin.revokeAccess();
             const socket = socketIO.getSocket();
             socket?.disconnect();
+            setIsProcessingStatusApplication(false);
           }}>
           <Text style={styles.text}>SIGN OUT</Text>
         </TouchableOpacity>
@@ -95,6 +98,4 @@ function getStyles()
 
   return styles;
 }
-
-
 

@@ -4,51 +4,36 @@ import { GenericButton } from "../props/genericButton";
 import { usePlayerStore } from "../gameStore";
 import { Player } from "../interfaces/PlayerInterface";
 
-function TowerEntrance() {
-
-  const player = usePlayerStore(state => state.player);
-
+function TowerCam() 
+{
   const playerList = usePlayerStore(state => state.playerList);
-
-  const styles = getStyle();
 
   const imageSource = require('../assets/towerEntrance.png');
 
-  const warning = "Turn back, traveler. The gate ahead does not open to the world of men.";
+  const styles = getStyle();
 
-  if (player?.profile.role !== 'ACOLITO') {
-    return (
-      <>
-        <Image source={imageSource} style={styles.image} />
-        <Text style={styles.title}>Tower Logs</Text>
-        <GenericButton />
-        <View style={{ height: '85%', flex: 1, flexDirection: 'row', position: 'absolute', width: '90%', marginLeft: '5%', marginTop: '50%' }}>
-          {playerList.map((elem: Player, i: any) => {
-            if (elem.isInTower) {
-              console.log(elem);
-              return <Image key={i} src={elem.avatar} style={styles.entryImage} />;
-            }
-            return <View key={i}></View>
-          })}
-        </View>
-      </>
-    )
-  }
-  else {
-    return (
-      <View style={{ flex: 1, alignItems: 'center' }}>
-        <Text style={styles.title2}>THE TOWER ENTRANCE</Text>
-        <Image source={imageSource} style={styles.image} />
-        {player?.profile.role === "ACOLITO" && <Text style={[styles.title, { top: '40%', fontSize: 30 }]}>{warning}</Text>}
-        <GenericButton />
+  return (
+    <>
+    <Image source={imageSource} style={styles.image} />
+      <Text style={styles.title}>Tower Logs</Text>
+      <GenericButton />
+      <View style={{ height: '85%', flex: 1, flexDirection: 'row', position: 'absolute', width: '90%', marginLeft: '5%', marginTop: '50%'}}>
+        {playerList.map((elem: Player, i: any) => {
+          if (elem.isInTower) {
+            console.log(elem);
+            return <Image key={i} src={elem.avatar} style={styles.entryImage} />;
+          }
+          return <View key={i}></View>
+        })}
       </View>
-    )
-  }
+    </>
+  )
 }
 
-export default TowerEntrance;
+export default TowerCam;
 
-function getStyle() {
+function getStyle()
+{
   const { height, fontScale } = useWindowDimensions();
 
   const styles = StyleSheet.create({
@@ -100,4 +85,3 @@ function getStyle() {
 
   return styles;
 }
-

@@ -147,8 +147,6 @@ export default function MortimerArtifactAlert() {
             </Animated.View>
           ))}
         </View>
-
-
       </View>
       {isButton && (<>
       <TouchableOpacity

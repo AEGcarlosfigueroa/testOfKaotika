@@ -34,6 +34,12 @@ export interface PlayerStore {
 
     canShowArtifacts: boolean;
     setCanShowArtifacts: (canShowArtifacts: boolean) => void;
+
+    acolyteList: Player[],
+    setAcolyteList: (acolyteList: Player[]) => void;
+
+    isProcessingStatusApplication: boolean,
+    setIsProcessingStatusApplication: (isProcessingStatusApplication: boolean) => void;
 }
 
 

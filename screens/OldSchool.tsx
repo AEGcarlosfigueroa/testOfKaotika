@@ -5,6 +5,7 @@ import map from "../assets/oldSchool.png";
 import { useNavigation, NavigationProp } from "@react-navigation/native";
 import stars from "../assets/icons/stars.png"
 import tarot from "../assets/icons/tarot.png"
+import jailDoor from "../assets/icons/jailDoor.png"
 import { usePlayerStore, scrollStateList } from "../gameStore";
 
 function OldSchool() {
@@ -21,7 +22,8 @@ function OldSchool() {
     SpyCam: undefined,
     Map: undefined,
     OldSchool: undefined,
-    HallOfSages: undefined
+    HallOfSages: undefined,
+    OldSchoolDungeon: undefined
   }
 
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
@@ -55,6 +57,12 @@ function OldSchool() {
         <Image source={stars} style={styles.image} />
         <Text style={styles.text}>LAB</Text>
       </TouchableOpacity>
+      <TouchableOpacity style={styles.dungeonStyle} onPress={() => {
+        navigation.navigate('OldSchoolDungeon');
+      }}>
+        <Image source={jailDoor} style={styles.image} />
+        <Text style={styles.text}>DUNGEON</Text>
+      </TouchableOpacity>
       {hallSages}
     </View>
   );
@@ -62,8 +70,7 @@ function OldSchool() {
 
 export default OldSchool;
 
-function getStyles()
-{
+function getStyles() {
   const { height, width, scale, fontScale } = useWindowDimensions();
 
   const styles = StyleSheet.create({
@@ -79,10 +86,13 @@ function getStyles()
       position: 'absolute'
     },
     entranceStyle: {
-      width: (100*fontScale), height: (100*fontScale), top: (0.25 * height), left: (0.15 * width), tintColor: 'black', position: 'absolute', zIndex: 20
+      width: (100 * fontScale), height: (100 * fontScale), top: (0.25 * height), left: (0.15 * width), tintColor: 'black', position: 'absolute', zIndex: 20
     },
     hallStyle: {
-      width: (100*fontScale), height: (100*fontScale), top: (0.25 * height), left: '75%', tintColor: 'yellow', position: 'absolute', zIndex: 20
+      width: (100 * fontScale), height: (100 * fontScale), top: (0.25 * height), left: '75%', tintColor: 'yellow', position: 'absolute', zIndex: 20
+    },
+    dungeonStyle: {
+      width: (110*fontScale), height: (100*fontScale), top: (0.58 * height), left: '45%', tintColor: 'yellow', position: 'absolute', zIndex: 20
     },
     image: {
       width: (60 * fontScale), height: (60 * fontScale), tintColor: 'white'
@@ -119,11 +129,15 @@ function getStyles()
       zIndex: 15
     },
     text: {
-      fontSize: 20*fontScale,
+      fontSize: 20 * fontScale,
       marginBottom: '5%',
       marginTop: '25%',
       color: '#E2DFD2',
+      boxShadow: '5px 5px 5px 5px black',
+      backgroundColor: 'rgba(0, 0, 0, 0.5)',
       fontFamily: 'OptimusPrincepsSemiBold',
+      justifyContent: 'center',
+      alignItems: 'center',
     },
     buttonText2: {
       fontFamily: 'OptimusPrincepsSemiBold',

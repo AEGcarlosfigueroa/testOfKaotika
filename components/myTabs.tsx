@@ -17,7 +17,18 @@ import { useWindowDimensions } from 'react-native';
 import { usePlayerStore } from '../gameStore';
 import Scanner from '../screens/scanner';
 import Obituary from '../screens/Obituary';
-import MortimerArtifactAlert from '../screens/MortimerArtifactAlert';
+import OldSchoolDungeon from '../screens/OldSchoolDungeon';
+import HollowOfTheLost from '../screens/HollowOfTheLost';
+import InnOfTheForgotten from '../screens/InnOfTheForgotten';
+import TowerCam from '../screens/TowerCam';
+import AcolyteTired from '../screens/AcolyteTired';
+import AcolyteStats from '../screens/AcolyteStats';
+import istvanCurseApplier from '../screens/istvanCurseApplier';
+import { deadlyEffects } from '../interfaces/constants';
+import AcolyteCursed from '../screens/AcolyteCursed';
+import AcolyteSick from '../screens/AcolyteSick';
+import Infectorium from '../screens/Infectorium';
+import MortimerCurator from '../screens/MortimerCurator';
 
 const Tab = createBottomTabNavigator();
 
@@ -39,8 +50,17 @@ export function stackNav() {
 }
 function mapNav() {
   const player = usePlayerStore(state => state.player);
-  if(player?.profile.role === 'ACOLITO')
-  {
+  if (player?.profile.role === 'ACOLITO' && player.statusEffects.includes(deadlyEffects.ethaziumCurse)) {
+    return (
+      <AcolyteCursed/>
+    )
+  }
+  else if (player?.profile.role === 'ACOLITO' && (player.statusEffects.includes(deadlyEffects.medulaApocalypse) || player.statusEffects.includes(deadlyEffects.putridPlague) || player.statusEffects.includes(deadlyEffects.epicWeakness))) {
+    return (
+      <AcolyteSick/>
+    )
+  }
+  else if (player?.profile.role === 'ACOLITO' && player.attributes[0].resistance > 30) {
     return (
       <Stack.Navigator screenOptions={{ headerShown: false }}>
         <Stack.Screen name="Map" component={Map} />
@@ -51,41 +71,80 @@ function mapNav() {
         <Stack.Screen name="OldSchool" component={OldSchool} />
         <Stack.Screen name="HallOfSages" component={HallOfSages} />
         <Stack.Screen name="Obituary" component={Obituary} />
+        <Stack.Screen name="OldSchoolDungeon" component={OldSchoolDungeon} />
+        <Stack.Screen name="HollowOfTheLost" component={HollowOfTheLost} />
+        <Stack.Screen name="InnOfTheForgotten" component={InnOfTheForgotten} />
+
       </Stack.Navigator>
     )
   }
-  else if(player?.profile.role === 'ISTVAN')
-  {
+  else if (player?.profile.role === 'ACOLITO' && player.attributes[0].resistance <= 30) {
+    return (
+      <AcolyteTired />
+    )
+  }
+  else if (player?.profile.role === 'ISTVAN') {
     return (
       <Stack.Navigator screenOptions={{ headerShown: false }}>
         <Stack.Screen name="Map" component={Map} />
         <Stack.Screen name="Entrance" component={Scanner} />
-        <Stack.Screen name="Tower" component={TowerEntrance} />
+        <Stack.Screen name="Tower" component={TowerCam} />
         <Stack.Screen name='Swamp' component={SpyCam} />
         <Stack.Screen name="Laboratory" component={Laboratory} />
         <Stack.Screen name="OldSchool" component={OldSchool} />
         <Stack.Screen name="HallOfSages" component={HallOfSages} />
         <Stack.Screen name="Obituary" component={Obituary} />
+        <Stack.Screen name="OldSchoolDungeon" component={OldSchoolDungeon} />
+        <Stack.Screen name="HollowOfTheLost" component={HollowOfTheLost} />
+        <Stack.Screen name="InnOfTheForgotten" component={InnOfTheForgotten} />
       </Stack.Navigator>
     )
   }
-  else
-  {
+  else {
     return (
       <Stack.Navigator screenOptions={{ headerShown: false }}>
         <Stack.Screen name="Map" component={Map} />
         <Stack.Screen name="Entrance" component={Entrance} />
-        <Stack.Screen name="Tower" component={TowerEntrance} />
+        <Stack.Screen name="Tower" component={TowerCam} />
         <Stack.Screen name='Swamp' component={SpyCam} />
         <Stack.Screen name="Laboratory" component={Laboratory} />
         <Stack.Screen name="OldSchool" component={OldSchool} />
         <Stack.Screen name="HallOfSages" component={HallOfSages} />
         <Stack.Screen name="Obituary" component={Obituary} />
+        <Stack.Screen name="OldSchoolDungeon" component={OldSchoolDungeon} />
+        <Stack.Screen name="HollowOfTheLost" component={HollowOfTheLost} />
+        <Stack.Screen name="InnOfTheForgotten" component={InnOfTheForgotten} />
       </Stack.Navigator>
     )
   }
 }
+
 export function MainTabNav() {
+  const player = usePlayerStore(state => state.player);
+
+  let barActiveColor = 'white'
+
+  let component = <></>
+
+  if(player?.profile.role === 'ACOLITO')
+  {
+    component = (<Tab.Screen name="Stats" component={AcolyteStats}/>);
+  }
+  else if(player?.profile.role === 'ISTVAN')
+  {
+    component = (<Tab.Screen name="Curse" component={istvanCurseApplier}/>)
+  }
+  else if(player?.profile.role === 'MORTIMER')
+  {
+    component = (<Tab.Screen name="Curator" component={MortimerCurator}/>)
+  }
+
+  if (player?.profile.role === 'ACOLITO' && player.isBetrayer) {
+    barActiveColor = 'red';
+  }
+  else if (player?.profile.role === 'VILLANO') {
+    component = (<Tab.Screen name="Infectorium" component={Infectorium} />);
+  }
   const { height, width, scale, fontScale } = useWindowDimensions();
   return (
     <Tab.Navigator
@@ -98,9 +157,12 @@ export function MainTabNav() {
           if (route.name === 'Home') iconName = 'home';
           else if (route.name === 'Map') iconName = 'map';
           else if (route.name === 'Settings') iconName = 'settings-sharp';
+          else if (route.name === 'Curse') iconName = 'skull-sharp';
+          else if(route.name === 'Curator') iconName = 'flask-sharp'
+          else iconName='person-circle-sharp'
           return <Ionicons name={iconName} size={size} color={color} />;
         },
-        tabBarActiveTintColor: 'white',
+        tabBarActiveTintColor: barActiveColor,
         tabBarInactiveTintColor: 'gray',
         tabBarShowLabel: false,
         tabBarStyle: {
@@ -123,6 +185,7 @@ export function MainTabNav() {
       <Tab.Screen name="Home" component={stackNav} />
       <Tab.Screen name="Map" component={mapNav} />
       <Tab.Screen name="Settings" component={SettingsStack} />
+      {component}
     </Tab.Navigator>
   );
 }

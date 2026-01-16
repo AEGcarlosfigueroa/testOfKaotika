@@ -11,7 +11,6 @@ type scrollProps = PropsWithChildren<{ style: ViewStyle }>
 
 const Scroll: React.FC<scrollProps> = props => {
 
-
   const player = usePlayerStore(state => state.player)
 
   const setScrollState = usePlayerStore(state => state.setScrollState)

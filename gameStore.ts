@@ -35,7 +35,13 @@ export const usePlayerStore = create<PlayerStore>((set) => ({
     setObituaryState: (obituaryState) => set({ obituaryState }),
 
     canShowArtifacts: false,
-    setCanShowArtifacts: (canShowArtifacts) => set({ canShowArtifacts })
+    setCanShowArtifacts: (canShowArtifacts) => set({ canShowArtifacts }),
+
+    acolyteList: [],
+    setAcolyteList: (acolyteList) => set({ acolyteList }),
+
+    isProcessingStatusApplication: false,
+    setIsProcessingStatusApplication: (isProcessingStatusApplication) => set({ isProcessingStatusApplication })
 }))
 
 export const obituaryStateList = {
@@ -48,4 +54,11 @@ export const scrollStateList = {
     uncollected: 0,
     collected: 1,
     destroyed: 2
+}
+
+export const deadlyEffects = {
+    putridPlague: "0",
+    epicWeakness: "1",
+    medulaApocalypse: "2",
+    ethaziumCurse: "3"
 }
