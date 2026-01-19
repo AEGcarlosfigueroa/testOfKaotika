@@ -2,6 +2,8 @@ import messaging from '@react-native-firebase/messaging'
 import { getAuth } from '@react-native-firebase/auth';
 import { PermissionsAndroid } from 'react-native';
 import { serverURL } from './App';
+import axiosInstance from './axiosInstance';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const getToken = async () => {
     const token = await messaging().getToken();
@@ -12,16 +14,14 @@ const getToken = async () => {
 
 export const sendTokenToServer = async (SERVER_URL: string, token: string | null, playerEmail: string) => {
     try {
-        const firebaseIdToken = await getAuth().currentUser?.getIdToken();
-        console.log(firebaseIdToken)
-        await fetch(`${SERVER_URL}/api/players/register-token`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json', "Authorization": `Bearer ${firebaseIdToken}` },
-            body: JSON.stringify({ token: token, email: playerEmail }),
+        const accessToken = await AsyncStorage.getItem('accessToken');
+        const response = await axiosInstance.post('/api/players/register-token',  {token: token, email: playerEmail },  {
+            headers: { 'jwtauthorization': `Bearer + ${accessToken}`, 'Content-Type': 'application/json' },
         });
         console.log('Token sent to server');
+        console.log(response);
     }
-    catch (error) {
+    catch (error: any) {
         console.error("could not post the data", error)
     }
 }
