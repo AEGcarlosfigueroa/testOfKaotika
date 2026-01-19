@@ -12,14 +12,50 @@ const getToken = async () => {
     return token
 }
 
+const refreshAccessToken = async() => {
+    const refreshToken = await AsyncStorage.getItem('refreshToken');
+      
+    if (refreshToken) {
+      try {
+        const { data } = await axiosInstance.post('/api/jwt/refreshToken', { refreshToken: refreshToken });
+        console.log(data);
+        AsyncStorage.setItem('accessToken', data.accessToken);
+        AsyncStorage.setItem('refreshToken', data.refreshToken);
+      } catch (refreshError) {
+        console.error('Refresh token failed:', refreshError);
+      }
+    }
+}    
+
 export const sendTokenToServer = async (SERVER_URL: string, token: string | null, playerEmail: string) => {
     try {
         const accessToken = await AsyncStorage.getItem('accessToken');
-        const response = await axiosInstance.post('/api/players/register-token',  {token: token, email: playerEmail },  {
-            headers: { 'jwtauthorization': `Bearer + ${accessToken}`, 'Content-Type': 'application/json' },
+        const response = await fetch(`${SERVER_URL}/api/players/register-token`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', "jwtauthorization": `Bearer ${accessToken}` },
+            body: JSON.stringify({ token: token, email: playerEmail }),
         });
-        console.log('Token sent to server');
-        console.log(response);
+
+        if(response.status === 403)
+        {
+            await refreshAccessToken();
+
+            const newAccessToken = await AsyncStorage.getItem('accessToken');
+            const newResponse = await fetch(`${SERVER_URL}/api/players/register-token`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json', "jwtauthorization": `Bearer ${newAccessToken}` },
+                body: JSON.stringify({ token: token, email: playerEmail }),
+            });
+
+            console.log('Token sent to server');
+            console.log(newResponse);
+        }
+        else
+        {
+            console.log('Token sent to server');
+            console.log(response);
+        }
+        
     }
     catch (error: any) {
         console.error("could not post the data", error)
