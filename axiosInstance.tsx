@@ -17,7 +17,7 @@ axiosInstance.interceptors.response.use(
       
       if (refreshToken) {
         try {
-          const { data } = await axiosInstance.post('/api/jwt/refreshToken', { refreshToken: refreshToken });
+          const { data } = await axiosInstance.get('/api/jwt/refreshToken', { headers: {'refreshtoken': `Bearer ${refreshToken}`} });
           console.log(data);
           AsyncStorage.setItem('accessToken', data.accessToken);
           AsyncStorage.setItem('refreshToken', data.refreshToken);
