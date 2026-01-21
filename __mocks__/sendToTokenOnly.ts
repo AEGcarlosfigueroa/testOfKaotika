@@ -1,3 +1,5 @@
+import AsyncStorageMock from "@react-native-async-storage/async-storage/jest/async-storage-mock";
+
 export interface MockFirebaseUser {
     getIdToken: () => Promise<string>;
 }
@@ -14,10 +16,10 @@ export const getAuth = (): MockFirebaseAuth => ({
 
 export const sendTokenToServer = async (SERVER_URL: string, token: string | null, playerEmail: string) => {
     try {
-        const firebaseIdToken = await getAuth().currentUser?.getIdToken();
+        const fakeJwtToken = await AsyncStorageMock.getItem('accessToken');
         await fetch(`${SERVER_URL}/api/players/register-token`, {
             method: "POST",
-            headers: { "Content-Type": "application/json", "Authorization": `Bearer ${firebaseIdToken}` },
+            headers: { "Content-Type": "application/json", "jwtauthorization": `Bearer ${fakeJwtToken}` },
             body: JSON.stringify({ token, email: playerEmail }),
         });
     } catch (error) {
