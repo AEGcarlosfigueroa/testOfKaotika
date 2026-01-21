@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { View, Image, StyleSheet, Text, useWindowDimensions, StatusBar, TouchableOpacity, Modal, Alert, Pressable } from 'react-native';
 import { NavigationProp, useNavigation } from '@react-navigation/native';
 import inn from './../assets/inn.png'
+import unknown from './../assets/icons/unknown.png';
 import { SafeAreaView, SafeAreaProvider } from 'react-native-safe-area-context';
 import { usePlayerStore } from "../gameStore";
 import socketIO from '../socketIO';
@@ -14,7 +15,9 @@ function InnOfTheForgotten() {
 
     const setPlayer = usePlayerStore(state => state.setPlayer);
 
-    const [modalVisible, setModalVisible] = useState(false)
+    const [modalVisible, setModalVisible] = useState(false);
+
+    const [showAngelo, setAngeloVisible] = useState(false);
 
     const [sending, setSending] = useState(false);
 
@@ -44,26 +47,32 @@ function InnOfTheForgotten() {
         handleBetrayerChange();
         setModalVisible(false);
     }
+    const onNoPress = () => {
+        if (sending) return
+        setSending(true)
+        setAngeloVisible(true)
+        setModalVisible(false)
+    }
 
     useEffect(() => {
         const socket = socketIO.getSocket();
         if (!socket) return;
-    
+
         console.log("Subscribing to authorization events");
-    
+
         const handler = (updatePlayer: Player) => {
-          console.log("Received updated player:", updatePlayer);
-          setPlayer(updatePlayer);
-          setSending(false);
+            console.log("Received updated player:", updatePlayer);
+            setPlayer(updatePlayer);
+            setSending(false);
         };
-    
+
         socket.on("authorization", handler);
-    
+
         return () => {
-          console.log("Unsubscribing from authorization events");
-          socket.off("authorization", handler);
+            console.log("Unsubscribing from authorization events");
+            socket.off("authorization", handler);
         };
-      }, [player]); 
+    }, [player]);
 
     useEffect(() => {
         if (!hasPrompted && player?.isBetrayer === false && player.profile.role === 'ACOLITO') {
@@ -71,23 +80,23 @@ function InnOfTheForgotten() {
             setHasPrompted(true);
         }
     }, [player, hasPrompted]);
-    
+
     const navigation = useNavigation<NavigationProp<RootStackParamList>>();
 
     return (
         <>
             {sending && (
                 <View style={styles.fullScreen}>
-                  <ActivityIndicator size="large" style={styles.spinner} />
+                    <ActivityIndicator size="large" style={styles.spinner} />
                 </View>
             )}
             <TouchableOpacity
-              style={styles.button2}
-              onPress={() => {
-                navigation.navigate('HollowOfTheLost')
-              }}
+                style={styles.button2}
+                onPress={() => {
+                    navigation.navigate('HollowOfTheLost')
+                }}
             >
-              <Text style={styles.buttonText2}>Back</Text>
+                <Text style={styles.buttonText2}>Back</Text>
             </TouchableOpacity>
             <Image style={styles.image} source={inn} />
             <Text style={styles.title}>INN OF THE FORGOTTEN</Text>
@@ -115,7 +124,7 @@ function InnOfTheForgotten() {
 
                                     <Pressable
                                         style={[styles.button, styles.buttonOpen]}
-                                        onPress={() => setModalVisible(false)}
+                                        onPress={() => onNoPress()}
                                     >
                                         <Text style={styles.textStyle}>NO...</Text>
                                     </Pressable>
@@ -126,6 +135,9 @@ function InnOfTheForgotten() {
                     </Modal>
                 </SafeAreaView>
             </SafeAreaProvider>
+            {showAngelo && <View style={{ height: '85%', marginTop: '20%', flex: 1, flexDirection: 'row', position: 'relative', width: '90%', marginLeft: '5%' }}>
+                <Image source={unknown} style={styles.entryImage} />
+            </View>}
 
         </>
     );
@@ -237,14 +249,24 @@ function getStyles() {
             marginTop: 20,
         },
         fullScreen: {
-          height: '100%',
-          position: 'absolute',
-          zIndex: 10,
-          width: '100%',
-          backgroundColor: 'rgba(0,0,0,1)'
+            height: '100%',
+            position: 'absolute',
+            zIndex: 10,
+            width: '100%',
+            backgroundColor: 'rgba(0,0,0,1)'
         },
         spinner: {
-          marginTop: '99%'
+            marginTop: '99%'
+        },
+        entryImage: {
+            height: 0.1 * height,
+            width: 0.1 * height,
+            position: 'relative',
+            padding: '1%',
+            borderRadius: 0.1 * height,
+            borderColor: 'lightblue',
+            borderStyle: 'solid',
+            borderWidth: 0.005 * height
         },
     });
 

@@ -62,3 +62,14 @@ export const deadlyEffects = {
     medulaApocalypse: "2",
     ethaziumCurse: "3"
 }
+
+const angeloStateList = {
+    angeloCaptured: 0,
+    angeloDelivered: 2,
+    angeloFree: 3
+}
+
+const states = {
+    angeloState: angeloStateList.angeloFree,
+    angeloCapturer: null as string | null,
+}
