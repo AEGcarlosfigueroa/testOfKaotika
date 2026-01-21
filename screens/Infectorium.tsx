@@ -84,7 +84,7 @@ export default function Infectorium() {
                                                     key={effect.id}
                                                     style={[
                                                         styles.effectButton,
-                                                        isApplied && styles.disabledEffectButton // apply special style
+                                                        isApplied && styles.disabledEffectButton 
                                                     ]}
                                                     onPress={() => {
                                                         if (isApplied) return; // do nothing if already applied

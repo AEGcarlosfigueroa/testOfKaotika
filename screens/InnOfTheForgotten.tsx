@@ -4,10 +4,11 @@ import { NavigationProp, useNavigation } from '@react-navigation/native';
 import inn from './../assets/inn.png'
 import unknown from './../assets/icons/unknown.png';
 import { SafeAreaView, SafeAreaProvider } from 'react-native-safe-area-context';
-import { usePlayerStore } from "../gameStore";
+import { usePlayerStore, angeloStateList, states } from "../gameStore";
 import socketIO from '../socketIO';
 import { Player } from '../interfaces/PlayerInterface';
 import { ActivityIndicator } from 'react-native';
+
 
 function InnOfTheForgotten() {
 
@@ -17,11 +18,17 @@ function InnOfTheForgotten() {
 
     const [modalVisible, setModalVisible] = useState(false);
 
+    const [angeloModal, setAngeloModal] = useState(false)
+
     const [showAngelo, setAngeloVisible] = useState(false);
 
     const [sending, setSending] = useState(false);
 
     const [hasPrompted, setHasPrompted] = useState(false);
+
+    const [angeloState, setAngeloState] = useState(states.angeloState);
+
+    const [angeloCapturer, setAngeloCapturer] = useState(states.angeloCapturer);
 
     const styles = getStyles();
 
@@ -48,10 +55,9 @@ function InnOfTheForgotten() {
         setModalVisible(false);
     }
     const onNoPress = () => {
-        if (sending) return
-        setSending(true)
         setAngeloVisible(true)
         setModalVisible(false)
+
     }
 
     useEffect(() => {
@@ -75,11 +81,44 @@ function InnOfTheForgotten() {
     }, [player]);
 
     useEffect(() => {
-        if (!hasPrompted && player?.isBetrayer === false && player.profile.role === 'ACOLITO') {
+        // Only show modal if:
+        // - Hasn't prompted yet
+        // - Player is not a betrayer
+        // - Player is ACOLITO
+        // - Angelo is not captured or this player is not the capturer
+        if (
+            !hasPrompted &&
+            player?.isBetrayer === false &&
+            player.profile.role === 'ACOLITO' &&
+            states.angeloState !== angeloStateList.angeloCaptured &&
+            states.angeloCapturer !== player.email
+        ) {
             setModalVisible(true);
             setHasPrompted(true);
         }
     }, [player, hasPrompted]);
+
+    useEffect(() => {
+        const socket = socketIO.getSocket();
+        if (!socket) return;
+
+        const handler = (angeloData: { angeloState: number; angeloCapturer: string | null }) => {
+            states.angeloState = angeloData.angeloState;
+            states.angeloCapturer = angeloData.angeloCapturer;
+
+
+            setAngeloState(states.angeloState);
+            setAngeloCapturer(states.angeloCapturer);
+        };
+
+        socket.on("angeloStateUpdate", handler);
+
+        // Cleanup function
+        return () => {
+            socket.off("angeloStateUpdate", handler);
+        };
+    }, []);
+
 
     const navigation = useNavigation<NavigationProp<RootStackParamList>>();
 
@@ -135,9 +174,87 @@ function InnOfTheForgotten() {
                     </Modal>
                 </SafeAreaView>
             </SafeAreaProvider>
-            {showAngelo && <View style={{ height: '85%', marginTop: '20%', flex: 1, flexDirection: 'row', position: 'relative', width: '90%', marginLeft: '5%' }}>
-                <Image source={unknown} style={styles.entryImage} />
-            </View>}
+            {showAngelo && (
+                <View
+                    style={{
+                        height: '85%',
+                        marginTop: '20%',
+                        flex: 1,
+                        flexDirection: 'row',
+                        position: 'relative',
+                        width: '90%',
+                        marginLeft: '5%',
+                    }}
+                >
+                    <Pressable
+                        onPress={() => setAngeloModal(true)}
+                        style={{ alignItems: 'center', justifyContent: 'center' }}
+                    >
+                        <Image source={unknown} style={styles.entryImage} />
+                    </Pressable>
+                </View>
+            )}
+
+            {/* Modal for capturing Angelo */}
+            <Modal transparent visible={angeloModal} animationType="fade">
+                <View style={styles.centeredView}>
+                    <View style={styles.modalView}>
+                        <Text style={styles.modalText}>You have Spotted Angelo!! Quickly! Grab HIM!!!</Text>
+
+                        <View style={{ flexDirection: 'row', justifyContent: 'space-around', width: '100%' }}>
+                            {/* YES Button */}
+                            <Pressable
+                                style={[styles.button, styles.buttonClose]}
+                                onPress={async () => {
+                                    setAngeloModal(false);
+                                    setSending(true);
+
+                                    try {
+                                        const socket = socketIO.getSocket();
+                                        if (socket) {
+                                            socket.emit('capture_Angelo', player?.email, angeloStateList.angeloCaptured);
+                                        }
+
+                                        // Update global state locally
+                                        states.angeloState = angeloStateList.angeloCaptured;
+                                        if (player?.email) states.angeloCapturer = player.email;
+
+
+                                        setAngeloState(states.angeloState);
+                                        setAngeloCapturer(states.angeloCapturer);
+
+                                        // RPG-style message
+                                        setTimeout(() => {
+                                            Alert.alert("Success", "You have captured Angelo!");
+                                            setSending(false);
+                                            setAngeloVisible(false);
+                                        }, 1000);
+                                    } catch (err) {
+                                        console.error(err);
+                                        setSending(false);
+                                    }
+                                }}
+                            >
+                                <Text style={styles.textStyle}>Yes</Text>
+                            </Pressable>
+
+                            {/* NO Button */}
+                            <Pressable
+                                style={[styles.button, styles.buttonOpen]}
+                                onPress={() => {
+                                    setAngeloModal(false); // just close modal
+                                    setAngeloVisible(true); // keep Angelo icon visible
+
+                                }}
+                            >
+                                <Text style={styles.textStyle}>No</Text>
+                            </Pressable>
+                        </View>
+                    </View>
+                </View>
+            </Modal>
+
+
 
         </>
     );
@@ -207,7 +324,7 @@ function getStyles() {
         },
         modalView: {
             margin: 10,
-            backgroundColor: 'rgba(0,0,0,0.5)',
+            backgroundColor: 'rgba(0,0,0,0.6)',
             borderRadius: 10,
             padding: 100,
             alignItems: 'center',

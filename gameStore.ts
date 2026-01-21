@@ -63,13 +63,13 @@ export const deadlyEffects = {
     ethaziumCurse: "3"
 }
 
-const angeloStateList = {
+export const angeloStateList = {
     angeloCaptured: 0,
     angeloDelivered: 2,
     angeloFree: 3
 }
 
-const states = {
+export const states = {
     angeloState: angeloStateList.angeloFree,
     angeloCapturer: null as string | null,
 }
