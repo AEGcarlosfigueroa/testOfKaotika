@@ -58,7 +58,18 @@ export const sendTokenToServer = async (SERVER_URL: string, token: string | null
         
     }
     catch (error: any) {
-        console.error("could not post the data", error)
+
+        await refreshAccessToken();
+
+        const newAccessToken = await AsyncStorage.getItem('accessToken');
+        const newResponse = await fetch(`${SERVER_URL}/api/players/register-token`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', "jwtauthorization": `Bearer ${newAccessToken}` },
+            body: JSON.stringify({ token: token, email: playerEmail }),
+        });
+
+        console.log('Token sent to server');
+        console.log(newResponse);
     }
 }
 

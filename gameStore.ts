@@ -41,7 +41,10 @@ export const usePlayerStore = create<PlayerStore>((set) => ({
     setAcolyteList: (acolyteList) => set({ acolyteList }),
 
     isProcessingStatusApplication: false,
-    setIsProcessingStatusApplication: (isProcessingStatusApplication) => set({ isProcessingStatusApplication })
+    setIsProcessingStatusApplication: (isProcessingStatusApplication) => set({ isProcessingStatusApplication }),
+
+    allPlayersList: [],
+    setAllPlayersList: (allPlayersList) => set({ allPlayersList })
 }))
 
 export const obituaryStateList = {
