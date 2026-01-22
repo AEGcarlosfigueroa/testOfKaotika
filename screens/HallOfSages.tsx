@@ -26,7 +26,7 @@ export default function HallOfSages() {
 
   const canShowArtifacts = usePlayerStore(state => state.canShowArtifacts);
 
-  const allPlayersList = usePlayerStore(state => state.allPlayersList);
+  const allPlayersList = usePlayerStore(state => state.allPlayersList)
 
   const [canDeliver, setCanDeliver] = useState(false);
 
@@ -166,7 +166,6 @@ export default function HallOfSages() {
 
   const notifyMortimer = () => {
     console.log("sending message to Mortimer")
-    const mortimerPlayer = allPlayersList.find(p => p.profile.role === "MORTIMER");
     if (!hasNotified && player?.email === states.angeloCapturer) {
       const socket = socketIO.getSocket();
       socket?.emit("angelo_IsWaiting", "");

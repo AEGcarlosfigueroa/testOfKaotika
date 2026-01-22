@@ -102,23 +102,18 @@ function InnOfTheForgotten() {
         const socket = socketIO.getSocket();
         if (!socket) return;
 
-        const handler = (angeloData: { angeloState: number; angeloCapturer: string | null }) => {
-            states.angeloState = angeloData.angeloState;
-            states.angeloCapturer = angeloData.angeloCapturer;
-
-
-            setAngeloState(states.angeloState);
-            setAngeloCapturer(states.angeloCapturer);
+        const handler = () => {
+            setSending(false);
         };
 
-        socket.on("angeloStateUpdate", handler);
+        socket.on("confirmation", handler);
 
         // Cleanup function
         return () => {
-            socket.off("angeloStateUpdate", handler);
+            socket.off("confirmation", handler);
         };
     }, []);
-    
+
     const navigation = useNavigation<NavigationProp<RootStackParamList>>();
 
     return (
