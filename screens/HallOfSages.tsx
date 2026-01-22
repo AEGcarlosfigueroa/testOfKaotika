@@ -2,7 +2,7 @@ import { TouchableOpacity, Text, Image, StyleSheet, StatusBar, View, useWindowDi
 import { useNavigation, NavigationProp } from "@react-navigation/native";
 import React, { useCallback } from "react";
 import HallOfSagesImage from "./../assets/hallOfSages.png";
-import { usePlayerStore } from "../gameStore";
+import { usePlayerStore, states, angeloStateList } from "../gameStore";
 import socketIO from "../socketIO";
 import { Player } from "../interfaces/PlayerInterface";
 import { useFocusEffect } from "@react-navigation/native";
@@ -110,6 +110,22 @@ export default function HallOfSages() {
     </TouchableOpacity>
   );
 
+    const delivery = (
+    <TouchableOpacity
+      style={styles.button}
+      onPress={() => {
+        const socket = socketIO.getSocket();
+      
+        if (socket) {
+          socket.emit("deliverPrisioner", " ");
+        }
+      }}
+    >
+      <Text style={styles.buttonText2}>Delivery the Prisioner</Text>
+    </TouchableOpacity>
+  );
+
+
   
 
   useFocusEffect(
@@ -125,6 +141,10 @@ export default function HallOfSages() {
         };
       }, [])
     )
+    const notifyMortimerHandler = () => {
+
+
+    }
   
   return (
     <>
@@ -154,6 +174,8 @@ export default function HallOfSages() {
       </View>
        {
         (canShowArtifacts && player?.profile.role === 'ACOLITO') && button}
+        {(states.angeloCapturer === player?.email && states.angeloState === angeloStateList.angeloCaptured) && delivery}
+        {(states.angeloCapturer === player?.email)}
     </>
   );
 };
