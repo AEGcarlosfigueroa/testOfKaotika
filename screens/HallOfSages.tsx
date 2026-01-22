@@ -26,7 +26,7 @@ export default function HallOfSages() {
 
   const canShowArtifacts = usePlayerStore(state => state.canShowArtifacts);
 
-  const allPlayersList = usePlayerStore(state => state.allPlayersList)
+  const allPlayersList = usePlayerStore(state => state.allPlayersList);
 
   const [canDeliver, setCanDeliver] = useState(false);
 

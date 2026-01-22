@@ -132,7 +132,19 @@ function App() {
 
   const setScrollState = usePlayerStore(state => state.setScrollState);
 
-  const setObituaryState = usePlayerStore(state => state.setObituaryState)
+  const setObituaryState = usePlayerStore(state => state.setObituaryState);
+
+  const setAngeloState = usePlayerStore(state => state.setAngeloState);
+
+  const setCanShowArtifacts = usePlayerStore(state => state.setCanShowArtifacts);
+
+  const setAngeloCapturer = usePlayerStore(state => state.setAngeloCapturer);
+
+  const setTrialResult = usePlayerStore(state => state.setTrialResult);
+
+  const setPlayersAuthorized = usePlayerStore(state => state.setPlayersAuthorized);
+
+  const setPlayersWhoHaveVoted = usePlayerStore(state => state.setPlayersWhoHaveVoted);
 
   const [hasLoggedIn, setHasLoggedIn] = useState<Boolean>(false);
 
@@ -142,6 +154,13 @@ function App() {
     const data = await response.data;
     setScrollState(data.state.scrollState);
     setObituaryState(data.state.obituaryState);
+    setAngeloState(data.state.angeloState || null);
+    setCanShowArtifacts(data.state.canShowArtifacts);
+    setAngeloCapturer(data.state.angeloCapturer);
+    setTrialResult(data.state.trialResult);
+    setPlayersAuthorized(data.state.playersAuthorized);
+    setPlayersWhoHaveVoted(data.state.playersWhoHaveVoted);
+
     console.log("Server response:", data);
   }
 

@@ -29,6 +29,7 @@ import AcolyteCursed from '../screens/AcolyteCursed';
 import AcolyteSick from '../screens/AcolyteSick';
 import Infectorium from '../screens/Infectorium';
 import MortimerCurator from '../screens/MortimerCurator';
+import HallOfSagesDirectory from '../screens/HallOfSagesDirectory';
 
 const Tab = createBottomTabNavigator();
 
@@ -69,7 +70,7 @@ function mapNav() {
         <Stack.Screen name='Swamp' component={Swamp} />
         <Stack.Screen name="Laboratory" component={Laboratory} />
         <Stack.Screen name="OldSchool" component={OldSchool} />
-        <Stack.Screen name="HallOfSages" component={HallOfSages} />
+        <Stack.Screen name="HallOfSages" component={HallOfSagesDirectory} />
         <Stack.Screen name="Obituary" component={Obituary} />
         <Stack.Screen name="OldSchoolDungeon" component={OldSchoolDungeon} />
         <Stack.Screen name="HollowOfTheLost" component={HollowOfTheLost} />
@@ -92,7 +93,7 @@ function mapNav() {
         <Stack.Screen name='Swamp' component={SpyCam} />
         <Stack.Screen name="Laboratory" component={Laboratory} />
         <Stack.Screen name="OldSchool" component={OldSchool} />
-        <Stack.Screen name="HallOfSages" component={HallOfSages} />
+        <Stack.Screen name="HallOfSages" component={HallOfSagesDirectory} />
         <Stack.Screen name="Obituary" component={Obituary} />
         <Stack.Screen name="OldSchoolDungeon" component={OldSchoolDungeon} />
         <Stack.Screen name="HollowOfTheLost" component={HollowOfTheLost} />
@@ -109,7 +110,7 @@ function mapNav() {
         <Stack.Screen name='Swamp' component={SpyCam} />
         <Stack.Screen name="Laboratory" component={Laboratory} />
         <Stack.Screen name="OldSchool" component={OldSchool} />
-        <Stack.Screen name="HallOfSages" component={HallOfSages} />
+        <Stack.Screen name="HallOfSages" component={HallOfSagesDirectory} />
         <Stack.Screen name="Obituary" component={Obituary} />
         <Stack.Screen name="OldSchoolDungeon" component={OldSchoolDungeon} />
         <Stack.Screen name="HollowOfTheLost" component={HollowOfTheLost} />
