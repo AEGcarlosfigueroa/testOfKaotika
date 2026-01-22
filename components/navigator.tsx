@@ -220,7 +220,7 @@ function Navigator() {
       socket.off("updateAcolyte", handleNewAcolyteList);
       socket.off("connectedPlayerUpdate", handleNewAllPlayersList)
     }
-  }, [navigation, isInTower, scrollState, positionList, playerList, artifacts, obituaryState, canShowArtifacts, acolyteList, allPlayersList]);
+  }, [navigation, isInTower, scrollState, positionList, playerList, artifacts, obituaryState, canShowArtifacts, acolyteList, allPlayersList, angeloState, angeloCapturer, trialResult, playersAuthorized, playersWhoHaveVoted]);
 
 
   BackHandler.addEventListener('hardwareBackPress', () => {
