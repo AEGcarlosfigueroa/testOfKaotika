@@ -132,7 +132,9 @@ function App() {
 
   const setScrollState = usePlayerStore(state => state.setScrollState);
 
-  const setObituaryState = usePlayerStore(state => state.setObituaryState)
+  const setObituaryState = usePlayerStore(state => state.setObituaryState);
+
+  const setAngeloState = usePlayerStore(state => state.setAngeloState);
 
   const [hasLoggedIn, setHasLoggedIn] = useState<Boolean>(false);
 
@@ -142,6 +144,7 @@ function App() {
     const data = await response.data;
     setScrollState(data.state.scrollState);
     setObituaryState(data.state.obituaryState);
+    setAngeloState(data.state.angeloState || null);
     console.log("Server response:", data);
   }
 

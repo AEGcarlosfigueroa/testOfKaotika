@@ -41,8 +41,12 @@ export interface PlayerStore {
     isProcessingStatusApplication: boolean,
     setIsProcessingStatusApplication: (isProcessingStatusApplication: boolean) => void;
 
-    allPlayersList: Player[]
+    allPlayersList: Player[],
     setAllPlayersList: (allPlayersList: Player[]) => void;
+
+    angeloState: number | null,
+    setAngeloState: (angeloState: number) => void
+
 }
 
 

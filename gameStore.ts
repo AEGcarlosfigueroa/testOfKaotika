@@ -44,7 +44,10 @@ export const usePlayerStore = create<PlayerStore>((set) => ({
     setIsProcessingStatusApplication: (isProcessingStatusApplication) => set({ isProcessingStatusApplication }),
 
     allPlayersList: [],
-    setAllPlayersList: (allPlayersList) => set({ allPlayersList })
+    setAllPlayersList: (allPlayersList) => set({ allPlayersList }),
+
+    angeloState: null,
+    setAngeloState: (angeloState) => set({ angeloState }),
 }))
 
 export const obituaryStateList = {
@@ -69,7 +72,9 @@ export const deadlyEffects = {
 export const angeloStateList = {
     angeloCaptured: 0,
     angeloDelivered: 2,
-    angeloFree: 3
+    angeloFree: 3,
+    angeloAwaitingTrial: 4,
+    angeloInTrial: 5
 }
 
 export const states = {
