@@ -1,6 +1,6 @@
 import { TouchableOpacity, Text, Image, StyleSheet, StatusBar, View, useWindowDimensions } from "react-native";
 import { useNavigation, NavigationProp } from "@react-navigation/native";
-import React, { useCallback } from "react";
+import React, { useCallback, useState } from "react";
 import HallOfSagesImage from "./../assets/hallOfSages.png";
 import { usePlayerStore, states, angeloStateList } from "../gameStore";
 import socketIO from "../socketIO";
@@ -26,7 +26,15 @@ export default function HallOfSages() {
 
   const canShowArtifacts = usePlayerStore(state => state.canShowArtifacts);
 
+  const allPlayersList = usePlayerStore(state => state.allPlayersList)
+
+  const mortimer = allPlayersList.find(
+    player => player.profile.role === "MORTIMER"
+  )
+
   const { height } = useWindowDimensions();
+
+  const [isDelivering, setDelivery] = useState(false)
 
   const styles = StyleSheet.create({
     image: {
@@ -35,7 +43,7 @@ export default function HallOfSages() {
       position: 'absolute',
       zIndex: -10,
     },
-     button: {
+    button: {
       position: 'absolute',
       top: '80%',
       left: '10%',
@@ -95,12 +103,17 @@ export default function HallOfSages() {
     },
   });
 
+  const canDeliver =
+    states.angeloState === angeloStateList.angeloCaptured &&
+    player?.email === states.angeloCapturer &&
+    mortimer?.isInHallOfSages === true;
+
   const button = (
     <TouchableOpacity
       style={styles.button}
       onPress={() => {
         const socket = socketIO.getSocket();
-      
+
         if (socket) {
           socket.emit("showArtifacts", " ");
         }
@@ -110,12 +123,12 @@ export default function HallOfSages() {
     </TouchableOpacity>
   );
 
-    const delivery = (
+  const delivery = (
     <TouchableOpacity
       style={styles.button}
       onPress={() => {
         const socket = socketIO.getSocket();
-      
+
         if (socket) {
           socket.emit("deliverPrisioner", " ");
         }
@@ -126,26 +139,24 @@ export default function HallOfSages() {
   );
 
 
-  
-
   useFocusEffect(
-      useCallback(() => {
-        const socket = socketIO.getSocket();
-        socket?.emit("hallOfSages", "enter");
-        
-        return () => {
-          if(socket && player)
-          {
-            socket.emit("hallOfSages", "exit");
-          }
-        };
-      }, [])
-    )
-    const notifyMortimerHandler = () => {
+    useCallback(() => {
+      const socket = socketIO.getSocket();
+      socket?.emit("hallOfSages", "enter");
+
+      setDelivery(canDeliver);
+
+      return () => {
+        socket?.emit("hallOfSages", "exit");
+      };
+    }, [canDeliver])
+  );
+
+  const notifyMortimerHandler = () => {
 
 
-    }
-  
+  }
+
   return (
     <>
       <TouchableOpacity
@@ -172,10 +183,9 @@ export default function HallOfSages() {
           return <View key={i}></View>
         })}
       </View>
-       {
+      {
         (canShowArtifacts && player?.profile.role === 'ACOLITO') && button}
-        {(states.angeloCapturer === player?.email && states.angeloState === angeloStateList.angeloCaptured) && delivery}
-        {(states.angeloCapturer === player?.email)}
+      {isDelivering && delivery}
     </>
   );
 };
