@@ -187,7 +187,7 @@ function Navigator() {
       setPlayersAuthorized(message.playersAuthorized);
       setPlayersWhoHaveVoted(message.playersWhoHaveVoted);
 
-      console.log("can show artifact: " + canShowArtifacts);
+      console.log(message);
     }
 
     const handleNewAcolyteList = (message: any) => {

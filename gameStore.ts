@@ -88,8 +88,3 @@ export const angeloStateList = {
     angeloAwaitingTrial: 4,
     angeloInTrial: 5
 }
-
-export const states = {
-    angeloState: angeloStateList.angeloFree,
-    angeloCapturer: null as string | null,
-}

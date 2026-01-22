@@ -4,9 +4,8 @@ import { NavigationProp, useNavigation } from '@react-navigation/native';
 import inn from './../assets/inn.png'
 import unknown from './../assets/icons/unknown.png';
 import { SafeAreaView, SafeAreaProvider } from 'react-native-safe-area-context';
-import { usePlayerStore, angeloStateList, states } from "../gameStore";
+import { usePlayerStore, angeloStateList } from "../gameStore";
 import socketIO from '../socketIO';
-import { Player } from '../interfaces/PlayerInterface';
 import { ActivityIndicator } from 'react-native';
 
 
@@ -26,9 +25,9 @@ function InnOfTheForgotten() {
 
     const [hasPrompted, setHasPrompted] = useState(false);
 
-    const [angeloState, setAngeloState] = useState(states.angeloState);
+    const angeloState = usePlayerStore(state => state.angeloState);
 
-    const [angeloCapturer, setAngeloCapturer] = useState(states.angeloCapturer);
+    const angeloCapturer = usePlayerStore(state => state.angeloCapturer);
 
     const styles = getStyles();
 
@@ -55,30 +54,19 @@ function InnOfTheForgotten() {
         setModalVisible(false);
     }
     const onNoPress = () => {
-        setAngeloVisible(true)
+        if(angeloState === angeloStateList.angeloFree) 
+        {
+            console.log("angelo visible");
+            console.log("angelo state: " + angeloState)
+            setAngeloVisible(true)
+        }
+        else
+        {
+            setAngeloVisible(false);
+        }
         setModalVisible(false)
 
     }
-
-    useEffect(() => {
-        const socket = socketIO.getSocket();
-        if (!socket) return;
-
-        console.log("Subscribing to authorization events");
-
-        const handler = (updatePlayer: Player) => {
-            console.log("Received updated player:", updatePlayer);
-            setPlayer(updatePlayer);
-            setSending(false);
-        };
-
-        socket.on("authorization", handler);
-
-        return () => {
-            console.log("Unsubscribing from authorization events");
-            socket.off("authorization", handler);
-        };
-    }, [player]);
 
     useEffect(() => {
         // Only show modal if:
@@ -90,20 +78,23 @@ function InnOfTheForgotten() {
             !hasPrompted &&
             player?.isBetrayer === false &&
             player.profile.role === 'ACOLITO' &&
-            states.angeloState !== angeloStateList.angeloCaptured &&
-            states.angeloCapturer !== player.email
+            angeloCapturer !== player.email
         ) {
             setModalVisible(true);
             setHasPrompted(true);
         }
-    }, [player, hasPrompted]);
+    }, [player, hasPrompted, angeloCapturer]);
 
     useEffect(() => {
         const socket = socketIO.getSocket();
         if (!socket) return;
 
-        const handler = () => {
+        const handler = (message: string) => {
             setSending(false);
+            if(message === "ok")
+            {
+                setAngeloVisible(false);
+            }
         };
 
         socket.on("confirmation", handler);
@@ -112,7 +103,7 @@ function InnOfTheForgotten() {
         return () => {
             socket.off("confirmation", handler);
         };
-    }, []);
+    }, [sending]);
 
     const navigation = useNavigation<NavigationProp<RootStackParamList>>();
 
@@ -208,21 +199,6 @@ function InnOfTheForgotten() {
                                         if (socket) {
                                             socket.emit('capture_Angelo', player?.email, angeloStateList.angeloCaptured);
                                         }
-
-                                        // Update global state locally
-                                        states.angeloState = angeloStateList.angeloCaptured;
-                                        if (player?.email) states.angeloCapturer = player.email;
-
-
-                                        setAngeloState(states.angeloState);
-                                        setAngeloCapturer(states.angeloCapturer);
-
-                                        // RPG-style message
-                                        setTimeout(() => {
-                                            Alert.alert("Success", "You have captured Angelo!");
-                                            setSending(false);
-                                            setAngeloVisible(false);
-                                        }, 1000);
                                     } catch (err) {
                                         console.error(err);
                                         setSending(false);

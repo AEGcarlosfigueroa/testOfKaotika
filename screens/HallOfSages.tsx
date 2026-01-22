@@ -2,7 +2,7 @@ import { TouchableOpacity, Text, Image, StyleSheet, StatusBar, View, useWindowDi
 import { useNavigation, NavigationProp } from "@react-navigation/native";
 import React, { useCallback, useEffect, useState } from "react";
 import HallOfSagesImage from "./../assets/hallOfSages.png";
-import { usePlayerStore, states, angeloStateList } from "../gameStore";
+import { usePlayerStore, angeloStateList } from "../gameStore";
 import socketIO from "../socketIO";
 import { Player } from "../interfaces/PlayerInterface";
 import { useFocusEffect } from "@react-navigation/native";
@@ -23,6 +23,10 @@ export default function HallOfSages() {
   const navigation = useNavigation<NavigationProp<RootStackParamList>>();
 
   const player = usePlayerStore(state => state.player);
+
+  const angeloCapturer = usePlayerStore(state => state.angeloCapturer);
+
+  const angeloState = usePlayerStore(state => state.angeloState)
 
   const canShowArtifacts = usePlayerStore(state => state.canShowArtifacts);
 
@@ -110,8 +114,8 @@ export default function HallOfSages() {
   useEffect(() => {
 
     const deliverable =
-      states.angeloState === angeloStateList.angeloCaptured &&
-      player?.email === states.angeloCapturer &&
+      angeloState === angeloStateList.angeloCaptured &&
+      player?.email === angeloCapturer &&
       mortimerPlayer?.isInHallOfSages === true;
 
 
@@ -120,7 +124,7 @@ export default function HallOfSages() {
     setCanDeliver(deliverable);
 
 
-  }, [player?.email, states.angeloState, states.angeloCapturer, allPlayersList]);
+  }, [player?.email, angeloState, angeloCapturer, allPlayersList]);
 
   const button = (
     <TouchableOpacity
@@ -166,7 +170,7 @@ export default function HallOfSages() {
 
   const notifyMortimer = () => {
     console.log("sending message to Mortimer")
-    if (!hasNotified && player?.email === states.angeloCapturer) {
+    if (!hasNotified && player?.email === angeloCapturer) {
       const socket = socketIO.getSocket();
       socket?.emit("angelo_IsWaiting", "");
       setHasNotified(true);
@@ -203,7 +207,7 @@ export default function HallOfSages() {
       {
         (canShowArtifacts && player?.profile.role === 'ACOLITO') && button}
       {canDeliver && delivery}
-      {player?.email === states.angeloCapturer && ( mortimerPlayer === undefined || mortimerPlayer?.isInHallOfSages === false) && (
+      {player?.email === angeloCapturer && ( mortimerPlayer === undefined || mortimerPlayer?.isInHallOfSages === false) && (
         <TouchableOpacity style={styles.button} onPress={notifyMortimer}>
           <Text style={styles.buttonText2}>Notify Mortimer</Text>
         </TouchableOpacity>
