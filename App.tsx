@@ -31,8 +31,8 @@ GoogleSignin.configure({
 // export const serverURL = "https://testofkaotika-server.onrender.com";
 // const serverURL = "http://localhost:3000";
 // export const serverURL = "http://10.70.0.24:3000"
-export const serverURL = "http://10.70.0.24:3000"
-// export const serverURL = 'http://10.70.0.24:3000'
+// export const serverURL = "http://10.70.0.154:3000"
+export const serverURL = 'http://10.70.0.24:3000'
 // export const serverURL = 'http://192.168.0.224:3000'
 // export const serverURL = 'http://192.168.1.131:3000'
 
@@ -136,6 +136,16 @@ function App() {
 
   const setAngeloState = usePlayerStore(state => state.setAngeloState);
 
+  const setCanShowArtifacts = usePlayerStore(state => state.setCanShowArtifacts);
+
+  const setAngeloCapturer = usePlayerStore(state => state.setAngeloCapturer);
+
+  const setTrialResult = usePlayerStore(state => state.setTrialResult);
+
+  const setPlayersAuthorized = usePlayerStore(state => state.setPlayersAuthorized);
+
+  const setPlayersWhoHaveVoted = usePlayerStore(state => state.setPlayersWhoHaveVoted);
+
   const [hasLoggedIn, setHasLoggedIn] = useState<Boolean>(false);
 
   async function fetchCurrentScrollState() {
@@ -145,6 +155,12 @@ function App() {
     setScrollState(data.state.scrollState);
     setObituaryState(data.state.obituaryState);
     setAngeloState(data.state.angeloState || null);
+    setCanShowArtifacts(data.state.canShowArtifacts);
+    setAngeloCapturer(data.state.angeloCapturer);
+    setTrialResult(data.state.trialResult);
+    setPlayersAuthorized(data.state.playersAuthorized);
+    setPlayersWhoHaveVoted(data.state.playersWhoHaveVoted);
+
     console.log("Server response:", data);
   }
 

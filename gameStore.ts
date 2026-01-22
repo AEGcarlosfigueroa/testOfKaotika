@@ -48,6 +48,18 @@ export const usePlayerStore = create<PlayerStore>((set) => ({
 
     angeloState: null,
     setAngeloState: (angeloState) => set({ angeloState }),
+
+    angeloCapturer: null,
+    setAngeloCapturer: (angeloCapturer) => set({ angeloCapturer }),
+
+    trialResult: { guilty: 0, innocent: 0 },
+    setTrialResult: (trialResult) => set({ trialResult }),
+
+    playersAuthorized: null,
+    setPlayersAuthorized: (playersAuthorized) => set({playersAuthorized}),
+
+    playersWhoHaveVoted: [],
+    setPlayersWhoHaveVoted: (playersWhoHaveVoted) => set({ playersWhoHaveVoted })
 }))
 
 export const obituaryStateList = {

@@ -60,6 +60,26 @@ function Navigator() {
 
   const setAllPlayersList = usePlayerStore(state => state.setAllPlayersList);
 
+  const angeloState = usePlayerStore(state => state.angeloState);
+
+  const setAngeloState = usePlayerStore(state => state.setAngeloState);
+
+  const angeloCapturer = usePlayerStore(state => state.angeloCapturer);
+
+  const setAngeloCapturer = usePlayerStore(state => state.setAngeloCapturer);
+
+  const trialResult = usePlayerStore(state => state.trialResult);
+
+  const setTrialResult = usePlayerStore(state => state.setTrialResult);
+
+  const playersAuthorized = usePlayerStore(state => state.playersAuthorized);
+
+  const setPlayersAuthorized = usePlayerStore(state => state.setPlayersAuthorized);
+
+  const playersWhoHaveVoted = usePlayerStore(state => state.playersWhoHaveVoted)
+
+  const setPlayersWhoHaveVoted = usePlayerStore(state => state.setPlayersWhoHaveVoted);
+
   const isFocused = useIsFocused();
 
   const [, forceUpdate] = useReducer(x => x + 1, 0);
@@ -161,6 +181,11 @@ function Navigator() {
       setObituaryState(message.obituaryState);
       setScrollState(message.scrollState);
       setCanShowArtifacts(message.canShowArtifacts);
+      setAngeloState(message.angeloState);
+      setAngeloCapturer(message.angeloCapturer);
+      setTrialResult(message.trialResult);
+      setPlayersAuthorized(message.playersAuthorized);
+      setPlayersWhoHaveVoted(message.playersWhoHaveVoted);
 
       console.log("can show artifact: " + canShowArtifacts);
     }
