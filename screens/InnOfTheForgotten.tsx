@@ -54,6 +54,8 @@ function InnOfTheForgotten() {
         setModalVisible(false);
     }
     const onNoPress = () => {
+        console.log("checking")
+        console.log(angeloState)
         if(angeloState === angeloStateList.angeloFree) 
         {
             console.log("angelo visible");

@@ -38,8 +38,6 @@ export default function HallOfSages() {
 
   const mortimerPlayer = allPlayersList.find(p => p.profile.role === "MORTIMER");
 
-  const isMortimerAbsent = mortimerPlayer ? !mortimerPlayer.isInHallOfSages : false;
-
   const { height } = useWindowDimensions();
 
   const styles = StyleSheet.create({
@@ -112,19 +110,18 @@ export default function HallOfSages() {
   console.log(mortimerPlayer);
 
   useEffect(() => {
-
     const deliverable =
       angeloState === angeloStateList.angeloCaptured &&
       player?.email === angeloCapturer &&
       mortimerPlayer?.isInHallOfSages === true;
 
-
-    console.log(mortimerPlayer?.isInHallOfSages)
-
     setCanDeliver(deliverable);
-
-
-  }, [player?.email, angeloState, angeloCapturer, allPlayersList]);
+  }, [
+    player?.email,
+    angeloState,
+    angeloCapturer,
+    mortimerPlayer
+  ]);
 
   const button = (
     <TouchableOpacity
@@ -152,7 +149,7 @@ export default function HallOfSages() {
         }
       }}
     >
-      <Text style={styles.buttonText2}>Delivery the Prisioner</Text>
+      <Text style={styles.buttonText2}>Deliver the Prisioner</Text>
     </TouchableOpacity>
   );
 
@@ -207,7 +204,7 @@ export default function HallOfSages() {
       {
         (canShowArtifacts && player?.profile.role === 'ACOLITO') && button}
       {canDeliver && delivery}
-      {player?.email === angeloCapturer && ( mortimerPlayer === undefined || mortimerPlayer?.isInHallOfSages === false) && (
+      {player?.email === angeloCapturer && (mortimerPlayer === undefined || mortimerPlayer?.isInHallOfSages === false) && (
         <TouchableOpacity style={styles.button} onPress={notifyMortimer}>
           <Text style={styles.buttonText2}>Notify Mortimer</Text>
         </TouchableOpacity>
