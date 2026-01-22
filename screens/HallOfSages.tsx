@@ -1,6 +1,6 @@
 import { TouchableOpacity, Text, Image, StyleSheet, StatusBar, View, useWindowDimensions } from "react-native";
 import { useNavigation, NavigationProp } from "@react-navigation/native";
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import HallOfSagesImage from "./../assets/hallOfSages.png";
 import { usePlayerStore, states, angeloStateList } from "../gameStore";
 import socketIO from "../socketIO";
@@ -28,13 +28,15 @@ export default function HallOfSages() {
 
   const allPlayersList = usePlayerStore(state => state.allPlayersList)
 
-  const mortimer = allPlayersList.find(
-    player => player.profile.role === "MORTIMER"
-  )
+  const [canDeliver, setCanDeliver] = useState(false);
+
+  const [hasNotified, setHasNotified] = useState(false);
+
+  const mortimerPlayer = allPlayersList.find(p => p.profile.role === "MORTIMER");
+
+  const isMortimerAbsent = mortimerPlayer ? !mortimerPlayer.isInHallOfSages : false;
 
   const { height } = useWindowDimensions();
-
-  const [isDelivering, setDelivery] = useState(false)
 
   const styles = StyleSheet.create({
     image: {
@@ -103,10 +105,22 @@ export default function HallOfSages() {
     },
   });
 
-  const canDeliver =
-    states.angeloState === angeloStateList.angeloCaptured &&
-    player?.email === states.angeloCapturer &&
-    mortimer?.isInHallOfSages === true;
+  console.log(mortimerPlayer);
+
+  useEffect(() => {
+
+    const deliverable =
+      states.angeloState === angeloStateList.angeloCaptured &&
+      player?.email === states.angeloCapturer &&
+      mortimerPlayer?.isInHallOfSages === true;
+
+
+    console.log(mortimerPlayer?.isInHallOfSages)
+
+    setCanDeliver(deliverable);
+
+
+  }, [player?.email, states.angeloState, states.angeloCapturer, allPlayersList]);
 
   const button = (
     <TouchableOpacity
@@ -144,17 +158,21 @@ export default function HallOfSages() {
       const socket = socketIO.getSocket();
       socket?.emit("hallOfSages", "enter");
 
-      setDelivery(canDeliver);
-
       return () => {
         socket?.emit("hallOfSages", "exit");
       };
-    }, [canDeliver])
+    }, [])
   );
 
-  const notifyMortimerHandler = () => {
-
-
+  const notifyMortimer = () => {
+    console.log("sending message to Mortimer")
+    const mortimerPlayer = allPlayersList.find(p => p.profile.role === "MORTIMER");
+    if (!hasNotified && player?.email === states.angeloCapturer) {
+      const socket = socketIO.getSocket();
+      socket?.emit("angelo_IsWaiting", "");
+      setHasNotified(true);
+      console.log("Mortimer notified!");
+    }
   }
 
   return (
@@ -185,7 +203,12 @@ export default function HallOfSages() {
       </View>
       {
         (canShowArtifacts && player?.profile.role === 'ACOLITO') && button}
-      {isDelivering && delivery}
+      {canDeliver && delivery}
+      {player?.email === states.angeloCapturer && ( mortimerPlayer === undefined || mortimerPlayer?.isInHallOfSages === false) && (
+        <TouchableOpacity style={styles.button} onPress={notifyMortimer}>
+          <Text style={styles.buttonText2}>Notify Mortimer</Text>
+        </TouchableOpacity>
+      )}
     </>
   );
 };

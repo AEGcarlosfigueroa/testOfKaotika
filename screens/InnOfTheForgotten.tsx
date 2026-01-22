@@ -118,8 +118,7 @@ function InnOfTheForgotten() {
             socket.off("angeloStateUpdate", handler);
         };
     }, []);
-
-
+    
     const navigation = useNavigation<NavigationProp<RootStackParamList>>();
 
     return (
