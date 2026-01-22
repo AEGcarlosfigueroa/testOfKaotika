@@ -56,6 +56,10 @@ function Navigator() {
 
   const setAcolyteList = usePlayerStore(state => state.setAcolyteList);
 
+  const allPlayersList = usePlayerStore(state => state.allPlayersList);
+
+  const setAllPlayersList = usePlayerStore(state => state.setAllPlayersList);
+
   const isFocused = useIsFocused();
 
   const [, forceUpdate] = useReducer(x => x + 1, 0);
@@ -165,6 +169,10 @@ function Navigator() {
       setAcolyteList(message);
     }
 
+    const handleNewAllPlayersList = (message: any) => {
+      setAllPlayersList(message);
+    }
+
     socket.on('isInTowerEntranceRequest', sendIsInTower);
     socket.on('authorization', handleEntryGranted);
     socket.on('update', handleNewData);
@@ -173,7 +181,8 @@ function Navigator() {
     socket.on("locationUpdated", handleLocationUpdated);
     socket.on("updateArtifacts", handleArtifactUpdate);
     socket.on("stateUpdate", handleStateUpdate);
-    socket.on("updateAcolyte", handleNewAcolyteList)
+    socket.on("updateAcolyte", handleNewAcolyteList);
+    socket.on("connectedPlayerUpdate", handleNewAllPlayersList)
     return () => {
       socket.off('authorization', handleEntryGranted);
       socket.off('isInTowerEntranceRequest', sendIsInTower);
@@ -184,8 +193,9 @@ function Navigator() {
       socket.off("updateArtifacts", handleArtifactUpdate);
       socket.off("stateUpdate", handleStateUpdate);
       socket.off("updateAcolyte", handleNewAcolyteList);
+      socket.off("connectedPlayerUpdate", handleNewAllPlayersList)
     }
-  }, [navigation, isInTower, scrollState, positionList, playerList, artifacts, obituaryState, canShowArtifacts, acolyteList]);
+  }, [navigation, isInTower, scrollState, positionList, playerList, artifacts, obituaryState, canShowArtifacts, acolyteList, allPlayersList]);
 
 
   BackHandler.addEventListener('hardwareBackPress', () => {
