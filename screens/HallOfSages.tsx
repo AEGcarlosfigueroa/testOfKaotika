@@ -1,6 +1,6 @@
 import { TouchableOpacity, Text, Image, StyleSheet, StatusBar, View, useWindowDimensions } from "react-native";
 import { useNavigation, NavigationProp } from "@react-navigation/native";
-import React, { useCallback } from "react";
+import React, { useCallback, useState } from "react";
 import HallOfSagesImage from "./../assets/hallOfSages.png";
 import { usePlayerStore, states, angeloStateList } from "../gameStore";
 import socketIO from "../socketIO";
@@ -27,6 +27,8 @@ export default function HallOfSages() {
   const canShowArtifacts = usePlayerStore(state => state.canShowArtifacts);
 
   const { height } = useWindowDimensions();
+
+  const [isDelivering, setDelivery] = useState(false)
 
   const styles = StyleSheet.create({
     image: {
@@ -110,7 +112,7 @@ export default function HallOfSages() {
     </TouchableOpacity>
   );
 
-    const delivery = (
+     const delivery = (
     <TouchableOpacity
       style={styles.button}
       onPress={() => {
