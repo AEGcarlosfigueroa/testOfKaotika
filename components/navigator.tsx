@@ -12,11 +12,13 @@ import Tower from '../screens/Tower';
 import pNotify from '../pushNotification';
 import { serverURL } from '../App';
 import ScrollAlert from '../screens/ScrollAlert';
-import { usePlayerStore, scrollStateList, obituaryStateList } from '../gameStore';
+import { usePlayerStore, scrollStateList, obituaryStateList, angeloStateList } from '../gameStore';
 import { useIsFocused } from '@react-navigation/native';
 import { getAuth } from '@react-native-firebase/auth';
 import AcolyteArtifactAlert from '../screens/AcolyteArtifactAlert';
 import MortimerArtifactAlert from '../screens/MortimerArtifactAlert';
+import TrialRoom from '../screens/TrialRoom';
+import TrialResult from '../screens/TrialResult';
 
 function Navigator() {
 
@@ -79,6 +81,10 @@ function Navigator() {
   const playersWhoHaveVoted = usePlayerStore(state => state.playersWhoHaveVoted)
 
   const setPlayersWhoHaveVoted = usePlayerStore(state => state.setPlayersWhoHaveVoted);
+
+  const showTrialResult = usePlayerStore(state => state.showTrialResult);
+
+  const setShowTrialResult = usePlayerStore(state => state.setShowTrialResult);
 
   const isFocused = useIsFocused();
 
@@ -178,6 +184,14 @@ function Navigator() {
     }
 
     const handleStateUpdate = (message: any) => {
+
+      const currentAngeloState = angeloState;
+
+      if(currentAngeloState === angeloStateList.angeloInTrial && message.angeloState !== angeloStateList.angeloInTrial)
+      {
+        setShowTrialResult(true);
+      }
+
       setObituaryState(message.obituaryState);
       setScrollState(message.scrollState);
       setCanShowArtifacts(message.canShowArtifacts);
@@ -220,7 +234,7 @@ function Navigator() {
       socket.off("updateAcolyte", handleNewAcolyteList);
       socket.off("connectedPlayerUpdate", handleNewAllPlayersList)
     }
-  }, [navigation, isInTower, scrollState, positionList, playerList, artifacts, obituaryState, canShowArtifacts, acolyteList, allPlayersList, angeloState, angeloCapturer, trialResult, playersAuthorized, playersWhoHaveVoted]);
+  }, [navigation, showTrialResult, isInTower, scrollState, positionList, playerList, artifacts, obituaryState, canShowArtifacts, acolyteList, allPlayersList, angeloState, angeloCapturer, trialResult, playersAuthorized, playersWhoHaveVoted]);
 
 
   BackHandler.addEventListener('hardwareBackPress', () => {
@@ -247,7 +261,18 @@ function Navigator() {
 
   switch (player.profile.role) {
     case 'ISTVAN':
-      return <IstvanNav />
+      if(angeloState === angeloStateList.angeloInTrial)
+      {
+        return <TrialRoom/>
+      }
+      else if(showTrialResult)
+      {
+        return <TrialResult/>
+      }
+      else
+      {
+        return <IstvanNav />
+      }
 
     case 'ACOLITO':
       if(obituaryState === obituaryStateList.evaluating) {
@@ -259,6 +284,13 @@ function Navigator() {
       else if (player.isInTower) {
         return <Tower />
       }
+      else if (!player.isBetrayer && angeloState === angeloStateList.angeloInTrial) {
+        return <TrialRoom />
+      }
+      else if(showTrialResult && !player.isBetrayer)
+      {
+        return <TrialResult/>
+      }
       else {
         return <AcolitoNav />
       }
@@ -269,11 +301,25 @@ function Navigator() {
       else if (scrollState === scrollStateList.collected) {
         return <ScrollAlert />
       }
+      else if(angeloState === angeloStateList.angeloInTrial) {
+        return <TrialRoom/>
+      }
+      else if(showTrialResult) {
+        return <TrialResult/>
+      }
       else {
         return <MortimerNav />
       }
     case 'VILLANO':
-      return <Villano />
+      if(angeloState === angeloStateList.angeloInTrial) {
+        return <TrialRoom/>
+      }
+      else if(showTrialResult) {
+        return <TrialResult/>
+      }
+      else {
+        return <Villano />
+      }
 
     default:
       return null;

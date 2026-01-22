@@ -58,6 +58,9 @@ export interface PlayerStore {
 
     playersWhoHaveVoted: string[],
     setPlayersWhoHaveVoted: (playersWhoHaveVoted: string[]) => void;
+
+    showTrialResult: boolean,
+    setShowTrialResult: (showTrialResult: boolean) => void;
 }   
 
 interface TrialResult {

@@ -59,7 +59,10 @@ export const usePlayerStore = create<PlayerStore>((set) => ({
     setPlayersAuthorized: (playersAuthorized) => set({playersAuthorized}),
 
     playersWhoHaveVoted: [],
-    setPlayersWhoHaveVoted: (playersWhoHaveVoted) => set({ playersWhoHaveVoted })
+    setPlayersWhoHaveVoted: (playersWhoHaveVoted) => set({ playersWhoHaveVoted }),
+
+    showTrialResult: false,
+    setShowTrialResult: (showTrialResult) => set({ showTrialResult })
 }))
 
 export const obituaryStateList = {
