@@ -62,7 +62,7 @@ function Map() {
         <Text style={styles.buttonText2}>Back</Text>
       </TouchableOpacity>
 
-      {(!player?.isBetrayer) && (
+      {(!player?.isBetrayer && player?.profile.role === 'ACOLITO') && (
       <TouchableOpacity style={styles.oldschoolStyle} onPress={() => {
         navigation.navigate('OldSchool');
         }}>
