@@ -31,10 +31,10 @@ GoogleSignin.configure({
 // export const serverURL = "https://testofkaotika-server.onrender.com";
 // const serverURL = "http://localhost:3000";
 // export const serverURL = "http://10.70.0.24:3000"
-// export const serverURL = "http://10.70.0.154:3000"
+export const serverURL = "http://10.70.0.154:3000"
 // export const serverURL = 'http://10.70.0.24:3000'
 // export const serverURL = 'http://192.168.1.229:3000'
-export const serverURL = 'http://192.168.1.131:3000'
+// export const serverURL = 'http://192.168.1.131:3000'
 
 const onGoogleButtonPress = async () => {
   // Check if your device supports Google Play

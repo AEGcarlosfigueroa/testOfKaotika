@@ -25,6 +25,8 @@ function InnOfTheForgotten() {
 
     const [hasPrompted, setHasPrompted] = useState(false);
 
+    const [isCaptured, setIsCapture] = useState(false);
+
     const angeloState = usePlayerStore(state => state.angeloState);
 
     const angeloCapturer = usePlayerStore(state => state.angeloCapturer);
@@ -53,17 +55,19 @@ function InnOfTheForgotten() {
         handleBetrayerChange();
         setModalVisible(false);
     }
+    const onOkPress = () => {
+        console.log("checking")
+        setIsCapture(false)
+    }
     const onNoPress = () => {
         console.log("checking")
         console.log(angeloState)
-        if(angeloState === angeloStateList.angeloFree) 
-        {
+        if (angeloState === angeloStateList.angeloFree) {
             console.log("angelo visible");
             console.log("angelo state: " + angeloState)
             setAngeloVisible(true)
         }
-        else
-        {
+        else {
             setAngeloVisible(false);
         }
         setModalVisible(false)
@@ -93,9 +97,9 @@ function InnOfTheForgotten() {
 
         const handler = (message: string) => {
             setSending(false);
-            if(message === "ok")
-            {
+            if (message === "ok") {
                 setAngeloVisible(false);
+                setIsCapture(true)
             }
         };
 
@@ -216,12 +220,37 @@ function InnOfTheForgotten() {
                                 onPress={() => {
                                     setAngeloModal(false); // just close modal
                                     setAngeloVisible(true); // keep Angelo icon visible
+                                    setIsCapture(true)
 
                                 }}
                             >
                                 <Text style={styles.textStyle}>No</Text>
                             </Pressable>
                         </View>
+                    </View>
+                </View>
+            </Modal>
+            <Modal
+                animationType="slide"
+                transparent={true}
+                visible={isCaptured}
+                onRequestClose={() => {
+                    Alert.alert('Modal has been closed.');
+                    // setModalVisible(!modalVisible);
+                }}>
+                <View style={styles.centeredView}>
+                    <View style={styles.modalView}>
+                        <Text style={styles.modalText}>You have captured Angelo</Text>
+                        <View style={styles.buttonRow}>
+
+                            <Pressable
+                                style={[styles.button, styles.buttonOpen]}
+                                onPress={() => onOkPress()}
+                            >
+                                <Text style={styles.textStyle}>OK...</Text>
+                            </Pressable>
+                        </View>
+
                     </View>
                 </View>
             </Modal>
