@@ -19,6 +19,10 @@ import AcolyteArtifactAlert from '../screens/AcolyteArtifactAlert';
 import MortimerArtifactAlert from '../screens/MortimerArtifactAlert';
 import TrialRoom from '../screens/TrialRoom';
 import TrialResult from '../screens/TrialResult';
+import AcolyteTired from '../screens/AcolyteTired';
+import { deadlyEffects } from '../interfaces/constants';
+import AcolyteCursed from '../screens/AcolyteCursed';
+import AcolyteSick from '../screens/AcolyteSick';
 
 function Navigator() {
 
@@ -277,6 +281,16 @@ function Navigator() {
     case 'ACOLITO':
       if(obituaryState === obituaryStateList.evaluating) {
         return <AcolyteArtifactAlert/>
+      }
+      else if(player.attributes[0].resistance <= 30)
+      {
+        return <AcolyteTired/>
+      }
+      else if(player.statusEffects.includes(deadlyEffects.ethaziumCurse)) {
+        return <AcolyteCursed/>
+      }
+      else if(player.statusEffects.length > 0) {
+        return <AcolyteSick/>
       }
       else if (player.isInside) {
         return <Laboratory />

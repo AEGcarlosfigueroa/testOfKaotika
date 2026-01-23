@@ -57,7 +57,7 @@ export default function Infectorium() {
 
     return (
         <View style={styles.fullScreen}>
-            <Text style={styles.title}>Miasma Den</Text>
+            <Text style={styles.title}>Infectorium</Text>
             {component}
             <Image source={image} style={styles.image} />
             <SafeAreaProvider>

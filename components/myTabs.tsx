@@ -9,7 +9,6 @@ import OldSchool from '../screens/OldSchool';
 import SpyCam from '../screens/SpyCam';
 import Map from '../screens/Map';
 import TowerEntrance from '../screens/TowerEntrance';
-import HallOfSages from '../screens/HallOfSages';
 import Laboratory from '../screens/laboratory';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import Swamp from '../screens/Swamp';
