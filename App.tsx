@@ -66,21 +66,26 @@ function App() {
 
   const styles = StyleSheet.create({
     button: {
-      top: '45%',
-      left: '25%',
-      width: '50%',
-      height: '5%',
-      backgroundColor: 'rgba(0,0,0,0.5)',
       position: 'absolute',
-      borderRadius: '25%',
+      bottom: '50%',
+      left: '12.5%',
+      width: '75%',
+      height: '10%',
+      backgroundColor: 'rgba(0,0,0,0.5)',
+      borderRadius: 5,
       borderWidth: 2,
-      borderColor: 'grey'
+      borderColor: 'grey',
+      justifyContent: 'center',
+      alignItems: 'center',
+
     },
     text: {
-      color: 'yellow',
-      alignSelf: 'center',
-      margin: '5%',
-      fontSize: 20 * fontScale
+      fontSize: 30 * fontScale,
+      color: '#fff',
+      textShadowColor: 'rgba(0, 0, 0, 0.7)',
+      textShadowOffset: { width: 2, height: 2 },
+      textShadowRadius: 4,
+      fontFamily: 'OptimusPrincepsSemiBold',
     },
     errorText: {
       color: 'red',

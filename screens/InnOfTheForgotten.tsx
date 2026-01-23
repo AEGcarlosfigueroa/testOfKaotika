@@ -103,11 +103,19 @@ function InnOfTheForgotten() {
             }
         };
 
+        const handler2 = (message: any) => {
+            setSending(false);
+            setPlayer(message);
+        }
+
         socket.on("confirmation", handler);
+        socket.on("authorization", handler2);
 
         // Cleanup function
         return () => {
             socket.off("confirmation", handler);
+            socket.off("authorization", handler2);
+
         };
     }, [sending]);
 
