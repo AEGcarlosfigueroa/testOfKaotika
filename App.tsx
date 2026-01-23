@@ -27,17 +27,12 @@ GoogleSignin.configure({
   webClientId: googleJSON.client[0].oauth_client[1].client_id,
 });
 
-// export const serverURL = "http://10.50.0.50:6002";
+export const serverURL = "http://10.50.0.50:6002";
 // export const serverURL = "https://testofkaotika-server.onrender.com";
 // const serverURL = "http://localhost:3000";
 // export const serverURL = "http://10.70.0.24:3000"
-<<<<<<< HEAD
-export const serverURL = "http://10.70.0.154:3000"
-// export const serverURL = 'http://10.70.0.24:3000'
-=======
 // export const serverURL = "http://10.70.0.154:3000"
-export const serverURL = 'http://10.70.0.24:3000'
->>>>>>> b671b92cc6821b1a5541201e3b55e9c7561b32d5
+// export const serverURL = 'http://10.70.0.24:3000'
 // export const serverURL = 'http://192.168.1.229:3000'
 // export const serverURL = 'http://192.168.1.131:3000'
 
