@@ -1,4 +1,4 @@
-import { TouchableOpacity, Text, Image, StyleSheet, StatusBar, View, useWindowDimensions } from "react-native";
+import { TouchableOpacity, Text, Image, StyleSheet, StatusBar, View, useWindowDimensions, ToastAndroid, ActivityIndicator } from "react-native";
 import { useNavigation, NavigationProp } from "@react-navigation/native";
 import React, { useCallback, useEffect, useState } from "react";
 import HallOfSagesImage from "./../assets/hallOfSages.png";
@@ -15,8 +15,11 @@ export default function HallOfSages() {
     Tower: undefined,
     TowerEntrance: undefined,
     SpyCam: undefined,
-    OldSchool: undefined
+    OldSchool: undefined,
+    OldSchoolDungeon: undefined
   }
+
+  const [loading, setLoading] = useState(false);
 
   const playerList = usePlayerStore(state => state.playerList);
 
@@ -105,9 +108,43 @@ export default function HallOfSages() {
       padding: '5%',
       textAlign: 'center',
     },
+    fullScreen: {
+        height: '100%',
+        position: 'absolute',
+        zIndex: 30,
+        width: '100%',
+        backgroundColor: 'rgba(0,0,0,1)'
+    },
+    spinner: {
+        marginTop: '99%'
+    }
   });
 
   console.log(mortimerPlayer);
+
+  useEffect(() => {
+        const socket = socketIO.getSocket();
+        if (!socket) return;
+
+        const handler = (message: string) => {
+            setLoading(false);
+            if(message === "ok")
+            {
+              ToastAndroid.show("Angelo has been delivered to the Dungeon", 2000);
+              if(player?.profile.role === 'MORTIMER')
+              {
+                navigation.navigate("OldSchoolDungeon")
+              }
+            }
+        };
+
+        socket.on("confirmation", handler);
+
+        // Cleanup function
+        return () => {
+            socket.off("confirmation", handler);
+        };
+    }, [loading]);
 
   useEffect(() => {
     const deliverable =
@@ -144,8 +181,9 @@ export default function HallOfSages() {
       onPress={() => {
         const socket = socketIO.getSocket();
 
-        if (socket) {
-          socket.emit("deliverPrisioner", " ");
+        if (socket && player) {
+          socket.emit("deliverAngeloToMortimer", player.email);
+          setLoading(true);
         }
       }}
     >
@@ -170,7 +208,6 @@ export default function HallOfSages() {
     if (!hasNotified && player?.email === angeloCapturer) {
       const socket = socketIO.getSocket();
       socket?.emit("angelo_IsWaiting", "");
-      setHasNotified(true);
       console.log("Mortimer notified!");
     }
   }
@@ -193,7 +230,7 @@ export default function HallOfSages() {
       <Text style={styles.title}>HALL OF SAGES</Text>
       <Image style={styles.image} source={HallOfSagesImage} />
       <View style={{ height: '85%', marginTop: '20%', flex: 1, flexDirection: 'row', position: 'relative', width: '90%', marginLeft: '5%' }}>
-        {playerList.map((elem: Player, i: any) => {
+        {allPlayersList.map((elem: Player, i: any) => {
           if (elem.isInHallOfSages) {
             console.log(elem);
             return <Image key={i} src={elem.avatar} style={styles.entryImage} />;
@@ -201,8 +238,13 @@ export default function HallOfSages() {
           return <View key={i}></View>
         })}
       </View>
+      {loading && (
+          <View style={styles.fullScreen}>
+              <ActivityIndicator size="large" style={styles.spinner} />
+          </View>
+      )}
       {
-        (canShowArtifacts && player?.profile.role === 'ACOLITO') && button}
+        (canShowArtifacts && player?.profile.role === 'ACOLITO' && angeloState !== angeloStateList.angeloCaptured) && button}
       {canDeliver && delivery}
       {player?.email === angeloCapturer && (mortimerPlayer === undefined || mortimerPlayer?.isInHallOfSages === false) && (
         <TouchableOpacity style={styles.button} onPress={notifyMortimer}>
