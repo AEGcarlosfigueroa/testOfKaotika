@@ -2,11 +2,12 @@ import React, { useState, useEffect } from 'react';
 import { View, Image, StyleSheet, Text, useWindowDimensions, StatusBar, TouchableOpacity, Modal, Alert, Pressable } from 'react-native';
 import { NavigationProp, useNavigation } from '@react-navigation/native';
 import inn from './../assets/inn.png'
+import unknown from './../assets/icons/unknown.png';
 import { SafeAreaView, SafeAreaProvider } from 'react-native-safe-area-context';
-import { usePlayerStore } from "../gameStore";
+import { usePlayerStore, angeloStateList } from "../gameStore";
 import socketIO from '../socketIO';
-import { Player } from '../interfaces/PlayerInterface';
 import { ActivityIndicator } from 'react-native';
+
 
 function InnOfTheForgotten() {
 
@@ -14,11 +15,21 @@ function InnOfTheForgotten() {
 
     const setPlayer = usePlayerStore(state => state.setPlayer);
 
-    const [modalVisible, setModalVisible] = useState(false)
+    const [modalVisible, setModalVisible] = useState(false);
+
+    const [angeloModal, setAngeloModal] = useState(false)
+
+    const [showAngelo, setAngeloVisible] = useState(false);
 
     const [sending, setSending] = useState(false);
 
     const [hasPrompted, setHasPrompted] = useState(false);
+
+    const [isCaptured, setIsCapture] = useState(false);
+
+    const angeloState = usePlayerStore(state => state.angeloState);
+
+    const angeloCapturer = usePlayerStore(state => state.angeloCapturer);
 
     const styles = getStyles();
 
@@ -44,50 +55,78 @@ function InnOfTheForgotten() {
         handleBetrayerChange();
         setModalVisible(false);
     }
+    const onOkPress = () => {
+        console.log("checking")
+        setIsCapture(false)
+    }
+    const onNoPress = () => {
+        console.log("checking")
+        console.log(angeloState)
+        if (angeloState === angeloStateList.angeloFree) {
+            console.log("angelo visible");
+            console.log("angelo state: " + angeloState)
+            setAngeloVisible(true)
+        }
+        else {
+            setAngeloVisible(false);
+        }
+        setModalVisible(false)
+
+    }
+
+    useEffect(() => {
+        // Only show modal if:
+        // - Hasn't prompted yet
+        // - Player is not a betrayer
+        // - Player is ACOLITO
+        // - Angelo is not captured or this player is not the capturer
+        if (
+            !hasPrompted &&
+            player?.isBetrayer === false &&
+            player.profile.role === 'ACOLITO' &&
+            angeloCapturer !== player.email
+        ) {
+            setModalVisible(true);
+            setHasPrompted(true);
+        }
+    }, [player, hasPrompted, angeloCapturer]);
 
     useEffect(() => {
         const socket = socketIO.getSocket();
         if (!socket) return;
-    
-        console.log("Subscribing to authorization events");
-    
-        const handler = (updatePlayer: Player) => {
-          console.log("Received updated player:", updatePlayer);
-          setPlayer(updatePlayer);
-          setSending(false);
-        };
-    
-        socket.on("authorization", handler);
-    
-        return () => {
-          console.log("Unsubscribing from authorization events");
-          socket.off("authorization", handler);
-        };
-      }, [player]); 
 
-    useEffect(() => {
-        if (!hasPrompted && player?.isBetrayer === false && player.profile.role === 'ACOLITO') {
-            setModalVisible(true);
-            setHasPrompted(true);
-        }
-    }, [player, hasPrompted]);
-    
+        const handler = (message: string) => {
+            setSending(false);
+            if (message === "ok") {
+                setAngeloVisible(false);
+                setIsCapture(true)
+            }
+        };
+
+        socket.on("confirmation", handler);
+
+        // Cleanup function
+        return () => {
+            socket.off("confirmation", handler);
+        };
+    }, [sending]);
+
     const navigation = useNavigation<NavigationProp<RootStackParamList>>();
 
     return (
         <>
             {sending && (
                 <View style={styles.fullScreen}>
-                  <ActivityIndicator size="large" style={styles.spinner} />
+                    <ActivityIndicator size="large" style={styles.spinner} />
                 </View>
             )}
             <TouchableOpacity
-              style={styles.button2}
-              onPress={() => {
-                navigation.navigate('HollowOfTheLost')
-              }}
+                style={styles.button2}
+                onPress={() => {
+                    navigation.navigate('HollowOfTheLost')
+                }}
             >
-              <Text style={styles.buttonText2}>Back</Text>
+                <Text style={styles.buttonText2}>Back</Text>
             </TouchableOpacity>
             <Image style={styles.image} source={inn} />
             <Text style={styles.title}>INN OF THE FORGOTTEN</Text>
@@ -115,7 +154,7 @@ function InnOfTheForgotten() {
 
                                     <Pressable
                                         style={[styles.button, styles.buttonOpen]}
-                                        onPress={() => setModalVisible(false)}
+                                        onPress={() => onNoPress()}
                                     >
                                         <Text style={styles.textStyle}>NO...</Text>
                                     </Pressable>
@@ -126,6 +165,97 @@ function InnOfTheForgotten() {
                     </Modal>
                 </SafeAreaView>
             </SafeAreaProvider>
+            {showAngelo && (
+                <View
+                    style={{
+                        height: '85%',
+                        marginTop: '20%',
+                        flex: 1,
+                        flexDirection: 'row',
+                        position: 'relative',
+                        width: '90%',
+                        marginLeft: '5%',
+                    }}
+                >
+                    <Pressable
+                        onPress={() => setAngeloModal(true)}
+                        style={{ alignItems: 'center', justifyContent: 'center' }}
+                    >
+                        <Image source={unknown} style={styles.entryImage} />
+                    </Pressable>
+                </View>
+            )}
+
+            {/* Modal for capturing Angelo */}
+            <Modal transparent visible={angeloModal} animationType="fade">
+                <View style={styles.centeredView}>
+                    <View style={styles.modalView}>
+                        <Text style={styles.modalText}>You have Spotted Angelo!! Quickly! Grab HIM!!!</Text>
+
+                        <View style={{ flexDirection: 'row', justifyContent: 'space-around', width: '100%' }}>
+                            {/* YES Button */}
+                            <Pressable
+                                style={[styles.button, styles.buttonClose]}
+                                onPress={async () => {
+                                    setAngeloModal(false);
+                                    setSending(true);
+
+                                    try {
+                                        const socket = socketIO.getSocket();
+                                        if (socket) {
+                                            socket.emit('capture_Angelo', player?.email, angeloStateList.angeloCaptured);
+                                        }
+                                    } catch (err) {
+                                        console.error(err);
+                                        setSending(false);
+                                    }
+                                }}
+                            >
+                                <Text style={styles.textStyle}>Yes</Text>
+                            </Pressable>
+
+                            {/* NO Button */}
+                            <Pressable
+                                style={[styles.button, styles.buttonOpen]}
+                                onPress={() => {
+                                    setAngeloModal(false); // just close modal
+                                    setAngeloVisible(true); // keep Angelo icon visible
+                                    setIsCapture(true)
+
+                                }}
+                            >
+                                <Text style={styles.textStyle}>No</Text>
+                            </Pressable>
+                        </View>
+                    </View>
+                </View>
+            </Modal>
+            <Modal
+                animationType="slide"
+                transparent={true}
+                visible={isCaptured}
+                onRequestClose={() => {
+                    Alert.alert('Modal has been closed.');
+                    // setModalVisible(!modalVisible);
+                }}>
+                <View style={styles.centeredView}>
+                    <View style={styles.modalView}>
+                        <Text style={styles.modalText}>You have captured Angelo</Text>
+                        <View style={styles.buttonRow}>
+
+                            <Pressable
+                                style={[styles.button, styles.buttonOpen]}
+                                onPress={() => onOkPress()}
+                            >
+                                <Text style={styles.textStyle}>OK...</Text>
+                            </Pressable>
+                        </View>
+
+                    </View>
+                </View>
+            </Modal>
+
+
 
         </>
     );
@@ -195,7 +325,7 @@ function getStyles() {
         },
         modalView: {
             margin: 10,
-            backgroundColor: 'rgba(0,0,0,0.5)',
+            backgroundColor: 'rgba(0,0,0,0.6)',
             borderRadius: 10,
             padding: 100,
             alignItems: 'center',
@@ -237,14 +367,24 @@ function getStyles() {
             marginTop: 20,
         },
         fullScreen: {
-          height: '100%',
-          position: 'absolute',
-          zIndex: 10,
-          width: '100%',
-          backgroundColor: 'rgba(0,0,0,1)'
+            height: '100%',
+            position: 'absolute',
+            zIndex: 10,
+            width: '100%',
+            backgroundColor: 'rgba(0,0,0,1)'
         },
         spinner: {
-          marginTop: '99%'
+            marginTop: '99%'
+        },
+        entryImage: {
+            height: 0.1 * height,
+            width: 0.1 * height,
+            position: 'relative',
+            padding: '1%',
+            borderRadius: 0.1 * height,
+            borderColor: 'lightblue',
+            borderStyle: 'solid',
+            borderWidth: 0.005 * height
         },
     });
 

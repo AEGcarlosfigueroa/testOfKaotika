@@ -40,9 +40,33 @@ export interface PlayerStore {
 
     isProcessingStatusApplication: boolean,
     setIsProcessingStatusApplication: (isProcessingStatusApplication: boolean) => void;
+
+    allPlayersList: Player[],
+    setAllPlayersList: (allPlayersList: Player[]) => void;
+
+    angeloState: number | null,
+    setAngeloState: (angeloState: number) => void
+
+    angeloCapturer: string | null,
+    setAngeloCapturer: (angeloCapturer: string | null) => void;
+
+    trialResult: TrialResult,
+    setTrialResult: (trialResult: TrialResult) => void;
+
+    playersAuthorized: number | null,
+    setPlayersAuthorized: (playersAuthorized: number | null) => void;
+
+    playersWhoHaveVoted: string[],
+    setPlayersWhoHaveVoted: (playersWhoHaveVoted: string[]) => void;
+
+    showTrialResult: boolean,
+    setShowTrialResult: (showTrialResult: boolean) => void;
+}   
+
+interface TrialResult {
+    guilty: number,
+    innocent: number
 }
-
-
 
 
 interface CoordinateEntry {

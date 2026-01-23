@@ -1,5 +1,6 @@
 import { sendTokenToServer } from "../__mocks__/sendToTokenOnly";
 import { getAuth } from "../__mocks__/mockFirebaseAuth";
+import AsyncStorageMock from "@react-native-async-storage/async-storage/jest/async-storage-mock";
 
 declare const global: any;
 
@@ -16,6 +17,10 @@ describe("sendTokenToServer", () => {
 
     it("should POST the token with Authorization header", async () => {
         const mockFirebaseToken = "firebase_12345";
+
+        const mockJwtToken = "u9n890m032vri";
+
+        await AsyncStorageMock.setItem('accessToken', mockJwtToken); //Save mock jwt token
 
         (getAuth as jest.Mock).mockReturnValue({
             currentUser: {
@@ -39,7 +44,7 @@ describe("sendTokenToServer", () => {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
-                    Authorization: `Bearer ${mockFirebaseToken}`,
+                    'jwtauthorization': `Bearer ${mockJwtToken}`,
                 },
                 body: JSON.stringify({ token, email }),
             }

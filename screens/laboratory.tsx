@@ -13,6 +13,7 @@ import { usePlayerStore } from '../gameStore';
 function Laboratory() {
 
   const [showQR, setShowQR] = useState<Boolean>(false);
+  
   const [socketId, setSocketId] = useState<String>('');
 
   const [buttonColor, setColor] = useState<ColorValue>('#E2DFD2');

@@ -13,7 +13,9 @@ import { NavigationContainer } from '@react-navigation/native';
 import pNotify from './pushNotification';
 import messaging from '@react-native-firebase/messaging';
 import { StatusBar } from 'react-native';
-import { usePlayerStore } from './gameStore'
+import { usePlayerStore } from './gameStore';
+import axiosInstance from './axiosInstance';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 messaging().setBackgroundMessageHandler(async remoteMessage => {
 
@@ -31,9 +33,8 @@ export const serverURL = "http://10.50.0.50:6002";
 // export const serverURL = "http://10.70.0.24:3000"
 // export const serverURL = "http://10.70.0.154:3000"
 // export const serverURL = 'http://10.70.0.24:3000'
-// export const serverURL = 'http://192.168.0.224:3000'
+// export const serverURL = 'http://192.168.1.229:3000'
 // export const serverURL = 'http://192.168.1.131:3000'
-
 
 const onGoogleButtonPress = async () => {
   // Check if your device supports Google Play
@@ -131,15 +132,35 @@ function App() {
 
   const setScrollState = usePlayerStore(state => state.setScrollState);
 
-  const setObituaryState = usePlayerStore(state => state.setObituaryState)
+  const setObituaryState = usePlayerStore(state => state.setObituaryState);
+
+  const setAngeloState = usePlayerStore(state => state.setAngeloState);
+
+  const setCanShowArtifacts = usePlayerStore(state => state.setCanShowArtifacts);
+
+  const setAngeloCapturer = usePlayerStore(state => state.setAngeloCapturer);
+
+  const setTrialResult = usePlayerStore(state => state.setTrialResult);
+
+  const setPlayersAuthorized = usePlayerStore(state => state.setPlayersAuthorized);
+
+  const setPlayersWhoHaveVoted = usePlayerStore(state => state.setPlayersWhoHaveVoted);
 
   const [hasLoggedIn, setHasLoggedIn] = useState<Boolean>(false);
 
   async function fetchCurrentScrollState() {
-    const response = await fetch(serverURL + "/api/states/all");
-    const data = await response.json();
+    const token = await AsyncStorage.getItem('accessToken');
+    const response = await axiosInstance.get(serverURL + "/api/states/all", { headers: { 'jwtauthorization': `Bearer ${token}` } });
+    const data = await response.data;
     setScrollState(data.state.scrollState);
     setObituaryState(data.state.obituaryState);
+    setAngeloState(data.state.angeloState || null);
+    setCanShowArtifacts(data.state.canShowArtifacts);
+    setAngeloCapturer(data.state.angeloCapturer);
+    setTrialResult(data.state.trialResult);
+    setPlayersAuthorized(data.state.playersAuthorized);
+    setPlayersWhoHaveVoted(data.state.playersWhoHaveVoted);
+
     console.log("Server response:", data);
   }
 
@@ -161,8 +182,7 @@ function App() {
       console.log("User:", account.user.email);
       console.log("Token:", firebaseIdToken);
 
-      // Send token to server
-      const response = await fetch(serverURL + "/api/players/email/" + account.user.email,
+      const tokenResponse = await fetch(serverURL + "/api/jwt/generateToken/" + account.user.email,
         {
           method: "GET",
           headers: {
@@ -171,11 +191,23 @@ function App() {
           },
         });
 
+      const tokenData = await tokenResponse.json();
+
+      if (tokenResponse.ok) {
+        await AsyncStorage.setItem('accessToken', tokenData.data.accessToken);
+        await AsyncStorage.setItem('refreshToken', tokenData.data.refreshToken);
+      }
+
+      const accessToken = await AsyncStorage.getItem('accessToken')
+
+      // Send token to server
+      const response = await axiosInstance.get(serverURL + "/api/players/email/" + account.user.email, { headers: { 'jwtauthorization': "Bearer: " + accessToken } });
+
       console.log(response);
 
       socketIO.connectSocket(firebaseIdToken, serverURL);
 
-      const data = await response.json();
+      const data = await response.data;
       console.log("Server response:", data);
 
       if (!data.error && !(data.message)) {
@@ -191,6 +223,7 @@ function App() {
 
         await pNotify(serverURL, data.data.email);
         await fetchCurrentScrollState();
+        setHasLoggedIn(true);
       }
 
       else {
@@ -261,8 +294,7 @@ function App() {
             console.log("User:", account.user.email);
             console.log("Token:", firebaseIdToken);
 
-            // Send token to server
-            const response = await fetch(serverURL + "/api/players/email/" + account.user.email,
+            const tokenResponse = await fetch(serverURL + "/api/jwt/generateToken/" + account.user.email,
               {
                 method: "GET",
                 headers: {
@@ -271,11 +303,23 @@ function App() {
                 },
               });
 
+            const tokenData = await tokenResponse.json();
+
+            if (tokenResponse.ok) {
+              await AsyncStorage.setItem('accessToken', tokenData.data.accessToken);
+              await AsyncStorage.setItem('refreshToken', tokenData.data.refreshToken);
+            }
+
+            const accessToken = await AsyncStorage.getItem('accessToken')
+
+            // Send token to server
+            const response = await axiosInstance.get(serverURL + "/api/players/email/" + account.user.email, { headers: { 'jwtauthorization': "Bearer: " + accessToken } });
+
             console.log(response);
 
             socketIO.connectSocket(firebaseIdToken, serverURL);
 
-            const data = await response.json();
+            const data = await response.data;
             console.log("Server response:", data);
 
             if (!data.error && !(data.message)) {
